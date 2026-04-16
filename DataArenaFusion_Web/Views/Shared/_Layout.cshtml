@@ -60,59 +60,61 @@
     
     <script>
         // Definicion default de loadDataGrid (Index.cshtml la puede sobreescribir)
-        window.loadDataGrid = async function() {
-            const res = await fetch('/api/DataApi/GetData');
-            if (!res.ok) return;
-            const result = await res.json();
-            const columns = result.columns || result.Columns || [];
-            const data    = result.data    || result.Data    || [];
+        if (typeof window.loadDataGrid !== 'function') {
+            window.loadDataGrid = async function() {
+                const res = await fetch('/api/DataApi/GetData');
+                if (!res.ok) return;
+                const result = await res.json();
+                const columns = result.columns || result.Columns || [];
+                const data    = result.data    || result.Data    || [];
 
-            // Actualizar contador
-            const lbl = document.getElementById('lblRegistros');
-            if (lbl) lbl.innerText = data.length;
+                // Actualizar contador
+                const lbl = document.getElementById('lblRegistros');
+                if (lbl) lbl.innerText = data.length;
 
-            // Encabezados
-            const trHead = document.getElementById('dgvHeaders');
-            const cmb    = document.getElementById('cmbFiltroColumna');
-            if (trHead) {
-                trHead.innerHTML = '';
-                if (cmb) cmb.innerHTML = '<option>Todas las columnas</option>';
-                columns.forEach(col => {
-                    const th = document.createElement('th');
-                    th.innerText = col;
-                    trHead.appendChild(th);
-                    if (cmb) {
-                        const opt = document.createElement('option');
-                        opt.value = col;
-                        opt.innerText = col;
-                        cmb.appendChild(opt);
-                    }
-                });
-            }
+                // Encabezados
+                const trHead = document.getElementById('dgvHeaders');
+                const cmb    = document.getElementById('cmbFiltroColumna');
+                if (trHead) {
+                    trHead.innerHTML = '';
+                    if (cmb) cmb.innerHTML = '<option>Todas las columnas</option>';
+                    columns.forEach(col => {
+                        const th = document.createElement('th');
+                        th.innerText = col;
+                        trHead.appendChild(th);
+                        if (cmb) {
+                            const opt = document.createElement('option');
+                            opt.value = col;
+                            opt.innerText = col;
+                            cmb.appendChild(opt);
+                        }
+                    });
+                }
 
-            // Cuerpo de la tabla
-            const tbody = document.getElementById('dgvBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            if (data.length === 0) {
-                tbody.innerHTML = '<tr><td class="text-center text-muted p-5" colspan="100%">No hay datos cargados.</td></tr>';
-                return;
-            }
-            const limit = Math.min(data.length, 2000);
-            for (let i = 0; i < limit; i++) {
-                const row = data[i];
-                const tr = document.createElement('tr');
-                columns.forEach(col => {
-                    const td = document.createElement('td');
-                    // Las propiedades del json pueden venir en PascalCase o camelCase
-                    const val = row[col] ?? row[col.charAt(0).toLowerCase() + col.slice(1)] ?? '';
-                    if (col.endsWith('(MXN)')) td.style.textAlign = 'right';
-                    td.innerText = val;
-                    tr.appendChild(td);
-                });
-                tbody.appendChild(tr);
-            }
-        };
+                // Cuerpo de la tabla
+                const tbody = document.getElementById('dgvBody');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td class="text-center text-muted p-5" colspan="100%">No hay datos cargados.</td></tr>';
+                    return;
+                }
+                const limit = Math.min(data.length, 2000);
+                for (let i = 0; i < limit; i++) {
+                    const row = data[i];
+                    const tr = document.createElement('tr');
+                    columns.forEach(col => {
+                        const td = document.createElement('td');
+                        // Las propiedades del json pueden venir en PascalCase o camelCase
+                        const val = row[col] ?? row[col.charAt(0).toLowerCase() + col.slice(1)] ?? '';
+                        if (col.endsWith('(MXN)')) td.style.textAlign = 'right';
+                        td.innerText = val;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                }
+            };
+        }
 
         // Mapa de tipos a extensiones de filtro
         const fileAcceptMap = {
