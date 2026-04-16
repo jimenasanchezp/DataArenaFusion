@@ -1,5 +1,6 @@
 using System.Data.Common;
 using DataArenaFusion.Models;
+using System.Data;
 
 namespace DataArenaFusion.Services.Database
 {
@@ -11,5 +12,6 @@ namespace DataArenaFusion.Services.Database
         DbConnection CreateConnection(DatabaseConnectionSettings settings);
         string BuildConnectionString(DatabaseConnectionSettings settings);
         bool TryTestConnection(DatabaseConnectionSettings settings, out string mensaje);
+        string MigrarDatos(DatabaseConnectionSettings settings, DataTable tabla);
     }
 }

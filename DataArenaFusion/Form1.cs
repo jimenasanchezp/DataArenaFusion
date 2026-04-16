@@ -18,6 +18,7 @@ namespace DataArenaFusion
             ConectarEventos();
             ConfigurarInterfazInicial();
             ConfigurarGrafica();
+            ConfigurarEstiloWeb();
         }
 
         private void ConectarEventos()
@@ -27,12 +28,11 @@ namespace DataArenaFusion
             btnImpXml.Click += (_, _) => ImportarArchivo("XML", "Archivos XML (*.xml)|*.xml", btnImpXml.Text);
             btnImpTxt.Click += (_, _) => ImportarArchivo("TXT", "Archivos TXT (*.txt)|*.txt", btnImpTxt.Text);
 
-            btnImpMaria.Click += (_, _) => AbrirConexion(DatabaseProvider.MariaDb);
-            btnImpPostgre.Click += (_, _) => AbrirConexion(DatabaseProvider.PostgreSql);
-            btnExpMaria.Click += (_, _) => AbrirConexion(DatabaseProvider.MariaDb);
-            btnExpPostgre.Click += (_, _) => AbrirConexion(DatabaseProvider.PostgreSql);
+            btnImpMaria.Click += (_, _) => ConfigurarConexion(DatabaseProvider.MariaDb);
+            btnImpPostgre.Click += (_, _) => ConfigurarConexion(DatabaseProvider.PostgreSql);
+            btnExpMaria.Click += async (_, _) => await MigrarDatos(DatabaseProvider.MariaDb);
+            btnExpPostgre.Click += async (_, _) => await MigrarDatos(DatabaseProvider.PostgreSql);
 
-            btnImpSql.Click += (_, _) => MostrarNoDisponible("SQL Server");
             btnGraficar.Click += (_, _) => GenerarGrafica();
             btnGenerarGrafica.Click += (_, _) => GenerarGrafica();
             btnLimpiar.Click += (_, _) => LimpiarPantalla();
@@ -55,10 +55,64 @@ namespace DataArenaFusion
 
             ActualizarCombosGrafica(_gestorDatos.TablaActual);
             lblRegistros.Text = "0 registros";
-            btnImpSql.Enabled = false;
-            btnImpSql.Visible = false;
-            btnImpPostgre.Text = "PostgreSQL";
-            btnExpPostgre.Text = "PostgreSQL";
+            btnExpMaria.Text = "Migrar a MariaDB";
+            btnExpPostgre.Text = "Migrar a PostgreSQL";
+        }
+
+        private void ConfigurarEstiloWeb()
+        {
+            this.Font = new Font("Segoe UI", 10F);
+            BackColor = Color.FromArgb(241, 244, 249);
+            tabControlPrincipal.BackColor = Color.FromArgb(241, 244, 249);
+            tabControlPrincipal.Appearance = TabAppearance.Normal;
+            tabControlPrincipal.DrawMode = TabDrawMode.Normal;
+            tabControlPrincipal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            
+            dgvDatos.BackgroundColor = Color.White;
+            dgvDatos.BorderStyle = BorderStyle.None;
+            dgvDatos.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvDatos.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dgvDatos.EnableHeadersVisualStyles = false;
+            
+            dgvDatos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(37, 99, 235);
+            dgvDatos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvDatos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            dgvDatos.ColumnHeadersHeight = 45;
+            
+            dgvDatos.DefaultCellStyle.BackColor = Color.White;
+            dgvDatos.DefaultCellStyle.ForeColor = Color.FromArgb(31, 41, 55);
+            dgvDatos.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
+            dgvDatos.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvDatos.DefaultCellStyle.Padding = new Padding(10, 0, 10, 0);
+            
+            dgvDatos.GridColor = Color.FromArgb(229, 231, 235);
+            dgvDatos.RowHeadersVisible = false;
+            dgvDatos.RowTemplate.Height = 45;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            pnlFiltro.BackColor = Color.White;
+            pnlConfigGrafica.BackColor = Color.White;
+            tabTabla.BackColor = Color.FromArgb(241, 244, 249);
+            tabGraficas.BackColor = Color.FromArgb(241, 244, 249);
+
+            foreach (Control ctrl in pnlImportar.Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    btn.Cursor = Cursors.Hand;
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.Size = new Size(210, 36);
+                    btn.Location = new Point((pnlImportar.Width - btn.Width) / 2, btn.Location.Y);
+                    
+                    btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(
+                        Math.Min(255, btn.BackColor.R + 30),
+                        Math.Min(255, btn.BackColor.G + 30),
+                        Math.Min(255, btn.BackColor.B + 30)
+                    );
+                }
+            }
+
+            btnGraficar.Cursor = Cursors.Hand;
         }
 
         private void ConfigurarGrafica()
@@ -74,13 +128,12 @@ namespace DataArenaFusion
             }
 
             chartPrincipal.Dock = DockStyle.Fill;
-            chartPrincipal.BackColor = Color.FromArgb(26, 28, 33);
+            chartPrincipal.BackColor = Color.White;
             chartPrincipal.BackGradientStyle = GradientStyle.TopBottom;
-            chartPrincipal.BackSecondaryColor = Color.FromArgb(32, 34, 40);
-            chartPrincipal.Palette = ChartColorPalette.None;
-            chartPrincipal.PaletteCustomColors = new[] { Color.FromArgb(255, 46, 115) };
+            chartPrincipal.BackSecondaryColor = Color.White;
+            chartPrincipal.Palette = ChartColorPalette.BrightPastel;
             chartPrincipal.BorderlineDashStyle = ChartDashStyle.Solid;
-            chartPrincipal.BorderlineColor = Color.FromArgb(60, 60, 65);
+            chartPrincipal.BorderlineColor = Color.FromArgb(229, 231, 235);
             chartPrincipal.BorderlineWidth = 1;
             chartPrincipal.AntiAliasing = AntiAliasingStyles.All;
             chartPrincipal.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
@@ -88,21 +141,21 @@ namespace DataArenaFusion
             chartPrincipal.ChartAreas.Clear();
             var area = new ChartArea("Principal")
             {
-                BackColor = Color.FromArgb(26, 28, 33)
+                BackColor = Color.White
             };
             area.BackGradientStyle = GradientStyle.TopBottom;
-            area.AxisX.MajorGrid.LineColor = Color.FromArgb(60, 60, 65);
-            area.AxisY.MajorGrid.LineColor = Color.FromArgb(60, 60, 65);
+            area.AxisX.MajorGrid.LineColor = Color.FromArgb(229, 231, 235);
+            area.AxisY.MajorGrid.LineColor = Color.FromArgb(229, 231, 235);
             area.AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Solid;
             area.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
             area.AxisX.LabelStyle.Angle = -35;
-            area.AxisX.LabelStyle.Font = new Font("Trebuchet MS", 8.5F);
-            area.AxisX.LabelStyle.ForeColor = Color.White;
-            area.AxisY.LabelStyle.Font = new Font("Trebuchet MS", 8.5F);
-            area.AxisY.LabelStyle.ForeColor = Color.White;
+            area.AxisX.LabelStyle.Font = new Font("Segoe UI", 8.5F);
+            area.AxisX.LabelStyle.ForeColor = Color.FromArgb(75, 85, 99);
+            area.AxisY.LabelStyle.Font = new Font("Segoe UI", 8.5F);
+            area.AxisY.LabelStyle.ForeColor = Color.FromArgb(75, 85, 99);
             area.AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
-            area.AxisX.LineColor = Color.FromArgb(100, 100, 105);
-            area.AxisY.LineColor = Color.FromArgb(100, 100, 105);
+            area.AxisX.LineColor = Color.FromArgb(203, 213, 225);
+            area.AxisY.LineColor = Color.FromArgb(203, 213, 225);
             chartPrincipal.ChartAreas.Add(area);
 
             chartPrincipal.Legends.Clear();
@@ -110,8 +163,8 @@ namespace DataArenaFusion
             {
                 Docking = Docking.Bottom,
                 Alignment = StringAlignment.Center,
-                Font = new Font("Trebuchet MS", 8.5F),
-                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.FromArgb(75, 85, 99),
                 BackColor = Color.Transparent
             });
 
@@ -119,8 +172,8 @@ namespace DataArenaFusion
             chartPrincipal.Titles.Add(new Title
             {
                 Text = "Importa datos para generar una grafica",
-                Font = new Font("Trebuchet MS", 12F, FontStyle.Bold),
-                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(31, 41, 55),
                 Alignment = ContentAlignment.TopLeft
             });
             chartPrincipal.Series.Clear();
@@ -192,7 +245,10 @@ namespace DataArenaFusion
 
         private void ActualizarCombosGrafica(DataTable tabla)
         {
-            var columnas = tabla.Columns.Cast<DataColumn>().Select(col => col.ColumnName).ToArray();
+            var columnas = tabla.Columns.Cast<DataColumn>()
+                .Select(col => col.ColumnName)
+                .Where(col => !string.Equals(col, "Fuente", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
 
             cmbEjeX.BeginUpdate();
             cmbEjeY.BeginUpdate();
@@ -246,7 +302,10 @@ namespace DataArenaFusion
                 return;
             }
 
-            var columnas = tabla.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+            var columnas = tabla.Columns.Cast<DataColumn>()
+                .Select(c => c.ColumnName)
+                .Where(c => !string.Equals(c, "Fuente", StringComparison.OrdinalIgnoreCase))
+                .ToList();
             var columnasNumericas = columnas.Where(col => EsColumnaNumerica(tabla, col)).ToList();
             var columnasTexto = columnas.Where(col => !EsColumnaNumerica(tabla, col)).ToList();
 
@@ -314,7 +373,7 @@ namespace DataArenaFusion
 
             chartPrincipal.Series.Clear();
             chartPrincipal.Titles.Clear();
-            chartPrincipal.Titles.Add(new Title($"{tipo}: {ejeX} vs {ejeY}") { ForeColor = Color.White });
+            chartPrincipal.Titles.Add(new Title($"{tipo}: {ejeX} vs {ejeY}") { ForeColor = Color.FromArgb(31, 41, 55) });
 
             if (string.Equals(tipo, "Pastel", StringComparison.OrdinalIgnoreCase))
             {
@@ -341,7 +400,7 @@ namespace DataArenaFusion
                 .GroupBy(fila => fila[ejeX]?.ToString() ?? string.Empty)
                 .Select(grupo => new
                 {
-                    Label = string.IsNullOrWhiteSpace(grupo.Key) ? "(Vacío)" : grupo.Key,
+                    Label = string.IsNullOrWhiteSpace(grupo.Key) ? "(Vacio)" : grupo.Key,
                     Value = usoSuma
                         ? grupo.Sum(fila => ObtenerNumero(fila[ejeY]?.ToString()))
                         : grupo.Count()
@@ -357,7 +416,7 @@ namespace DataArenaFusion
 
             serie["PointWidth"] = "0.65";
             serie["BarLabelStyle"] = "Center";
-            serie.Color = Color.FromArgb(255, 46, 115); // Rosa dark
+            serie.Color = Color.FromArgb(37, 99, 235);
 
             chartPrincipal.Series.Add(serie);
             AjustarEjesParaSeries();
@@ -378,7 +437,7 @@ namespace DataArenaFusion
                 .GroupBy(fila => fila[ejeX]?.ToString() ?? string.Empty)
                 .Select(grupo => new
                 {
-                    Label = string.IsNullOrWhiteSpace(grupo.Key) ? "(Vacío)" : grupo.Key,
+                    Label = string.IsNullOrWhiteSpace(grupo.Key) ? "(Vacio)" : grupo.Key,
                     Value = usoSuma
                         ? grupo.Sum(fila => ObtenerNumero(fila[ejeY]?.ToString()))
                         : grupo.Count()
@@ -392,6 +451,7 @@ namespace DataArenaFusion
                 serie.Points.AddXY(grupo.Label, grupo.Value);
             }
 
+            serie.Color = Color.FromArgb(99, 102, 241);
             serie["PieLabelStyle"] = "Outside";
             serie["PieDrawingStyle"] = "SoftEdge";
             serie["CollectedThreshold"] = "5";
@@ -421,14 +481,14 @@ namespace DataArenaFusion
         private void AjustarEjesParaSeries()
         {
             var area = chartPrincipal.ChartAreas["Principal"];
-            area.AxisX.TitleFont = new Font("Trebuchet MS", 9F, FontStyle.Bold);
-            area.AxisX.TitleForeColor = Color.White;
-            area.AxisY.TitleFont = new Font("Trebuchet MS", 9F, FontStyle.Bold);
-            area.AxisY.TitleForeColor = Color.White;
-            area.AxisX.LabelStyle.Font = new Font("Trebuchet MS", 8.5F);
-            area.AxisX.LabelStyle.ForeColor = Color.White;
-            area.AxisY.LabelStyle.Font = new Font("Trebuchet MS", 8.5F);
-            area.AxisY.LabelStyle.ForeColor = Color.White;
+            area.AxisX.TitleFont = new Font("Segoe UI", 9F, FontStyle.Bold);
+            area.AxisX.TitleForeColor = Color.FromArgb(31, 41, 55);
+            area.AxisY.TitleFont = new Font("Segoe UI", 9F, FontStyle.Bold);
+            area.AxisY.TitleForeColor = Color.FromArgb(31, 41, 55);
+            area.AxisX.LabelStyle.Font = new Font("Segoe UI", 9F);
+            area.AxisX.LabelStyle.ForeColor = Color.FromArgb(75, 85, 99);
+            area.AxisY.LabelStyle.Font = new Font("Segoe UI", 9F);
+            area.AxisY.LabelStyle.ForeColor = Color.FromArgb(75, 85, 99);
             area.AxisX.MajorGrid.Enabled = true;
             area.AxisY.MajorGrid.Enabled = true;
             area.RecalculateAxesScale();
@@ -441,8 +501,8 @@ namespace DataArenaFusion
             chartPrincipal.Titles.Add(new Title
             {
                 Text = mensaje,
-                Font = new Font("Trebuchet MS", 11F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(255, 46, 115), // Rosa
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(37, 99, 235),
                 Alignment = ContentAlignment.MiddleCenter
             });
         }
@@ -507,6 +567,76 @@ namespace DataArenaFusion
         }
 
 
+
+        private void ConfigurarConexion(DatabaseProvider provider)
+        {
+            var settings = ObtenerConfiguracionGuardada(provider);
+            using var dialogo = new DatabaseConnectionForm(provider, settings);
+
+            if (dialogo.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            _conexionesGuardadas[provider] = dialogo.Settings;
+
+            var servicio = DatabaseConnectionServiceFactory.Create(provider);
+            var resumen = $"Host: {dialogo.Settings.Host}\nPuerto: {dialogo.Settings.Port}\nBase: {dialogo.Settings.Database}\nUsuario: {dialogo.Settings.Username}";
+
+            MessageBox.Show(
+                $"Conexion preparada para {servicio.DisplayName}.\n\n{resumen}",
+                "Conexion guardada",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        private async Task MigrarDatos(DatabaseProvider provider)
+        {
+            if (_gestorDatos.TablaActual.Rows.Count == 0)
+            {
+                MessageBox.Show(
+                    "Primero importa uno o mas archivos antes de migrar los datos.",
+                    "Sin datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            var settings = ObtenerConfiguracionGuardada(provider);
+            using var dialogo = new DatabaseConnectionForm(provider, settings);
+
+            if (dialogo.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            _conexionesGuardadas[provider] = dialogo.Settings;
+
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                var servicio = DatabaseConnectionServiceFactory.Create(provider);
+                var resumen = await Task.Run(() => servicio.MigrarDatos(dialogo.Settings, _gestorDatos.TablaActual));
+
+                MessageBox.Show(
+                    resumen,
+                    $"Migracion {servicio.DisplayName}",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"No se pudo completar la migracion.\n\nDetalle: {ex.Message}",
+                    "Error de migracion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
 
         private void AbrirConexion(DatabaseProvider provider)
         {

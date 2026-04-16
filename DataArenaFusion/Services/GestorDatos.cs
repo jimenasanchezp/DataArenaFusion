@@ -21,11 +21,13 @@ namespace DataArenaFusion.Services
 
         public void CargarArchivo(string ruta)
         {
-            Limpiar();
             var lector = LectorFactory.ObtenerLector(ruta);
             var importacion = lector.Leer(ruta);
 
-            AgregarImportacion(importacion);
+            AsegurarColumnaFuente();
+            var fuente = ObtenerNombreFuenteUnico(ruta);
+
+            AgregarImportacion(importacion, fuente);
             RegistrosActuales = ConvertirARegistros(TablaActual);
             ReconstruirIndice();
         }
@@ -52,7 +54,7 @@ namespace DataArenaFusion.Services
             return DetectorDuplicados.ObtenerDuplicados(RegistrosActuales).Count;
         }
 
-        private void AgregarImportacion(TablaImportada importacion)
+        private void AgregarImportacion(TablaImportada importacion, string fuente)
         {
             AsegurarColumnas(importacion.Encabezados);
 
@@ -62,6 +64,7 @@ namespace DataArenaFusion.Services
                 foreach (var filaImportada in importacion.Filas)
                 {
                     var fila = TablaActual.NewRow();
+                    fila["Fuente"] = fuente;
 
                     foreach (var encabezado in importacion.Encabezados)
                     {
@@ -88,6 +91,35 @@ namespace DataArenaFusion.Services
                     TablaActual.Columns.Add(encabezado, typeof(string));
                 }
             }
+        }
+
+        private void AsegurarColumnaFuente()
+        {
+            if (!TablaActual.Columns.Contains("Fuente"))
+            {
+                TablaActual.Columns.Add("Fuente", typeof(string));
+                TablaActual.Columns["Fuente"]!.SetOrdinal(0);
+            }
+        }
+
+        private string ObtenerNombreFuenteUnico(string ruta)
+        {
+            var nombreBase = Path.GetFileName(ruta);
+            var nombre = nombreBase;
+            var contador = 2;
+
+            while (TablaActual.Rows.Cast<DataRow>()
+                .Any(fila => string.Equals(fila["Fuente"]?.ToString(), nombre, StringComparison.OrdinalIgnoreCase)))
+            {
+                var extension = Path.GetExtension(nombreBase);
+                var sinExtension = Path.GetFileNameWithoutExtension(nombreBase);
+                nombre = string.IsNullOrWhiteSpace(extension)
+                    ? $"{sinExtension}_{contador}"
+                    : $"{sinExtension}_{contador}{extension}";
+                contador++;
+            }
+
+            return nombre;
         }
 
         private static DataTable CrearTablaBase()
