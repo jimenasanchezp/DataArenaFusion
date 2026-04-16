@@ -14,27 +14,27 @@ namespace DataArenaFusion.Services
 
         public GestorDatos()
         {
-            TablaActual = new DataTable();
+            TablaActual = CrearTablaBase();
             RegistrosActuales = new List<Registro>();
             IndiceId = new Dictionary<int, Registro>();
         }
 
         public void CargarArchivo(string ruta)
         {
+            Limpiar();
             var lector = LectorFactory.ObtenerLector(ruta);
             var importacion = lector.Leer(ruta);
 
-            TablaActual = importacion.ToDataTable();
-            RegistrosActuales = ConvertirARegistros(importacion);
+            AgregarImportacion(importacion);
+            RegistrosActuales = ConvertirARegistros(TablaActual);
+            ReconstruirIndice();
+        }
 
+        public void Limpiar()
+        {
+            TablaActual = CrearTablaBase();
+            RegistrosActuales = new List<Registro>();
             IndiceId.Clear();
-            foreach (var reg in RegistrosActuales)
-            {
-                if (!IndiceId.ContainsKey(reg.Id))
-                {
-                    IndiceId.Add(reg.Id, reg);
-                }
-            }
         }
 
         public void OrdenarAscendente()
@@ -52,23 +52,78 @@ namespace DataArenaFusion.Services
             return DetectorDuplicados.ObtenerDuplicados(RegistrosActuales).Count;
         }
 
-        private static List<Registro> ConvertirARegistros(TablaImportada importacion)
+        private void AgregarImportacion(TablaImportada importacion)
+        {
+            AsegurarColumnas(importacion.Encabezados);
+
+            TablaActual.BeginLoadData();
+            try
+            {
+                foreach (var filaImportada in importacion.Filas)
+                {
+                    var fila = TablaActual.NewRow();
+
+                    foreach (var encabezado in importacion.Encabezados)
+                    {
+                        fila[encabezado] = filaImportada.TryGetValue(encabezado, out var valor)
+                            ? valor ?? string.Empty
+                            : string.Empty;
+                    }
+
+                    TablaActual.Rows.Add(fila);
+                }
+            }
+            finally
+            {
+                TablaActual.EndLoadData();
+            }
+        }
+
+        private void AsegurarColumnas(IEnumerable<string> encabezados)
+        {
+            foreach (var encabezado in encabezados)
+            {
+                if (!TablaActual.Columns.Contains(encabezado))
+                {
+                    TablaActual.Columns.Add(encabezado, typeof(string));
+                }
+            }
+        }
+
+        private static DataTable CrearTablaBase()
+        {
+            return new DataTable();
+        }
+
+        private void ReconstruirIndice()
+        {
+            IndiceId.Clear();
+
+            foreach (var reg in RegistrosActuales)
+            {
+                if (!IndiceId.ContainsKey(reg.Id))
+                {
+                    IndiceId.Add(reg.Id, reg);
+                }
+            }
+        }
+
+        private static List<Registro> ConvertirARegistros(DataTable tabla)
         {
             var registros = new List<Registro>();
-            var tieneId = importacion.Encabezados.Any(EncabezadoId);
-            var tieneCategoria = importacion.Encabezados.Any(EncabezadoCategoria);
-            var tieneValor = importacion.Encabezados.Any(EncabezadoValor);
 
-            if (!tieneId || !tieneCategoria || !tieneValor)
+            if (!tabla.Columns.Contains("Id") ||
+                !tabla.Columns.Contains("Categoria") ||
+                !tabla.Columns.Contains("Valor"))
             {
                 return registros;
             }
 
-            foreach (var fila in importacion.Filas)
+            foreach (DataRow fila in tabla.Rows)
             {
-                var valorId = ObtenerValor(fila, "Id");
-                var valorCategoria = ObtenerValor(fila, "Categoria");
-                var valorImporte = ObtenerValor(fila, "Valor");
+                var valorId = fila["Id"]?.ToString();
+                var valorCategoria = fila["Categoria"]?.ToString() ?? string.Empty;
+                var valorImporte = fila["Valor"]?.ToString();
 
                 if (!int.TryParse(valorId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var id) &&
                     !int.TryParse(valorId, NumberStyles.Integer, CultureInfo.CurrentCulture, out id))
@@ -83,12 +138,15 @@ namespace DataArenaFusion.Services
                 }
 
                 var extras = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                foreach (var par in fila)
+
+                foreach (DataColumn columna in tabla.Columns)
                 {
-                    if (!EncabezadoId(par.Key) && !EncabezadoCategoria(par.Key) && !EncabezadoValor(par.Key))
+                    if (EsColumnaPrincipal(columna.ColumnName))
                     {
-                        extras[par.Key] = par.Value;
+                        continue;
                     }
+
+                    extras[columna.ColumnName] = fila[columna.ColumnName]?.ToString() ?? string.Empty;
                 }
 
                 registros.Add(new Registro
@@ -103,26 +161,11 @@ namespace DataArenaFusion.Services
             return registros;
         }
 
-        private static string ObtenerValor(IDictionary<string, string> fila, string encabezado)
+        private static bool EsColumnaPrincipal(string encabezado)
         {
-            foreach (var par in fila)
-            {
-                if (string.Equals(par.Key, encabezado, StringComparison.OrdinalIgnoreCase))
-                {
-                    return par.Value ?? string.Empty;
-                }
-            }
-
-            return string.Empty;
+            return string.Equals(encabezado, "Id", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(encabezado, "Categoria", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(encabezado, "Valor", StringComparison.OrdinalIgnoreCase);
         }
-
-        private static bool EncabezadoId(string encabezado) =>
-            string.Equals(encabezado, "Id", StringComparison.OrdinalIgnoreCase);
-
-        private static bool EncabezadoCategoria(string encabezado) =>
-            string.Equals(encabezado, "Categoria", StringComparison.OrdinalIgnoreCase);
-
-        private static bool EncabezadoValor(string encabezado) =>
-            string.Equals(encabezado, "Valor", StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -124,25 +124,28 @@ namespace DataArenaFusion.Data
         private static TablaImportada LeerDelimitado(string ruta, char delimitadorPreferido)
         {
             var importacion = new TablaImportada();
-            var lineas = File.ReadAllLines(ruta);
 
-            if (lineas.Length == 0)
+            using var reader = new StreamReader(ruta);
+            var primeraLinea = reader.ReadLine();
+
+            if (primeraLinea == null)
             {
                 return importacion;
             }
 
-            var delimitador = DetectarDelimitador(lineas[0], delimitadorPreferido);
-            var encabezados = ParseLine(lineas[0], delimitador);
+            var delimitador = DetectarDelimitador(primeraLinea, delimitadorPreferido);
+            var encabezados = ParseLine(primeraLinea, delimitador);
             importacion.Encabezados.AddRange(encabezados);
 
-            for (int i = 1; i < lineas.Length; i++)
+            string? linea;
+            while ((linea = reader.ReadLine()) != null)
             {
-                if (string.IsNullOrWhiteSpace(lineas[i]))
+                if (string.IsNullOrWhiteSpace(linea))
                 {
                     continue;
                 }
 
-                var valores = ParseLine(lineas[i], delimitador);
+                var valores = ParseLine(linea, delimitador);
                 var registro = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
                 for (int j = 0; j < encabezados.Count; j++)

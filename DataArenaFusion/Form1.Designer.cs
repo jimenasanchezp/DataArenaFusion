@@ -1,4 +1,4 @@
-﻿namespace DataArenaFusion
+namespace DataArenaFusion
 {
     partial class Form1
     {
@@ -29,7 +29,6 @@
             btnImpJson = new Button();
             btnImpCsv = new Button();
             lblImportar = new Label();
-            pnlExportar = new Panel();
             btnExpMaria = new Button();
             btnExpPostgre = new Button();
             lblExportar = new Label();
@@ -38,8 +37,6 @@
             dgvDatos = new DataGridView();
             pnlFiltro = new Panel();
             lblRegistros = new Label();
-            cmbFiltroFuente = new ComboBox();
-            lblFiltro = new Label();
             tabGraficas = new TabPage();
             pnlConfigGrafica = new Panel();
             btnGraficar = new Button();
@@ -49,21 +46,25 @@
             lblEjeY = new Label();
             cmbEjeX = new ComboBox();
             lblEjeX = new Label();
+            chartPrincipal = new System.Windows.Forms.DataVisualization.Charting.Chart();
             pnlImportar.SuspendLayout();
-            pnlExportar.SuspendLayout();
             tabControlPrincipal.SuspendLayout();
             tabTabla.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
             pnlFiltro.SuspendLayout();
             tabGraficas.SuspendLayout();
             pnlConfigGrafica.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartPrincipal).BeginInit();
             SuspendLayout();
             // 
             // pnlImportar
             // 
-            pnlImportar.BackColor = Color.FromArgb(32, 34, 40);
+            pnlImportar.BackColor = Color.FromArgb(26, 28, 33);
             pnlImportar.Controls.Add(btnGenerarGrafica);
             pnlImportar.Controls.Add(btnLimpiar);
+            pnlImportar.Controls.Add(lblExportar);
+            pnlImportar.Controls.Add(btnExpPostgre);
+            pnlImportar.Controls.Add(btnExpMaria);
             pnlImportar.Controls.Add(btnImpPostgre);
             pnlImportar.Controls.Add(btnImpMaria);
             pnlImportar.Controls.Add(btnImpSql);
@@ -72,34 +73,34 @@
             pnlImportar.Controls.Add(btnImpJson);
             pnlImportar.Controls.Add(btnImpCsv);
             pnlImportar.Controls.Add(lblImportar);
-            pnlImportar.Dock = DockStyle.Top;
+            pnlImportar.Dock = DockStyle.Left;
             pnlImportar.Location = new Point(0, 0);
             pnlImportar.Name = "pnlImportar";
-            pnlImportar.Size = new Size(1184, 55);
+            pnlImportar.Size = new Size(200, 661);
             pnlImportar.TabIndex = 0;
             // 
             // btnGenerarGrafica
             // 
-            btnGenerarGrafica.BackColor = Color.FromArgb(94, 129, 172);
+            btnGenerarGrafica.BackColor = Color.FromArgb(255, 46, 115);
             btnGenerarGrafica.FlatAppearance.BorderSize = 0;
             btnGenerarGrafica.FlatStyle = FlatStyle.Flat;
             btnGenerarGrafica.ForeColor = Color.White;
-            btnGenerarGrafica.Location = new Point(920, 12);
+            btnGenerarGrafica.Location = new Point(15, 570);
             btnGenerarGrafica.Name = "btnGenerarGrafica";
-            btnGenerarGrafica.Size = new Size(140, 30);
+            btnGenerarGrafica.Size = new Size(170, 40);
             btnGenerarGrafica.TabIndex = 9;
-            btnGenerarGrafica.Text = "⚡ Procesar Datos";
+            btnGenerarGrafica.Text = "⚡ Generar Gráfico";
             btnGenerarGrafica.UseVisualStyleBackColor = false;
             // 
             // btnLimpiar
             // 
-            btnLimpiar.BackColor = Color.FromArgb(191, 97, 106);
+            btnLimpiar.BackColor = Color.FromArgb(64, 66, 73);
             btnLimpiar.FlatAppearance.BorderSize = 0;
             btnLimpiar.FlatStyle = FlatStyle.Flat;
             btnLimpiar.ForeColor = Color.White;
-            btnLimpiar.Location = new Point(820, 12);
+            btnLimpiar.Location = new Point(15, 520);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(85, 30);
+            btnLimpiar.Size = new Size(170, 30);
             btnLimpiar.TabIndex = 8;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = false;
@@ -110,9 +111,9 @@
             btnImpPostgre.FlatAppearance.BorderSize = 0;
             btnImpPostgre.FlatStyle = FlatStyle.Flat;
             btnImpPostgre.ForeColor = Color.White;
-            btnImpPostgre.Location = new Point(660, 12);
+            btnImpPostgre.Location = new Point(15, 300);
             btnImpPostgre.Name = "btnImpPostgre";
-            btnImpPostgre.Size = new Size(110, 30);
+            btnImpPostgre.Size = new Size(170, 30);
             btnImpPostgre.TabIndex = 7;
             btnImpPostgre.Text = "PostgreSQL";
             btnImpPostgre.UseVisualStyleBackColor = false;
@@ -123,9 +124,9 @@
             btnImpMaria.FlatAppearance.BorderSize = 0;
             btnImpMaria.FlatStyle = FlatStyle.Flat;
             btnImpMaria.ForeColor = Color.White;
-            btnImpMaria.Location = new Point(560, 12);
+            btnImpMaria.Location = new Point(15, 260);
             btnImpMaria.Name = "btnImpMaria";
-            btnImpMaria.Size = new Size(90, 30);
+            btnImpMaria.Size = new Size(170, 30);
             btnImpMaria.TabIndex = 6;
             btnImpMaria.Text = "MariaDB";
             btnImpMaria.UseVisualStyleBackColor = false;
@@ -136,9 +137,9 @@
             btnImpSql.FlatAppearance.BorderSize = 0;
             btnImpSql.FlatStyle = FlatStyle.Flat;
             btnImpSql.ForeColor = Color.White;
-            btnImpSql.Location = new Point(460, 12);
+            btnImpSql.Location = new Point(15, 220);
             btnImpSql.Name = "btnImpSql";
-            btnImpSql.Size = new Size(90, 30);
+            btnImpSql.Size = new Size(170, 30);
             btnImpSql.TabIndex = 5;
             btnImpSql.Text = "SQL Srv";
             btnImpSql.UseVisualStyleBackColor = false;
@@ -149,9 +150,9 @@
             btnImpTxt.FlatAppearance.BorderSize = 0;
             btnImpTxt.FlatStyle = FlatStyle.Flat;
             btnImpTxt.ForeColor = Color.White;
-            btnImpTxt.Location = new Point(380, 12);
+            btnImpTxt.Location = new Point(15, 180);
             btnImpTxt.Name = "btnImpTxt";
-            btnImpTxt.Size = new Size(65, 30);
+            btnImpTxt.Size = new Size(170, 30);
             btnImpTxt.TabIndex = 4;
             btnImpTxt.Text = "TXT";
             btnImpTxt.UseVisualStyleBackColor = false;
@@ -162,9 +163,9 @@
             btnImpXml.FlatAppearance.BorderSize = 0;
             btnImpXml.FlatStyle = FlatStyle.Flat;
             btnImpXml.ForeColor = Color.FromArgb(46, 52, 64);
-            btnImpXml.Location = new Point(300, 12);
+            btnImpXml.Location = new Point(15, 140);
             btnImpXml.Name = "btnImpXml";
-            btnImpXml.Size = new Size(65, 30);
+            btnImpXml.Size = new Size(170, 30);
             btnImpXml.TabIndex = 3;
             btnImpXml.Text = "XML";
             btnImpXml.UseVisualStyleBackColor = false;
@@ -175,9 +176,9 @@
             btnImpJson.FlatAppearance.BorderSize = 0;
             btnImpJson.FlatStyle = FlatStyle.Flat;
             btnImpJson.ForeColor = Color.FromArgb(46, 52, 64);
-            btnImpJson.Location = new Point(220, 12);
+            btnImpJson.Location = new Point(15, 100);
             btnImpJson.Name = "btnImpJson";
-            btnImpJson.Size = new Size(65, 30);
+            btnImpJson.Size = new Size(170, 30);
             btnImpJson.TabIndex = 2;
             btnImpJson.Text = "JSON";
             btnImpJson.UseVisualStyleBackColor = false;
@@ -188,9 +189,9 @@
             btnImpCsv.FlatAppearance.BorderSize = 0;
             btnImpCsv.FlatStyle = FlatStyle.Flat;
             btnImpCsv.ForeColor = Color.FromArgb(46, 52, 64);
-            btnImpCsv.Location = new Point(140, 12);
+            btnImpCsv.Location = new Point(15, 60);
             btnImpCsv.Name = "btnImpCsv";
-            btnImpCsv.Size = new Size(65, 30);
+            btnImpCsv.Size = new Size(170, 30);
             btnImpCsv.TabIndex = 1;
             btnImpCsv.Text = "CSV";
             btnImpCsv.UseVisualStyleBackColor = false;
@@ -200,23 +201,11 @@
             lblImportar.AutoSize = true;
             lblImportar.Font = new Font("Trebuchet MS", 10.2F, FontStyle.Bold);
             lblImportar.ForeColor = Color.FromArgb(216, 222, 233);
-            lblImportar.Location = new Point(15, 16);
+            lblImportar.Location = new Point(15, 20);
             lblImportar.Name = "lblImportar";
             lblImportar.Size = new Size(124, 23);
             lblImportar.TabIndex = 0;
             lblImportar.Text = "📥 IMPORTAR:";
-            // 
-            // pnlExportar
-            // 
-            pnlExportar.BackColor = Color.FromArgb(46, 52, 64);
-            pnlExportar.Controls.Add(btnExpMaria);
-            pnlExportar.Controls.Add(btnExpPostgre);
-            pnlExportar.Controls.Add(lblExportar);
-            pnlExportar.Dock = DockStyle.Top;
-            pnlExportar.Location = new Point(0, 55);
-            pnlExportar.Name = "pnlExportar";
-            pnlExportar.Size = new Size(1184, 45);
-            pnlExportar.TabIndex = 1;
             // 
             // btnExpMaria
             // 
@@ -224,9 +213,9 @@
             btnExpMaria.FlatAppearance.BorderSize = 0;
             btnExpMaria.FlatStyle = FlatStyle.Flat;
             btnExpMaria.ForeColor = Color.White;
-            btnExpMaria.Location = new Point(300, 8);
+            btnExpMaria.Location = new Point(15, 440);
             btnExpMaria.Name = "btnExpMaria";
-            btnExpMaria.Size = new Size(90, 28);
+            btnExpMaria.Size = new Size(170, 30);
             btnExpMaria.TabIndex = 9;
             btnExpMaria.Text = "MariaDB";
             btnExpMaria.UseVisualStyleBackColor = false;
@@ -237,9 +226,9 @@
             btnExpPostgre.FlatAppearance.BorderSize = 0;
             btnExpPostgre.FlatStyle = FlatStyle.Flat;
             btnExpPostgre.ForeColor = Color.White;
-            btnExpPostgre.Location = new Point(200, 8);
+            btnExpPostgre.Location = new Point(15, 400);
             btnExpPostgre.Name = "btnExpPostgre";
-            btnExpPostgre.Size = new Size(90, 28);
+            btnExpPostgre.Size = new Size(170, 30);
             btnExpPostgre.TabIndex = 8;
             btnExpPostgre.Text = "SQL Srv";
             btnExpPostgre.UseVisualStyleBackColor = false;
@@ -249,7 +238,7 @@
             lblExportar.AutoSize = true;
             lblExportar.Font = new Font("Trebuchet MS", 10.2F, FontStyle.Bold);
             lblExportar.ForeColor = Color.FromArgb(216, 222, 233);
-            lblExportar.Location = new Point(15, 10);
+            lblExportar.Location = new Point(15, 360);
             lblExportar.Name = "lblExportar";
             lblExportar.Size = new Size(165, 23);
             lblExportar.TabIndex = 1;
@@ -261,21 +250,21 @@
             tabControlPrincipal.Controls.Add(tabGraficas);
             tabControlPrincipal.Dock = DockStyle.Fill;
             tabControlPrincipal.Font = new Font("Trebuchet MS", 9.5F);
-            tabControlPrincipal.Location = new Point(0, 100);
+            tabControlPrincipal.Location = new Point(200, 0);
             tabControlPrincipal.Name = "tabControlPrincipal";
             tabControlPrincipal.SelectedIndex = 0;
-            tabControlPrincipal.Size = new Size(1184, 561);
+            tabControlPrincipal.Size = new Size(984, 661);
             tabControlPrincipal.TabIndex = 2;
             // 
             // tabTabla
             // 
-            tabTabla.BackColor = Color.FromArgb(236, 239, 244);
+            tabTabla.BackColor = Color.FromArgb(18, 18, 22);
             tabTabla.Controls.Add(dgvDatos);
             tabTabla.Controls.Add(pnlFiltro);
             tabTabla.Location = new Point(4, 31);
             tabTabla.Name = "tabTabla";
             tabTabla.Padding = new Padding(3);
-            tabTabla.Size = new Size(1176, 526);
+            tabTabla.Size = new Size(976, 626);
             tabTabla.TabIndex = 0;
             tabTabla.Text = "📋 Tabla de Datos";
             // 
@@ -283,10 +272,10 @@
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
-            dgvDatos.BackgroundColor = Color.White;
+            dgvDatos.BackgroundColor = Color.FromArgb(26, 28, 33);
             dgvDatos.BorderStyle = BorderStyle.None;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(76, 86, 106);
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 46, 115);
             dataGridViewCellStyle2.Font = new Font("Trebuchet MS", 9.5F, FontStyle.Bold);
             dataGridViewCellStyle2.ForeColor = Color.White;
             dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
@@ -300,63 +289,43 @@
             dgvDatos.Name = "dgvDatos";
             dgvDatos.ReadOnly = true;
             dgvDatos.RowHeadersWidth = 51;
-            dgvDatos.Size = new Size(1170, 475);
+            dgvDatos.Size = new Size(970, 575);
             dgvDatos.TabIndex = 1;
             // 
             // pnlFiltro
             // 
-            pnlFiltro.BackColor = Color.White;
+            pnlFiltro.BackColor = Color.FromArgb(32, 34, 40);
             pnlFiltro.Controls.Add(lblRegistros);
-            pnlFiltro.Controls.Add(cmbFiltroFuente);
-            pnlFiltro.Controls.Add(lblFiltro);
             pnlFiltro.Dock = DockStyle.Top;
             pnlFiltro.Location = new Point(3, 3);
             pnlFiltro.Name = "pnlFiltro";
-            pnlFiltro.Size = new Size(1170, 45);
+            pnlFiltro.Size = new Size(970, 45);
             pnlFiltro.TabIndex = 0;
             // 
             // lblRegistros
             // 
             lblRegistros.AutoSize = true;
-            lblRegistros.ForeColor = Color.FromArgb(94, 129, 172);
-            lblRegistros.Location = new Point(300, 12);
+            lblRegistros.ForeColor = Color.FromArgb(255, 46, 115);
+            lblRegistros.Location = new Point(15, 12);
             lblRegistros.Name = "lblRegistros";
             lblRegistros.Size = new Size(84, 22);
             lblRegistros.TabIndex = 2;
             lblRegistros.Text = "0 registros";
-            // 
-            // cmbFiltroFuente
-            // 
-            cmbFiltroFuente.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFiltroFuente.FormattingEnabled = true;
-            cmbFiltroFuente.Location = new Point(140, 9);
-            cmbFiltroFuente.Name = "cmbFiltroFuente";
-            cmbFiltroFuente.Size = new Size(140, 30);
-            cmbFiltroFuente.TabIndex = 1;
-            // 
-            // lblFiltro
-            // 
-            lblFiltro.AutoSize = true;
-            lblFiltro.Location = new Point(10, 12);
-            lblFiltro.Name = "lblFiltro";
-            lblFiltro.Size = new Size(139, 22);
-            lblFiltro.TabIndex = 0;
-            lblFiltro.Text = "Filtrar por fuente:";
-            // 
             // tabGraficas
             // 
-            tabGraficas.BackColor = Color.FromArgb(236, 239, 244);
+            tabGraficas.BackColor = Color.FromArgb(18, 18, 22);
             tabGraficas.Controls.Add(pnlConfigGrafica);
+            tabGraficas.Controls.Add(chartPrincipal);
             tabGraficas.Location = new Point(4, 31);
             tabGraficas.Name = "tabGraficas";
             tabGraficas.Padding = new Padding(3);
-            tabGraficas.Size = new Size(1176, 526);
+            tabGraficas.Size = new Size(976, 626);
             tabGraficas.TabIndex = 1;
             tabGraficas.Text = "📈 Gráficas";
             // 
             // pnlConfigGrafica
             // 
-            pnlConfigGrafica.BackColor = Color.White;
+            pnlConfigGrafica.BackColor = Color.FromArgb(32, 34, 40);
             pnlConfigGrafica.Controls.Add(btnGraficar);
             pnlConfigGrafica.Controls.Add(cmbTipoGrafica);
             pnlConfigGrafica.Controls.Add(lblTipo);
@@ -367,12 +336,22 @@
             pnlConfigGrafica.Dock = DockStyle.Top;
             pnlConfigGrafica.Location = new Point(3, 3);
             pnlConfigGrafica.Name = "pnlConfigGrafica";
-            pnlConfigGrafica.Size = new Size(1170, 55);
+            pnlConfigGrafica.Size = new Size(970, 55);
             pnlConfigGrafica.TabIndex = 0;
+            // 
+            // chartPrincipal
+            // 
+            chartPrincipal.BackColor = Color.FromArgb(26, 28, 33);
+            chartPrincipal.Dock = DockStyle.Fill;
+            chartPrincipal.Location = new Point(3, 58);
+            chartPrincipal.Name = "chartPrincipal";
+            chartPrincipal.Size = new Size(970, 565);
+            chartPrincipal.TabIndex = 1;
+            chartPrincipal.Text = "chartPrincipal";
             // 
             // btnGraficar
             // 
-            btnGraficar.BackColor = Color.FromArgb(180, 142, 173);
+            btnGraficar.BackColor = Color.FromArgb(255, 46, 115);
             btnGraficar.FlatAppearance.BorderSize = 0;
             btnGraficar.FlatStyle = FlatStyle.Flat;
             btnGraficar.ForeColor = Color.White;
@@ -387,7 +366,7 @@
             // 
             cmbTipoGrafica.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafica.FormattingEnabled = true;
-            cmbTipoGrafica.Items.AddRange(new object[] { "Barras", "Pastel", "Dispersión" });
+            cmbTipoGrafica.Items.AddRange(new object[] { "Barras", "Pastel" });
             cmbTipoGrafica.Location = new Point(550, 13);
             cmbTipoGrafica.Name = "cmbTipoGrafica";
             cmbTipoGrafica.Size = new Size(140, 30);
@@ -396,6 +375,7 @@
             // lblTipo
             // 
             lblTipo.AutoSize = true;
+            lblTipo.ForeColor = Color.White;
             lblTipo.Location = new Point(500, 16);
             lblTipo.Name = "lblTipo";
             lblTipo.Size = new Size(47, 22);
@@ -414,6 +394,7 @@
             // lblEjeY
             // 
             lblEjeY.AutoSize = true;
+            lblEjeY.ForeColor = Color.White;
             lblEjeY.Location = new Point(260, 16);
             lblEjeY.Name = "lblEjeY";
             lblEjeY.Size = new Size(79, 22);
@@ -432,6 +413,7 @@
             // lblEjeX
             // 
             lblEjeX.AutoSize = true;
+            lblEjeX.ForeColor = Color.White;
             lblEjeX.Location = new Point(20, 16);
             lblEjeX.Name = "lblEjeX";
             lblEjeX.Size = new Size(54, 22);
@@ -444,7 +426,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 661);
             Controls.Add(tabControlPrincipal);
-            Controls.Add(pnlExportar);
             Controls.Add(pnlImportar);
             Font = new Font("Trebuchet MS", 9F);
             Name = "Form1";
@@ -452,16 +433,14 @@
             Text = "Data Arena Fusion";
             pnlImportar.ResumeLayout(false);
             pnlImportar.PerformLayout();
-            pnlExportar.ResumeLayout(false);
-            pnlExportar.PerformLayout();
             tabControlPrincipal.ResumeLayout(false);
             tabTabla.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvDatos).EndInit();
-            pnlFiltro.ResumeLayout(false);
             pnlFiltro.PerformLayout();
             tabGraficas.ResumeLayout(false);
             pnlConfigGrafica.ResumeLayout(false);
             pnlConfigGrafica.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)chartPrincipal).EndInit();
             ResumeLayout(false);
 
         }
@@ -479,7 +458,6 @@
         private System.Windows.Forms.Button btnImpJson;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.Button btnGenerarGrafica;
-        private System.Windows.Forms.Panel pnlExportar;
         private System.Windows.Forms.Label lblExportar;
         private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.Button btnExpMaria;
@@ -489,7 +467,6 @@
         private System.Windows.Forms.Panel pnlFiltro;
         private System.Windows.Forms.DataGridView dgvDatos;
         private System.Windows.Forms.Label lblRegistros;
-        private System.Windows.Forms.ComboBox cmbFiltroFuente;
         private System.Windows.Forms.Label lblFiltro;
         private System.Windows.Forms.Panel pnlConfigGrafica;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartPrincipal;
