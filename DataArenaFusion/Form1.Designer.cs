@@ -33,7 +33,7 @@ namespace DataArenaFusion
             btnExpPostgre = new Button();
             lblAcciones = new Label();
             btnLimpiar = new Button();
-            //btnGenerarGrafica = new Button();
+            btnConsola = new Button();
             tabControlPrincipal = new TabControl();
             tabTabla = new TabPage();
             dgvDatos = new DataGridView();
@@ -76,6 +76,7 @@ namespace DataArenaFusion
             pnlImportar.Controls.Add(btnExpPostgre);
             pnlImportar.Controls.Add(lblAcciones);
             pnlImportar.Controls.Add(btnLimpiar);
+            pnlImportar.Controls.Add(btnConsola);
             pnlImportar.Dock = DockStyle.Left;
             pnlImportar.Location = new Point(0, 0);
             pnlImportar.Name = "pnlImportar";
@@ -265,6 +266,20 @@ namespace DataArenaFusion
             btnLimpiar.UseVisualStyleBackColor = false;
             // 
 
+            // 
+            // btnConsola
+            // 
+            btnConsola.BackColor = Color.FromArgb(255, 46, 115);
+            btnConsola.FlatAppearance.BorderSize = 0;
+            btnConsola.FlatStyle = FlatStyle.Flat;
+            btnConsola.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnConsola.ForeColor = Color.White;
+            btnConsola.Location = new Point(15, 548);
+            btnConsola.Name = "btnConsola";
+            btnConsola.Size = new Size(210, 40);
+            btnConsola.TabIndex = 12;
+            btnConsola.Text = "Abrir Consola";
+            btnConsola.UseVisualStyleBackColor = false;
             // 
             // tabControlPrincipal
             // 
@@ -481,6 +496,7 @@ namespace DataArenaFusion
         private System.Windows.Forms.Button btnExpMaria;
         private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.Button btnConsola;
         private System.Windows.Forms.TabControl tabControlPrincipal;
         private System.Windows.Forms.TabPage tabTabla;
         private System.Windows.Forms.TabPage tabGraficas;

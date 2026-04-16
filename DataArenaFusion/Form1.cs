@@ -6,6 +6,7 @@ using DataArenaFusion.Models;
 using DataArenaFusion.Services;
 using DataArenaFusion.Services.Database;
 
+using System.Runtime.InteropServices;
 namespace DataArenaFusion
 {
     public partial class Form1 : Form
@@ -36,6 +37,7 @@ namespace DataArenaFusion
             //btnGraficar.Click += (_, _) => GenerarGrafica();
             //btnGenerarGrafica.Click += (_, _) => GenerarGrafica();
             btnLimpiar.Click += (_, _) => LimpiarPantalla();
+            btnConsola.Click += btnConsola_Click;
 
             cmbEjeX.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
             cmbEjeY.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
@@ -114,6 +116,72 @@ namespace DataArenaFusion
             }
 
                 //btnGraficar.Cursor = Cursors.Hand;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool AllocConsole();
+
+        private void btnConsola_Click(object sender, EventArgs e)
+        {
+            if (_gestorDatos.TablaActual == null || _gestorDatos.TablaActual.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay datos cargados para mostrar en la consola.", "Consola", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Abrir la terminal negra tipo CMD
+            AllocConsole();
+
+            Console.Clear();
+            Console.WriteLine("==================================================");
+            Console.WriteLine("       DATA ARENA FUSION - CONSOLA DE DATOS       ");
+            Console.WriteLine("==================================================");
+            Console.WriteLine($"Total Registros: {_gestorDatos.TablaActual.Rows.Count}");
+            Console.WriteLine();
+
+            // Imprimir Encabezados
+            var encabezados = _gestorDatos.TablaActual.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+            Console.WriteLine(string.Join(" | ", encabezados.Select(e => e.PadRight(15))));
+            Console.WriteLine(new string('-', 15 * encabezados.Count + (3 * encabezados.Count)));
+
+            // Imprimir Filas (hasta un maximo para no saturar)
+            int limite = Math.Min(100, _gestorDatos.TablaActual.Rows.Count);
+            for (int i = 0; i < limite; i++)
+            {
+                var fila = _gestorDatos.TablaActual.Rows[i];
+                var valores = encabezados.Select(c => (fila[c]?.ToString() ?? "").PadRight(15).Substring(0, Math.Min((fila[c]?.ToString() ?? "").Length, 15)+Math.Max(0, 15 - (fila[c]?.ToString() ?? "").Length)));
+                Console.WriteLine(string.Join(" | ", valores));
+            }
+
+            if (_gestorDatos.TablaActual.Rows.Count > limite)
+            {
+                Console.WriteLine($"\n... y {_gestorDatos.TablaActual.Rows.Count - limite} registros más (ocultos).");
+            }
+
+            var serie = chartPrincipal.Series.FirstOrDefault();
+            if (serie != null && serie.Points.Count > 0)
+            {
+                Console.WriteLine("\n==================================================");
+                Console.WriteLine("                  GRAFICA ASCII                   ");
+                Console.WriteLine("==================================================");
+                Console.WriteLine($"Eje X: {cmbEjeX.SelectedItem} | Eje Y: {cmbEjeY.SelectedItem}\n");
+
+                double maxY = serie.Points.Max(p => p.YValues[0]);
+                int maxBarWidth = 30; // caracteres
+                
+                foreach(var point in serie.Points)
+                {
+                    string label = string.IsNullOrWhiteSpace(point.AxisLabel) ? "X" : point.AxisLabel;
+                    if (label.Length > 12) label = label.Substring(0, 9) + "...";
+                    
+                    int barLength = maxY > 0 ? (int)((point.YValues[0] / maxY) * maxBarWidth) : 0;
+                    string bar = new string('#', barLength);
+                    Console.WriteLine($"{label.PadRight(12)} | {bar} {point.YValues[0]}");
+                }
+            }
+
+            Console.WriteLine("\n[Datos mostrados. Esta consola refleja el estado actual en memoria.]");
         }
 
         private void ConfigurarGrafica()
