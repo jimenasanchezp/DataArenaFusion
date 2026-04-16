@@ -33,8 +33,8 @@ namespace DataArenaFusion
             btnExpMaria.Click += async (_, _) => await MigrarDatos(DatabaseProvider.MariaDb);
             btnExpPostgre.Click += async (_, _) => await MigrarDatos(DatabaseProvider.PostgreSql);
 
-            btnGraficar.Click += (_, _) => GenerarGrafica();
-            btnGenerarGrafica.Click += (_, _) => GenerarGrafica();
+            //btnGraficar.Click += (_, _) => GenerarGrafica();
+            //btnGenerarGrafica.Click += (_, _) => GenerarGrafica();
             btnLimpiar.Click += (_, _) => LimpiarPantalla();
 
             cmbEjeX.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
@@ -113,7 +113,7 @@ namespace DataArenaFusion
                 }
             }
 
-            btnGraficar.Cursor = Cursors.Hand;
+                //btnGraficar.Cursor = Cursors.Hand;
         }
 
         private void ConfigurarGrafica()

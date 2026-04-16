@@ -33,7 +33,7 @@ namespace DataArenaFusion
             btnExpPostgre = new Button();
             lblAcciones = new Label();
             btnLimpiar = new Button();
-            btnGenerarGrafica = new Button();
+            //btnGenerarGrafica = new Button();
             tabControlPrincipal = new TabControl();
             tabTabla = new TabPage();
             dgvDatos = new DataGridView();
@@ -47,7 +47,7 @@ namespace DataArenaFusion
             cmbEjeY = new ComboBox();
             lblTipo = new Label();
             cmbTipoGrafica = new ComboBox();
-            btnGraficar = new Button();
+          //  btnGraficar = new Button();
             chartPrincipal = new System.Windows.Forms.DataVisualization.Charting.Chart();
             pnlImportar.SuspendLayout();
             tabControlPrincipal.SuspendLayout();
@@ -76,7 +76,6 @@ namespace DataArenaFusion
             pnlImportar.Controls.Add(btnExpPostgre);
             pnlImportar.Controls.Add(lblAcciones);
             pnlImportar.Controls.Add(btnLimpiar);
-            pnlImportar.Controls.Add(btnGenerarGrafica);
             pnlImportar.Dock = DockStyle.Left;
             pnlImportar.Location = new Point(0, 0);
             pnlImportar.Name = "pnlImportar";
@@ -265,19 +264,7 @@ namespace DataArenaFusion
             btnLimpiar.Text = "Limpiar Datos";
             btnLimpiar.UseVisualStyleBackColor = false;
             // 
-            // btnGenerarGrafica
-            // 
-            btnGenerarGrafica.BackColor = Color.FromArgb(255, 46, 115);
-            btnGenerarGrafica.FlatAppearance.BorderSize = 0;
-            btnGenerarGrafica.FlatStyle = FlatStyle.Flat;
-            btnGenerarGrafica.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnGenerarGrafica.ForeColor = Color.White;
-            btnGenerarGrafica.Location = new Point(15, 548);
-            btnGenerarGrafica.Name = "btnGenerarGrafica";
-            btnGenerarGrafica.Size = new Size(210, 40);
-            btnGenerarGrafica.TabIndex = 12;
-            btnGenerarGrafica.Text = "Generar Grafica";
-            btnGenerarGrafica.UseVisualStyleBackColor = false;
+
             // 
             // tabControlPrincipal
             // 
@@ -370,7 +357,6 @@ namespace DataArenaFusion
             pnlConfigGrafica.Controls.Add(cmbEjeY);
             pnlConfigGrafica.Controls.Add(lblTipo);
             pnlConfigGrafica.Controls.Add(cmbTipoGrafica);
-            pnlConfigGrafica.Controls.Add(btnGraficar);
             pnlConfigGrafica.Dock = DockStyle.Top;
             pnlConfigGrafica.Location = new Point(3, 3);
             pnlConfigGrafica.Name = "pnlConfigGrafica";
@@ -441,19 +427,7 @@ namespace DataArenaFusion
             cmbTipoGrafica.Size = new Size(155, 31);
             cmbTipoGrafica.TabIndex = 5;
             // 
-            // btnGraficar
-            // 
-            btnGraficar.BackColor = Color.FromArgb(255, 46, 115);
-            btnGraficar.FlatAppearance.BorderSize = 0;
-            btnGraficar.FlatStyle = FlatStyle.Flat;
-            btnGraficar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnGraficar.ForeColor = Color.White;
-            btnGraficar.Location = new Point(752, 13);
-            btnGraficar.Name = "btnGraficar";
-            btnGraficar.Size = new Size(155, 36);
-            btnGraficar.TabIndex = 10;
-            btnGraficar.Text = "Generar Grafica";
-            btnGraficar.UseVisualStyleBackColor = false;
+
             // 
             // chartPrincipal
             // 
@@ -507,7 +481,6 @@ namespace DataArenaFusion
         private System.Windows.Forms.Button btnExpMaria;
         private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.Button btnLimpiar;
-        private System.Windows.Forms.Button btnGenerarGrafica;
         private System.Windows.Forms.TabControl tabControlPrincipal;
         private System.Windows.Forms.TabPage tabTabla;
         private System.Windows.Forms.TabPage tabGraficas;
@@ -522,6 +495,5 @@ namespace DataArenaFusion
         private System.Windows.Forms.Label lblEjeY;
         private System.Windows.Forms.ComboBox cmbEjeX;
         private System.Windows.Forms.Label lblEjeX;
-        private System.Windows.Forms.Button btnGraficar;
     }
 }

@@ -24,6 +24,9 @@ namespace DataArenaFusion.Services
             var lector = LectorFactory.ObtenerLector(ruta);
             var importacion = lector.Leer(ruta);
 
+            // Llamar al nuevo servicio inteligente de APIs
+            DataEnricherService.EnriquecerTabla(importacion);
+
             AsegurarColumnaFuente();
             var fuente = ObtenerNombreFuenteUnico(ruta);
 
