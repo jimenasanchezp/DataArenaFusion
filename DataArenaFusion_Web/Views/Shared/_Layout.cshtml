@@ -143,28 +143,31 @@
             if (tbody) {
                 tbody.innerHTML = '<tr><td class="text-center p-4 text-primary" colspan="100%"><strong>⏳ Cargando datos...</strong></td></tr>';
             }
-
+             
             try {
+                console.log("1. Enviando archivo al servidor...");
                 const res = await fetch('/api/DataApi/Upload', {
                     method: 'POST',
                     body: fd
                 });
 
                 if (res.ok) {
-                    // Esperar a que loadDataGrid este disponible (se define en Index.cshtml)
+                    console.log("2. Archivo subido. Solicitando datos de vuelta...");
                     if (typeof window.loadDataGrid === 'function') {
                         await window.loadDataGrid();
+                        console.log("3. ¡Tabla cargada exitosamente!");
                     } else {
-                        // Fallback: recargar la pagina
                         window.location.reload();
                     }
                 } else {
                     const err = await res.json().catch(() => ({ message: 'Error desconocido' }));
-                    alert('Error al cargar el archivo: ' + (err.message || res.statusText));
+                    alert('Error al cargar el archivo: ' + err.message);
                     if (tbody) tbody.innerHTML = '<tr><td class="text-center text-danger p-4" colspan="100%">Error al cargar el archivo.</td></tr>';
                 }
             } catch (ex) {
-                alert('Error de red: ' + ex.message);
+                // ESTE ALERT NOS DIRÁ EXACTAMENTE QUÉ PASÓ
+                alert('ERROR FATAL: Revisa la consola (F12)');
+                console.error("El servidor cortó la conexión abruptamente. Error detallado: ", ex);
             }
         });
     </script>

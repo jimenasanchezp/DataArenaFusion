@@ -15,10 +15,13 @@ namespace DataArenaFusion_Web.Controllers
             _gestor = gestor;
         }
 
+        // --- INICIO DE LA CORRECCIÓN PARA ARCHIVOS GRANDES ---
         [HttpPost("Upload")]
+        [DisableRequestSizeLimit]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
         public async Task<IActionResult> Upload([FromForm] IFormFile file)
         {
-            if (file == null || file.Length == 0) return BadRequest("Archivo inválido.");
+            if (file == null || file.Length == 0) return BadRequest("Archivo inválido o no se recibió.");
 
             var tempPath = Path.GetTempFileName() + Path.GetExtension(file.FileName);
             using (var stream = new FileStream(tempPath, FileMode.Create))
@@ -40,6 +43,7 @@ namespace DataArenaFusion_Web.Controllers
                 if (System.IO.File.Exists(tempPath)) System.IO.File.Delete(tempPath);
             }
         }
+        // --- FIN DE LA CORRECCIÓN ---
 
         [HttpGet("GetData")]
         public IActionResult GetData()
@@ -54,8 +58,13 @@ namespace DataArenaFusion_Web.Controllers
                     columns.Add(col.ColumnName);
                 }
 
-                foreach (DataRow row in _gestor.TablaActual.Rows)
+                // --- LÍMITE DE SEGURIDAD PARA EVITAR CRASH DEL SERVIDOR ---
+                // Mandamos máximo 2,000 filas al frontend (el total de la tabla sigue intacto en memoria para las gráficas)
+                int limite = Math.Min(_gestor.TablaActual.Rows.Count, 2000);
+
+                for (int i = 0; i < limite; i++)
                 {
+                    var row = _gestor.TablaActual.Rows[i];
                     var dict = new Dictionary<string, object>();
                     foreach (DataColumn col in _gestor.TablaActual.Columns)
                     {
@@ -83,9 +92,9 @@ namespace DataArenaFusion_Web.Controllers
             if (string.IsNullOrWhiteSpace(columna)) return BadRequest("Columna requerida");
             var procesador = new DataArenaFusion.Processing.Procesadores.ProcesadorDuplicados(_gestor.ColId, _gestor.ColCat, _gestor.ColVal);
             var duplicados = procesador.Procesar(_gestor.RegistrosActuales, columna);
-            
+
             var valoresRepetidos = new HashSet<string>();
-            foreach(var d in duplicados)
+            foreach (var d in duplicados)
             {
                 string val = "";
                 if (columna == _gestor.ColId) val = d.Id.ToString();
@@ -101,12 +110,12 @@ namespace DataArenaFusion_Web.Controllers
         public async Task<IActionResult> EnriquecerApi()
         {
             if (_gestor.TablaActual.Rows.Count == 0) return BadRequest("No hay datos.");
-            
+
             await DataEnricherService.EnriquecerDataTableAsync(_gestor.TablaActual);
             // After modifying DataTable, reload into records optionally or just leave table modified.
             return Ok();
         }
-        
+
         [HttpPost("Limpiar")]
         public IActionResult Limpiar()
         {

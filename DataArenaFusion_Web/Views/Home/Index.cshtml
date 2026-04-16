@@ -25,7 +25,6 @@
 </style>
 
 <div class="tab-container">
-    <!-- Navbar Tabs Equivalentes -->
     <ul class="nav nav-tabs bg-white pt-2 px-2 border-bottom-0" id="mainTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active fw-bold text-dark border-bottom-0" id="tabla-tab" data-bs-toggle="tab" data-bs-target="#tabla-pane" type="button" role="tab">Tabla de Datos</button>
@@ -35,12 +34,9 @@
         </li>
     </ul>
 
-    <!-- Tab Content -->
     <div class="tab-content flex-grow-1 d-flex flex-column" id="mainTabsContent" style="overflow: hidden;">
         
-        <!-- Pestaña TABLA -->
         <div class="tab-pane fade show active h-100 flex-column" id="tabla-pane" role="tabpanel" style="display: flex;">
-            <!-- Filter Panel -->
             <div class="filter-panel">
                 <span class="fw-bold" style="color: #6b7280;">Registros: <span id="lblRegistros">0</span></span>
                 <div style="width: 2px; height: 20px; background: #e5e7eb; margin: 0 10px;"></div>
@@ -55,7 +51,6 @@
                 <button class="btn-duplicados" onclick="accionAPI('Duplicados')">Extraer Duplicados</button>
             </div>
 
-            <!-- DataGrid Area -->
             <div class="flex-grow-1" style="overflow: auto;">
                 <table class="dgv-table" id="dgvDatos">
                     <thead><tr id="dgvHeaders"></tr></thead>
@@ -66,9 +61,7 @@
             </div>
         </div>
 
-        <!-- Pestaña GRAFICA -->
         <div class="tab-pane fade h-100 flex-column" id="grafica-pane" role="tabpanel" style="display:flex; flex-direction:column; background-color: white;">
-            <!-- Toolbar de la gráfica (igual que en WinForms) -->
             <div class="filter-panel" style="gap:16px; flex-wrap: wrap;">
                 <div class="d-flex align-items-center gap-2">
                     <label class="fw-bold" style="color:#111827; white-space:nowrap;">Eje X:</label>
@@ -89,7 +82,6 @@
                 </div>
                 <button class="btn-ordenar" style="background:#2563eb;" onclick="generarGrafica()">📊 Generar Gráfica</button>
             </div>
-            <!-- Canvas de Chart.js -->
             <div class="flex-grow-1 d-flex align-items-center justify-content-center p-3" style="overflow:hidden;">
                 <canvas id="chartPrincipal" style="max-height:500px;"></canvas>
                 <p id="chartPlaceholder" class="text-muted text-center">Importa datos y presiona <strong>Generar Gráfica</strong>.</p>
@@ -106,7 +98,7 @@
     let _globalData    = [];
     let _chartInstance = null;
 
-    // ─── loadDataGrid: Sobrescribe la version del Layout ─────────────────────
+    // ─── loadDataGrid: Obtener datos de la API ───────────────────────────────
     window.loadDataGrid = async function() {
         const res = await fetch('/api/DataApi/GetData');
         if (!res.ok) return;
@@ -166,21 +158,18 @@
         cmbX.innerHTML = '';
         cmbY.innerHTML = '';
 
-        // Detectar cuales columnas son numericas (como en WinForms)
         const numericas = columns.filter(col => {
             const val = data.find(r => r[col] !== '' && r[col] !== null)?.[col];
             return val !== undefined && !isNaN(parseFloat(String(val).replace(/[^0-9.-]/g, '')));
         });
         const texto = columns.filter(c => !numericas.includes(c));
 
-        // Eje X: columnas de texto primero
         [...texto, ...numericas].forEach(col => {
             const o = document.createElement('option');
             o.value = col; o.innerText = col;
             cmbX.appendChild(o);
         });
 
-        // Eje Y: columnas numericas primero
         [...numericas, ...texto].forEach(col => {
             const o = document.createElement('option');
             o.value = col; o.innerText = col;
@@ -188,7 +177,7 @@
         });
     }
 
-    // ─── Generación de gráfica (equivalente a GenerarGrafica en WinForms) ────
+    // ─── Generación de gráfica ────────────────────────────────────────────────
     function generarGrafica() {
         const ejeX  = document.getElementById('cmbEjeX')?.value;
         const ejeY  = document.getElementById('cmbEjeY')?.value;
@@ -202,7 +191,6 @@
             alert('Selecciona Eje X y Eje Y.'); return;
         }
 
-        // Agrupar y sumar (igual que GenerarBarras/GenerarPastel en WinForms)
         const grupos = {};
         _globalData.forEach(row => {
             const labelKey = row[ejeX] ?? '(vacío)';
@@ -211,15 +199,12 @@
             grupos[labelKey] = (grupos[labelKey] || 0) + num;
         });
 
-        // Limitar etiquetas para legibilidad (igual que en WinForms, max ~20)
         const entries = Object.entries(grupos).slice(0, 40);
         const labels  = entries.map(e => e[0]);
         const values  = entries.map(e => parseFloat(e[1].toFixed(2)));
 
-        // Paleta de colores vibrante
         const palette = labels.map((_, i) => `hsl(${(i * 37) % 360}, 70%, 55%)`);
 
-        // Destruir gráfica anterior si existe
         if (_chartInstance) { _chartInstance.destroy(); _chartInstance = null; }
         const canvas = document.getElementById('chartPrincipal');
         if (placeholder) placeholder.style.display = 'none';
@@ -235,7 +220,7 @@
                     backgroundColor: palette,
                     borderColor: palette.map(c => c.replace('55%', '40%')),
                     borderWidth: tipo === 'bar' || tipo === 'line' ? 1.5 : 2,
-                    tension: 0.4  // suavizado de línea
+                    tension: 0.4 
                 }]
             },
             options: {
@@ -258,68 +243,85 @@
         });
     }
 
-    // ─── Botones ──────────────────────────────────────────────────────────────
+    // ─── Botones Superiores de Tabla ──────────────────────────────────────────
     async function accionAPI(accion) {
         const dgvBody = document.getElementById('dgvBody');
         dgvBody.style.opacity = '0.5';
 
-        if (accion === 'Ordenar') {
-            await fetch('/api/DataApi/Ordenar', { method: 'POST' });
-        } else if (accion === 'Duplicados') {
-            const col = document.getElementById('cmbFiltroColumna').value;
-            if (col === 'Todas las columnas') {
-                alert('Selecciona una columna específica para buscar duplicados.');
-                dgvBody.style.opacity = '1'; return;
+        try {
+            if (accion === 'Ordenar') {
+                await fetch('/api/DataApi/Ordenar', { method: 'POST' });
+            } else if (accion === 'Agrupar') {
+                alert("La función de agrupar en tabla aún no está conectada al servidor.");
+            } else if (accion === 'Duplicados') {
+                const col = document.getElementById('cmbFiltroColumna').value;
+                if (col === 'Todas las columnas') {
+                    alert('Selecciona una columna específica para buscar duplicados.');
+                    return; 
+                }
+                
+                const res = await fetch('/api/DataApi/Duplicados?columna=' + encodeURIComponent(col), { method: 'POST' });
+                if (res.ok) {
+                    const duplicados = await res.json();
+                    const rows = document.querySelectorAll('#dgvBody tr');
+                    const colIdx = _globalColumns.indexOf(col);
+                    
+                    rows.forEach(tr => {
+                        const cellVal = tr.cells[colIdx]?.innerText ?? '';
+                        tr.style.backgroundColor = duplicados.includes(cellVal) ? '#fee2e2' : '';
+                    });
+                    
+                    alert(`Se encontraron ${duplicados.length} valores duplicados en "${col}". Están resaltados en rojo.`);
+                    return; 
+                }
             }
-            const res = await fetch('/api/DataApi/Duplicados?columna=' + encodeURIComponent(col), { method: 'POST' });
-            if (res.ok) {
-                const duplicados = await res.json();
-                // Resaltar filas duplicadas en la tabla
-                const rows = document.querySelectorAll('#dgvBody tr');
-                const colIdx = _globalColumns.indexOf(col);
-                rows.forEach(tr => {
-                    const cellVal = tr.cells[colIdx]?.innerText ?? '';
-                    tr.style.backgroundColor = duplicados.includes(cellVal) ? '#fee2e2' : '';
-                });
-                alert(`Se encontraron ${duplicados.length} valores duplicados en "${col}". Están resaltados en rojo.`);
-            }
-        }
 
-        await window.loadDataGrid();
-        dgvBody.style.opacity = '1';
+            // Solo se recarga la tabla si fue Ordenar
+            await window.loadDataGrid();
+        } catch (error) {
+            alert("Ocurrió un error de red: " + error.message);
+        } finally {
+            dgvBody.style.opacity = '1';
+        }
     }
 
-    document.getElementById('btnApi').addEventListener('click', async () => {
-        document.getElementById('btnApi').innerText = "Procesando...";
-        document.getElementById('btnApi').disabled = true;
-        try {
-            await fetch('/api/DataApi/EnriquecerApi', { method: 'POST' });
-            await window.loadDataGrid();
-            alert("Datos enriquecidos con éxito desde las APIs de internet.");
-        } catch(e) {
-            alert("Error de red: " + e.message);
-        } finally {
-            document.getElementById('btnApi').innerText = "API";
-            document.getElementById('btnApi').disabled = false;
-        }
-    });
+    // ─── Eventos Extras (Limpieza y APIs Externas) ────────────────────────────
+    // Verificamos de forma segura si los botones existen en _Layout.cshtml
+    const btnApi = document.getElementById('btnApi');
+    if (btnApi) {
+        btnApi.addEventListener('click', async () => {
+            btnApi.innerText = "Procesando...";
+            btnApi.disabled = true;
+            try {
+                await fetch('/api/DataApi/EnriquecerApi', { method: 'POST' });
+                await window.loadDataGrid();
+                alert("Datos enriquecidos con éxito desde las APIs de internet.");
+            } catch(e) {
+                alert("Error de red: " + e.message);
+            } finally {
+                btnApi.innerText = "API";
+                btnApi.disabled = false;
+            }
+        });
+    }
 
-    document.getElementById('btnLimpiar').addEventListener('click', async () => {
-        await fetch('/api/DataApi/Limpiar', { method: 'POST' });
-        _globalColumns = []; _globalData = [];
-        document.getElementById('dgvHeaders').innerHTML = '';
-        document.getElementById('dgvBody').innerHTML = '<tr><td class="text-center p-5 text-muted" colspan="100%">No hay datos cargados.</td></tr>';
-        document.getElementById('lblRegistros').innerText = "0";
-        if (_chartInstance) { _chartInstance.destroy(); _chartInstance = null; }
-        const ph = document.getElementById('chartPlaceholder');
-        if (ph) ph.style.display = '';
-        const cv = document.getElementById('chartPrincipal');
-        if (cv) cv.style.display = 'none';
-    });
+    const btnLimpiar = document.getElementById('btnLimpiar');
+    if (btnLimpiar) {
+        btnLimpiar.addEventListener('click', async () => {
+            await fetch('/api/DataApi/Limpiar', { method: 'POST' });
+            _globalColumns = []; _globalData = [];
+            document.getElementById('dgvHeaders').innerHTML = '';
+            document.getElementById('dgvBody').innerHTML = '<tr><td class="text-center p-5 text-muted" colspan="100%">No hay datos cargados.</td></tr>';
+            document.getElementById('lblRegistros').innerText = "0";
+            if (_chartInstance) { _chartInstance.destroy(); _chartInstance = null; }
+            const ph = document.getElementById('chartPlaceholder');
+            if (ph) ph.style.display = '';
+            const cv = document.getElementById('chartPrincipal');
+            if (cv) cv.style.display = 'none';
+        });
+    }
 
     // Estado inicial
     window.loadDataGrid();
 </script>
 }
-
-
