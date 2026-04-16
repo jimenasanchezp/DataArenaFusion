@@ -46,7 +46,8 @@ namespace DataArenaFusion
         private void ConfigurarInterfazInicial()
         {
             dgvDatos.AutoGenerateColumns = true;
-            dgvDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            dgvDatos.ScrollBars = ScrollBars.Both;
             dgvDatos.DataSource = _gestorDatos.TablaActual;
 
             cmbTipoGrafica.Items.Clear();

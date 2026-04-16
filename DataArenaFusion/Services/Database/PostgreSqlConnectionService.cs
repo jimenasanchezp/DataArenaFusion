@@ -108,11 +108,37 @@ namespace DataArenaFusion.Services.Database
                 CrearTabla(connection, tableName, columnas);
                 tablasCreadas++;
 
+                using var transaction = connection.BeginTransaction();
+                using var cmd = connection.CreateCommand();
+                cmd.Transaction = transaction;
+
+                var nombresParametros = new List<string>();
+                for (int i = 0; i < columnas.Count; i++)
+                {
+                    var nombreParametro = $"@p{i}";
+                    nombresParametros.Add(nombreParametro);
+
+                    var parameter = cmd.CreateParameter();
+                    parameter.ParameterName = nombreParametro;
+                    cmd.Parameters.Add(parameter);
+                }
+
+                var columnasSql = string.Join(", ", columnas.Select(QuoteIdentifier));
+                var parametrosSql = string.Join(", ", nombresParametros);
+                cmd.CommandText = $"INSERT INTO {QuoteIdentifier(tableName)} ({columnasSql}) VALUES ({parametrosSql});";
+                cmd.Prepare();
+
                 foreach (var fila in grupo)
                 {
-                    InsertarFila(connection, tableName, columnas, fila);
+                    for (int i = 0; i < columnas.Count; i++)
+                    {
+                        cmd.Parameters[i].Value = fila[columnas[i]]?.ToString() ?? string.Empty;
+                    }
+                    cmd.ExecuteNonQuery();
                     filasInsertadas++;
                 }
+
+                transaction.Commit();
             }
 
             return $"PostgreSQL listo. Se crearon {tablasCreadas} tablas e insertaron {filasInsertadas} filas.";
@@ -180,27 +206,7 @@ namespace DataArenaFusion.Services.Database
             cmd.ExecuteNonQuery();
         }
 
-        private void InsertarFila(DbConnection connection, string tableName, IReadOnlyList<string> columnas, DataRow fila)
-        {
-            using var cmd = connection.CreateCommand();
-            var nombresParametros = new List<string>();
 
-            for (int i = 0; i < columnas.Count; i++)
-            {
-                var nombreParametro = $"@p{i}";
-                nombresParametros.Add(nombreParametro);
-
-                var parameter = cmd.CreateParameter();
-                parameter.ParameterName = nombreParametro;
-                parameter.Value = fila[columnas[i]]?.ToString() ?? string.Empty;
-                cmd.Parameters.Add(parameter);
-            }
-
-            var columnasSql = string.Join(", ", columnas.Select(QuoteIdentifier));
-            var parametrosSql = string.Join(", ", nombresParametros);
-            cmd.CommandText = $"INSERT INTO {QuoteIdentifier(tableName)} ({columnasSql}) VALUES ({parametrosSql});";
-            cmd.ExecuteNonQuery();
-        }
 
         private static string QuoteIdentifier(string value)
         {
