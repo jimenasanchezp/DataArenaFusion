@@ -34,11 +34,17 @@ namespace DataArenaFusion
             lblAcciones = new Label();
             btnLimpiar = new Button();
             btnConsola = new Button();
+            btnApi = new Button();
             tabControlPrincipal = new TabControl();
             tabTabla = new TabPage();
             dgvDatos = new DataGridView();
             pnlFiltro = new Panel();
             lblRegistros = new Label();
+            lblFiltro = new Label();
+            cmbFiltroColumna = new ComboBox();
+            btnOrdenar = new Button();
+            btnAgrupar = new Button();
+            btnDuplicados = new Button();
             tabGraficas = new TabPage();
             pnlConfigGrafica = new Panel();
             lblEjeX = new Label();
@@ -76,6 +82,7 @@ namespace DataArenaFusion
             pnlImportar.Controls.Add(btnExpPostgre);
             pnlImportar.Controls.Add(lblAcciones);
             pnlImportar.Controls.Add(btnLimpiar);
+            pnlImportar.Controls.Add(btnApi);
             pnlImportar.Controls.Add(btnConsola);
             pnlImportar.Dock = DockStyle.Left;
             pnlImportar.Location = new Point(0, 0);
@@ -281,6 +288,20 @@ namespace DataArenaFusion
             btnConsola.Text = "Abrir Consola";
             btnConsola.UseVisualStyleBackColor = false;
             // 
+            // btnApi
+            // 
+            btnApi.BackColor = Color.FromArgb(75, 46, 255);
+            btnApi.FlatAppearance.BorderSize = 0;
+            btnApi.FlatStyle = FlatStyle.Flat;
+            btnApi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnApi.ForeColor = Color.White;
+            btnApi.Location = new Point(15, 600);
+            btnApi.Name = "btnApi";
+            btnApi.Size = new Size(210, 40);
+            btnApi.TabIndex = 13;
+            btnApi.Text = "API";
+            btnApi.UseVisualStyleBackColor = false;
+            // 
             // tabControlPrincipal
             // 
             tabControlPrincipal.Controls.Add(tabTabla);
@@ -309,6 +330,11 @@ namespace DataArenaFusion
             // 
             pnlFiltro.BackColor = Color.White;
             pnlFiltro.Controls.Add(lblRegistros);
+            pnlFiltro.Controls.Add(lblFiltro);
+            pnlFiltro.Controls.Add(cmbFiltroColumna);
+            pnlFiltro.Controls.Add(btnOrdenar);
+            pnlFiltro.Controls.Add(btnAgrupar);
+            pnlFiltro.Controls.Add(btnDuplicados);
             pnlFiltro.Dock = DockStyle.Top;
             pnlFiltro.Location = new Point(3, 3);
             pnlFiltro.Name = "pnlFiltro";
@@ -325,6 +351,69 @@ namespace DataArenaFusion
             lblRegistros.Size = new Size(95, 25);
             lblRegistros.TabIndex = 2;
             lblRegistros.Text = "0 registros";
+            // 
+            // lblFiltro
+            // 
+            lblFiltro.AutoSize = true;
+            lblFiltro.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblFiltro.ForeColor = Color.FromArgb(75, 85, 99);
+            lblFiltro.Location = new Point(200, 16);
+            lblFiltro.Name = "lblFiltro";
+            lblFiltro.Size = new Size(94, 23);
+            lblFiltro.TabIndex = 3;
+            lblFiltro.Text = "Filtrar por:";
+            // 
+            // cmbFiltroColumna
+            // 
+            cmbFiltroColumna.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltroColumna.Font = new Font("Segoe UI", 10F);
+            cmbFiltroColumna.FormattingEnabled = true;
+            cmbFiltroColumna.Location = new Point(295, 12);
+            cmbFiltroColumna.Name = "cmbFiltroColumna";
+            cmbFiltroColumna.Size = new Size(180, 31);
+            cmbFiltroColumna.TabIndex = 4;
+            // 
+            // btnOrdenar
+            // 
+            btnOrdenar.BackColor = Color.FromArgb(46, 115, 255);
+            btnOrdenar.FlatAppearance.BorderSize = 0;
+            btnOrdenar.FlatStyle = FlatStyle.Flat;
+            btnOrdenar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnOrdenar.ForeColor = Color.White;
+            btnOrdenar.Location = new Point(500, 10);
+            btnOrdenar.Name = "btnOrdenar";
+            btnOrdenar.Size = new Size(130, 32);
+            btnOrdenar.TabIndex = 5;
+            btnOrdenar.Text = "Ordenar";
+            btnOrdenar.UseVisualStyleBackColor = false;
+            // 
+            // btnAgrupar
+            // 
+            btnAgrupar.BackColor = Color.FromArgb(46, 115, 255);
+            btnAgrupar.FlatAppearance.BorderSize = 0;
+            btnAgrupar.FlatStyle = FlatStyle.Flat;
+            btnAgrupar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAgrupar.ForeColor = Color.White;
+            btnAgrupar.Location = new Point(640, 10);
+            btnAgrupar.Name = "btnAgrupar";
+            btnAgrupar.Size = new Size(130, 32);
+            btnAgrupar.TabIndex = 6;
+            btnAgrupar.Text = "Agrupar";
+            btnAgrupar.UseVisualStyleBackColor = false;
+            // 
+            // btnDuplicados
+            // 
+            btnDuplicados.BackColor = Color.FromArgb(46, 115, 255);
+            btnDuplicados.FlatAppearance.BorderSize = 0;
+            btnDuplicados.FlatStyle = FlatStyle.Flat;
+            btnDuplicados.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnDuplicados.ForeColor = Color.White;
+            btnDuplicados.Location = new Point(780, 10);
+            btnDuplicados.Name = "btnDuplicados";
+            btnDuplicados.Size = new Size(140, 32);
+            btnDuplicados.TabIndex = 7;
+            btnDuplicados.Text = "Duplicados";
+            btnDuplicados.UseVisualStyleBackColor = false;
             // 
             // dgvDatos
             // 
@@ -497,12 +586,18 @@ namespace DataArenaFusion
         private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.Button btnConsola;
+        private System.Windows.Forms.Button btnApi;
         private System.Windows.Forms.TabControl tabControlPrincipal;
         private System.Windows.Forms.TabPage tabTabla;
         private System.Windows.Forms.TabPage tabGraficas;
         private System.Windows.Forms.Panel pnlFiltro;
         private System.Windows.Forms.DataGridView dgvDatos;
         private System.Windows.Forms.Label lblRegistros;
+        private System.Windows.Forms.Label lblFiltro;
+        private System.Windows.Forms.ComboBox cmbFiltroColumna;
+        private System.Windows.Forms.Button btnOrdenar;
+        private System.Windows.Forms.Button btnAgrupar;
+        private System.Windows.Forms.Button btnDuplicados;
         private System.Windows.Forms.Panel pnlConfigGrafica;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartPrincipal;
         private System.Windows.Forms.ComboBox cmbTipoGrafica;

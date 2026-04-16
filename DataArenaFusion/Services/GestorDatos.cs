@@ -12,6 +12,14 @@ namespace DataArenaFusion.Services
         public List<Registro> RegistrosActuales { get; private set; }
         public Dictionary<int, Registro> IndiceId { get; private set; }
 
+        public string ColId => _colId;
+        public string ColCat => _colCat;
+        public string ColVal => _colVal;
+
+        private string _colId = "Id";
+        private string _colCat = "Categoria";
+        private string _colVal = "Valor";
+
         public GestorDatos()
         {
             TablaActual = CrearTablaBase();
@@ -24,8 +32,8 @@ namespace DataArenaFusion.Services
             var lector = LectorFactory.ObtenerLector(ruta);
             var importacion = lector.Leer(ruta);
 
-            // Llamar al nuevo servicio inteligente de APIs
-            DataEnricherService.EnriquecerTabla(importacion);
+            // Llamar al nuevo servicio inteligente de APIs (DESACTIVADO POR RENDIMIENTO)
+            // DataEnricherService.EnriquecerTabla(importacion);
 
             AsegurarColumnaFuente();
             var fuente = ObtenerNombreFuenteUnico(ruta);
@@ -47,6 +55,20 @@ namespace DataArenaFusion.Services
             OrdenadorDatos.BubbleSortPorValor(RegistrosActuales, true);
         }
 
+        public void FiltrarDatos(string columna, string valor)
+        {
+            if (string.IsNullOrWhiteSpace(columna) || string.IsNullOrWhiteSpace(valor) || columna == "Todas las columnas")
+            {
+                TablaActual.DefaultView.RowFilter = string.Empty;
+            }
+            else
+            {
+                // Escape simple quotes and avoid injection by doing basic escaping
+                var valorSeguro = valor.Replace("'", "''");
+                TablaActual.DefaultView.RowFilter = $"CONVERT([{columna}], 'System.String') LIKE '%{valorSeguro}%'";
+            }
+        }
+
         public Dictionary<string, double> ObtenerDatosParaGrafica()
         {
             return Agrupador.SumarPorCategoria(RegistrosActuales);
@@ -55,6 +77,108 @@ namespace DataArenaFusion.Services
         public int ContarDuplicados()
         {
             return DetectorDuplicados.ObtenerDuplicados(RegistrosActuales).Count;
+        }
+
+        public List<Registro> ObtenerListaDuplicados()
+        {
+            return DetectorDuplicados.ObtenerDuplicados(RegistrosActuales);
+        }
+
+        public void SincronizarTablaDesdeMemoria()
+        {
+            TablaActual.BeginLoadData();
+            TablaActual.Rows.Clear();
+            
+            // Cachear el esquema de la tabla
+            bool hasId = TablaActual.Columns.Contains(_colId);
+            bool hasCat = TablaActual.Columns.Contains(_colCat);
+            bool hasVal = TablaActual.Columns.Contains(_colVal);
+            
+            foreach (var reg in RegistrosActuales)
+            {
+                var fila = TablaActual.NewRow();
+                
+                if (hasId) fila[_colId] = reg.Id.ToString();
+                if (hasCat) fila[_colCat] = reg.Categoria;
+                if (hasVal) fila[_colVal] = reg.Valor.ToString(CultureInfo.InvariantCulture);
+
+                foreach (var extra in reg.Extras)
+                {
+                    if (TablaActual.Columns.Contains(extra.Key))
+                    {
+                        fila[extra.Key] = extra.Value;
+                    }
+                }
+                TablaActual.Rows.Add(fila);
+            }
+            
+            TablaActual.EndLoadData();
+        }
+
+        private List<Registro> ConvertirARegistros(DataTable tabla)
+        {
+            var registros = new List<Registro>();
+            DetectarColumnas(tabla);
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                var valorIdStr = !string.IsNullOrEmpty(_colId) ? fila[_colId]?.ToString() : "0";
+                var valorCat = !string.IsNullOrEmpty(_colCat) ? fila[_colCat]?.ToString() ?? "" : "General";
+                var valorNumStr = !string.IsNullOrEmpty(_colVal) ? fila[_colVal]?.ToString() : "0";
+
+                // Intentar Parsear ID (si existe)
+                int id = 0;
+                int.TryParse(valorIdStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out id);
+
+                // Intentar Parsear Valor
+                double valor = 0;
+                if (!string.IsNullOrEmpty(valorNumStr))
+                {
+                    if (!double.TryParse(valorNumStr, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out valor))
+                    {
+                        double.TryParse(valorNumStr, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out valor);
+                    }
+                }
+
+                var extras = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                foreach (DataColumn columna in tabla.Columns)
+                {
+                    if (EsColumnaPrincipal(columna.ColumnName)) continue;
+                    extras[columna.ColumnName] = fila[columna.ColumnName]?.ToString() ?? string.Empty;
+                }
+
+                registros.Add(new Registro
+                {
+                    Id = id,
+                    Categoria = valorCat,
+                    Valor = valor,
+                    Extras = extras
+                });
+            }
+
+            return registros;
+        }
+
+        private void DetectarColumnas(DataTable tabla)
+        {
+            var headers = tabla.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+
+            // Buscar ID
+            _colId = headers.FirstOrDefault(h => new[] { "id", "código", "item", "nro", "key", "code" }.Any(k => h.Contains(k, StringComparison.OrdinalIgnoreCase))) ?? "";
+            
+            // Buscar Categoria
+            _colCat = headers.FirstOrDefault(h => new[] { "nombre", "producto", "categoría", "descripción", "tipo", "name", "category", "description" }.Any(k => h.Contains(k, StringComparison.OrdinalIgnoreCase))) ?? "";
+
+            // Buscar Valor
+            _colVal = headers.FirstOrDefault(h => new[] { "precio", "monto", "cantidad", "valor", "total", "price", "amount", "value", "quantity" }.Any(k => h.Contains(k, StringComparison.OrdinalIgnoreCase))) ?? "";
+        }
+
+        private bool EsColumnaPrincipal(string encabezado)
+        {
+            return (encabezado == _colId && !string.IsNullOrEmpty(_colId)) || 
+                   (encabezado == _colCat && !string.IsNullOrEmpty(_colCat)) || 
+                   (encabezado == _colVal && !string.IsNullOrEmpty(_colVal));
         }
 
         private void AgregarImportacion(TablaImportada importacion, string fuente)
@@ -141,66 +265,6 @@ namespace DataArenaFusion.Services
                     IndiceId.Add(reg.Id, reg);
                 }
             }
-        }
-
-        private static List<Registro> ConvertirARegistros(DataTable tabla)
-        {
-            var registros = new List<Registro>();
-
-            if (!tabla.Columns.Contains("Id") ||
-                !tabla.Columns.Contains("Categoria") ||
-                !tabla.Columns.Contains("Valor"))
-            {
-                return registros;
-            }
-
-            foreach (DataRow fila in tabla.Rows)
-            {
-                var valorId = fila["Id"]?.ToString();
-                var valorCategoria = fila["Categoria"]?.ToString() ?? string.Empty;
-                var valorImporte = fila["Valor"]?.ToString();
-
-                if (!int.TryParse(valorId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var id) &&
-                    !int.TryParse(valorId, NumberStyles.Integer, CultureInfo.CurrentCulture, out id))
-                {
-                    continue;
-                }
-
-                if (!double.TryParse(valorImporte, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var valor) &&
-                    !double.TryParse(valorImporte, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out valor))
-                {
-                    continue;
-                }
-
-                var extras = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-                foreach (DataColumn columna in tabla.Columns)
-                {
-                    if (EsColumnaPrincipal(columna.ColumnName))
-                    {
-                        continue;
-                    }
-
-                    extras[columna.ColumnName] = fila[columna.ColumnName]?.ToString() ?? string.Empty;
-                }
-
-                registros.Add(new Registro
-                {
-                    Id = id,
-                    Categoria = valorCategoria,
-                    Valor = valor,
-                    Extras = extras
-                });
-            }
-
-            return registros;
-        }
-
-        private static bool EsColumnaPrincipal(string encabezado)
-        {
-            return string.Equals(encabezado, "Id", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(encabezado, "Categoria", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(encabezado, "Valor", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

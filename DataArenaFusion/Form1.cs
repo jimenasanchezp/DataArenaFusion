@@ -7,6 +7,8 @@ using DataArenaFusion.Services;
 using DataArenaFusion.Services.Database;
 
 using System.Runtime.InteropServices;
+using DataArenaFusion.Processing.Procesadores;
+
 namespace DataArenaFusion
 {
     public partial class Form1 : Form
@@ -38,11 +40,17 @@ namespace DataArenaFusion
             //btnGenerarGrafica.Click += (_, _) => GenerarGrafica();
             btnLimpiar.Click += (_, _) => LimpiarPantalla();
             btnConsola.Click += btnConsola_Click;
+            btnApi.Click += btnApi_Click;
 
             cmbEjeX.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
             cmbEjeY.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
             cmbTipoGrafica.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
 
+            cmbFiltroColumna.SelectedIndexChanged += (_, _) => AplicarFiltro();
+
+            btnOrdenar.Click += btnOrdenar_Click;
+            btnAgrupar.Click += btnAgrupar_Click;
+            btnDuplicados.Click += btnDuplicados_Click;
         }
 
         private void ConfigurarInterfazInicial()
@@ -122,6 +130,173 @@ namespace DataArenaFusion
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool AllocConsole();
 
+        private void btnOrdenar_Click(object sender, EventArgs e)
+        {
+            if (_gestorDatos.RegistrosActuales.Count == 0 || cmbFiltroColumna.SelectedItem == null)
+            {
+                MessageBox.Show("Carga un archivo y selecciona una columna para ordenar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string columna = cmbFiltroColumna.SelectedItem.ToString();
+            if (columna == "Todas las columnas")
+            {
+                MessageBox.Show("Selecciona una columna específica para ordenar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            
+            Cursor = Cursors.WaitCursor;
+            
+            // Pausar UI
+            dgvDatos.SuspendLayout();
+            var modoAnterior = dgvDatos.AutoSizeColumnsMode;
+            dgvDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; // Desactiva recálculo de ancho por fila
+
+            var procesador = new ProcesadorOrdenamiento(_gestorDatos.ColId, _gestorDatos.ColCat, _gestorDatos.ColVal);
+            procesador.Procesar(_gestorDatos.RegistrosActuales, columna);
+            
+            _gestorDatos.SincronizarTablaDesdeMemoria();
+            dgvDatos.DataSource = null;
+            dgvDatos.DataSource = _gestorDatos.TablaActual;
+            
+            // Restaurar UI
+            dgvDatos.AutoSizeColumnsMode = modoAnterior;
+            dgvDatos.ResumeLayout();
+            
+            Cursor = Cursors.Default;
+            
+            MessageBox.Show($"Datos ordenados por '{columna}' exitosamente usando QuickSort.", "Ordenamiento", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnAgrupar_Click(object sender, EventArgs e)
+        {
+            if (_gestorDatos.RegistrosActuales.Count == 0 || cmbFiltroColumna.SelectedItem == null)
+            {
+                MessageBox.Show("Carga un archivo y selecciona una columna en el Buscador para agrupar o contar sus registros.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            string columna = cmbFiltroColumna.SelectedItem.ToString();
+            if (columna == "Todas las columnas")
+            {
+                MessageBox.Show("Selecciona una columna específica para agrupar (ej: Ciudad o Categoría).", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var procesador = new ProcesadorAgrupamiento(_gestorDatos.ColId, _gestorDatos.ColCat, _gestorDatos.ColVal);
+            var agrupados = procesador.Procesar(_gestorDatos.RegistrosActuales, columna);
+            
+            if (agrupados.Count == 0)
+            {
+                MessageBox.Show("No hay datos suficientes para agrupar por esta columna.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var formReporte = new Form
+            {
+                Text = $"Resumen por {columna} - Data Arena Fusion",
+                Size = new Size(500, 550),
+                StartPosition = FormStartPosition.CenterParent,
+                Icon = this.Icon
+            };
+            
+            var dgvReporte = new DataGridView 
+            { 
+                Dock = DockStyle.Fill, 
+                ReadOnly = true, 
+                AllowUserToAddRows = false, 
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None,
+                EnableHeadersVisualStyles = false
+            };
+            
+            dgvReporte.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(37, 99, 235);
+            dgvReporte.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvReporte.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dgvReporte.ColumnHeadersHeight = 40;
+
+            dgvReporte.Columns.Add("Key", columna);
+            
+            string tituloValor = string.IsNullOrEmpty(_gestorDatos.ColVal) ? "Conteo de Registros" : $"Total ({_gestorDatos.ColVal})";
+            dgvReporte.Columns.Add("Sum", tituloValor);
+
+            bool isCounting = string.IsNullOrEmpty(_gestorDatos.ColVal);
+            foreach(var item in agrupados)
+            {
+                dgvReporte.Rows.Add(item.Key, isCounting ? item.Value.ToString("N0") : item.Value.ToString("N2"));
+            }
+            
+            formReporte.Controls.Add(dgvReporte);
+            formReporte.ShowDialog();
+        }
+
+        private void btnDuplicados_Click(object sender, EventArgs e)
+        {
+            if (_gestorDatos.RegistrosActuales.Count == 0 || cmbFiltroColumna.SelectedItem == null)
+            {
+                MessageBox.Show("Carga un archivo y selecciona una columna en el Buscador para detectar valores repetidos.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            string columna = cmbFiltroColumna.SelectedItem.ToString();
+            if (columna == "Todas las columnas")
+            {
+                MessageBox.Show("Selecciona una columna específica para buscar duplicados.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var procesador = new ProcesadorDuplicados(_gestorDatos.ColId, _gestorDatos.ColCat, _gestorDatos.ColVal);
+            var duplicados = procesador.Procesar(_gestorDatos.RegistrosActuales, columna);
+            
+            if (duplicados.Count == 0)
+            {
+                MessageBox.Show($"No se encontraron duplicados en la columna '{columna}'.", "Duplicados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Cursor = Cursors.WaitCursor;
+            dgvDatos.SuspendLayout();
+
+            // 1. Construir un índice ultra rápido (O(1)) de los valores repetidos
+            var valoresDuplicados = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var d in duplicados)
+            {
+                string val = "";
+                if (columna == _gestorDatos.ColId) val = d.Id.ToString();
+                else if (columna == _gestorDatos.ColCat) val = d.Categoria;
+                else if (columna == _gestorDatos.ColVal) val = d.Valor.ToString(CultureInfo.InvariantCulture);
+                else { d.Extras.TryGetValue(columna, out val); val ??= ""; }
+                
+                valoresDuplicados.Add(val);
+            }
+
+            // 2. Limpiar y Resaltar en un solo ciclo rápido
+            int resaltados = 0;
+            if (dgvDatos.Columns.Contains(columna))
+            {
+                foreach (DataGridViewRow row in dgvDatos.Rows)
+                {
+                    string val = row.Cells[columna].Value?.ToString() ?? "";
+
+                    if (valoresDuplicados.Contains(val))
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightCoral;
+                        resaltados++;
+                    }
+                    else
+                    {
+                        row.DefaultCellStyle.BackColor = Color.White;
+                    }
+                }
+            }
+
+            dgvDatos.ResumeLayout();
+            Cursor = Cursors.Default;
+
+            MessageBox.Show($"Se detectaron y resaltaron {resaltados} filas con datos duplicados en '{columna}'.", "Detección de Duplicados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void btnConsola_Click(object sender, EventArgs e)
         {
             if (_gestorDatos.TablaActual == null || _gestorDatos.TablaActual.Rows.Count == 0)
@@ -183,6 +358,59 @@ namespace DataArenaFusion
 
             Console.WriteLine("\n[Datos mostrados. Esta consola refleja el estado actual en memoria.]");
         }
+
+        private async void btnApi_Click(object sender, EventArgs e)
+        {
+            if (_gestorDatos.TablaActual.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay datos cargados para enriquecer.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            btnApi.Enabled = false;
+            btnApi.Text = "Procesando...";
+            Cursor = Cursors.WaitCursor;
+
+            // PREVENCION DE ERROR: Desconectar la tabla de la interfaz (UI thread)
+            // ANTES de modificarla en segundo plano (Background Thread) para evitar NullReferenceException
+            dgvDatos.SuspendLayout();
+            dgvDatos.DataSource = null;
+            dgvDatos.ResumeLayout();
+
+            try
+            {
+                // Enriquecer de forma asincrona para no bloquear UI
+                await DataEnricherService.EnriquecerDataTableAsync(_gestorDatos.TablaActual);
+
+                // Volver a reconectar la tabla a la Interfaz de forma segura
+                dgvDatos.SuspendLayout();
+                dgvDatos.DataSource = _gestorDatos.TablaActual;
+                
+                // Formatear columnas financieras
+                foreach (DataGridViewColumn col in dgvDatos.Columns)
+                {
+                    if (col.Name.EndsWith("(MXN)"))
+                    {
+                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    }
+                }
+                
+                dgvDatos.ResumeLayout();
+                
+                MessageBox.Show("Datos enriquecidos con éxito desde las APIs de internet.", "API", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al conectar con la API: {ex.Message}", "Error API", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnApi.Enabled = true;
+                btnApi.Text = "API";
+                Cursor = Cursors.Default;
+            }
+        }
+
 
         private void ConfigurarGrafica()
         {
@@ -306,8 +534,48 @@ namespace DataArenaFusion
 
             lblRegistros.Text = $"{_gestorDatos.TablaActual.Rows.Count} registros";
             ActualizarCombosGrafica(_gestorDatos.TablaActual);
+            RefrescarFiltros();
             AutoConfigurarGrafica();
             GenerarGrafica();
+        }
+
+        private void RefrescarFiltros()
+        {
+            cmbFiltroColumna.SelectedIndexChanged -= Filtro_SelectedIndexChanged;
+
+            var columnas = _gestorDatos.TablaActual.Columns.Cast<DataColumn>()
+                .Select(c => c.ColumnName).ToArray();
+                
+            cmbFiltroColumna.Items.Clear();
+            cmbFiltroColumna.Items.Add("Todas las columnas");
+            if (columnas.Length > 0) cmbFiltroColumna.Items.AddRange(columnas);
+            
+            if (cmbFiltroColumna.Items.Count > 0) cmbFiltroColumna.SelectedIndex = 0;
+
+            cmbFiltroColumna.SelectedIndexChanged += Filtro_SelectedIndexChanged;
+        }
+
+        private void Filtro_SelectedIndexChanged(object sender, EventArgs e) => AplicarFiltro();
+
+        private void AplicarFiltro()
+        {
+            if (cmbFiltroColumna.SelectedItem == null || dgvDatos.Columns.Count == 0) return;
+            string columna = cmbFiltroColumna.SelectedItem.ToString();
+            
+            if (columna == "Todas las columnas")
+            {
+                foreach (DataGridViewColumn col in dgvDatos.Columns)
+                {
+                    col.Visible = true;
+                }
+            }
+            else
+            {
+                foreach (DataGridViewColumn col in dgvDatos.Columns)
+                {
+                    col.Visible = (col.Name == columna);
+                }
+            }
         }
 
 
