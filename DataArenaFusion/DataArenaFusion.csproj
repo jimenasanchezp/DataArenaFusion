@@ -21,6 +21,9 @@
     <None Update="SampleData\Amazon.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SampleData\data_climate.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SampleData\estudiantes_ai.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

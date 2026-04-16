@@ -483,7 +483,6 @@
         private System.Windows.Forms.Label lblExportar;
         private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.Button btnExpMaria;
-        private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.TabControl tabControlPrincipal;
         private System.Windows.Forms.TabPage tabTabla;
         private System.Windows.Forms.TabPage tabGraficas;
