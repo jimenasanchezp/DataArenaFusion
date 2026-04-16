@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11626.88 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataArenaFusion_Web", "DataArenaFusion_Web.csproj", "{B9A04BF6-03F6-A3F5-0090-83BEB456E713}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9A04BF6-03F6-A3F5-0090-83BEB456E713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9A04BF6-03F6-A3F5-0090-83BEB456E713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9A04BF6-03F6-A3F5-0090-83BEB456E713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9A04BF6-03F6-A3F5-0090-83BEB456E713}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4AE1D0EC-1FFF-4F54-809C-6C2FB0ECDD5C}
+	EndGlobalSection
+EndGlobal
