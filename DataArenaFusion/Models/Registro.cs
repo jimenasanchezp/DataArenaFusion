@@ -1,16 +1,14 @@
-﻿using System;
-using DataArenaFusion.Models;
-namespace DataArenaFusion.Models;
-public class Registro
-{
-    /// <summary>
-    /// Almacena los valores de cada columna para este registro
-    /// Clave: nombre de columna, Valor: el dato
-    /// </summary>
-    public Dictionary<string, object> Datos { get; set; }
+﻿using System.Collections.Generic;
 
-    public Registro()
+namespace DataArenaFusion.Models
+{
+    public class Registro
     {
-        Datos = new Dictionary<string, object>();
+        public int Id { get; set; }
+        public string Categoria { get; set; }
+        public double Valor { get; set; }
+
+        // Atrapa cualquier columna extra que no sean las 3 principales
+        public Dictionary<string, string> Extras { get; set; } = new Dictionary<string, string>();
     }
 }

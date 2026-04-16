@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DataArenaFusion.Data;
+using DataArenaFusion.Models;
 
 namespace DataArenaFusion.Data.Interfaces
 {

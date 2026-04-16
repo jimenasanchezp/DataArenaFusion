@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using DataArenaFusion.Models;
 using DataArenaFusion.Data;
 using DataArenaFusion.Data.Interfaces;
 
