@@ -40,14 +40,43 @@ A continuación se detallan los niveles del reto completados:
 
 ---
 
-## 🏗️ Estructura del Proyecto
+## 🏗️ Estructura de la Solución
 
-La solución está organizada en los siguientes proyectos:
-
-1.  **`DataArenaFusion.Core`**: Biblioteca de clases central. Contiene los modelos, interfaces de lectura, algoritmos de procesamiento y el `GestorDatos`. Es el corazón del sistema.
-2.  **`DataArenaFusion`**: Aplicación de escritorio (WinForms). Ofrece una experiencia premium con modo oscuro, gráficas interactivas y herramientas de administración de bases de datos.
-3.  **`DataArenaFusion.Console`**: Aplicación de consola. Ideal para operaciones rápidas, previsualización de datos y pruebas de algoritmos.
-4.  **`DataArenaFusion_Web`**: Plataforma web basada en ASP.NET MVC. Permite la carga centralizada de datos y visualización desde cualquier navegador.
+```text
+DataArenaFusion/
+├── DataArenaFusion.slnx          ← Solución principal
+│
+├── DataArenaFusion.Core/         ← Núcleo de Lógica (Arquitectura N-Tier)
+│   ├── Models/
+│   │   ├── Registro.cs           ← Modelo universal con soporte dinámico
+│   │   └── TablaImportada.cs     ← Estructura para conversión a DataTable
+│   ├── Data/
+│   │   ├── ImportadorTabular.cs  ← Motor de parseo para formatos planos
+│   │   └── Interfaces/           ← Nivel 2: Fábrica de lectores especializados
+│   ├── Processing/
+│   │   ├── Algoritmos/           ← Nivel 4-5: Núcleo de Algoritmos (Sin LINQ)
+│   │   │   ├── OrdenadorDatos.cs ← Implementación de BubbleSort/QuickSort
+│   │   │   ├── Agrupador.cs      ← Lógica de agregación por categorías
+│   │   │   └── DetectorDuplicados.cs ← Detección de colisiones de IDs
+│   │   └── Procesadores/         ← Orquestadores de procesamiento asíncrono
+│   └── Services/
+│       ├── GestorDatos.cs        ← Controlador de estado y memoria principal
+│       └── Database/             ← Nivel 3: Conectores y Migradores SQL
+│
+├── DataArenaFusion/              ← Aplicación Desktop (WinForms)
+│   ├── Form1.cs                  ← Interfaz principal con gráficas y tablas
+│   └── TestData/                 ← Datasets reales (Nivel 1)
+│
+├── DataArenaFusion.Console/      ← Aplicación de Consola
+│   └── Program.cs                ← Interfaz ASCII y pruebas rápidas
+│
+└── DataArenaFusion_Web/          ← Aplicación Web (ASP.NET Core MVC)
+    ├── Controllers/
+    │   └── DataApiController.cs  ← API de carga y procesamiento remoto
+    ├── Services/
+    │   └── DataEnricherService.cs ← Enriquecimiento vía APIs (Bonus)
+    └── Views/                    ← Vistas dinámicas en Razor
+```
 
 ---
 
