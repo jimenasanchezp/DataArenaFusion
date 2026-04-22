@@ -98,6 +98,40 @@ namespace DataArenaFusion.Core.Services
             }
         }
 
+        public int ContarDuplicados()
+        {
+            lock (_syncLock)
+            {
+                var duplicados = DetectorDuplicados.ObtenerDuplicados(RegistrosActuales);
+                return duplicados.Count;
+            }
+        }
+
+        public List<Registro> Filtrar(string termino)
+        {
+            lock (_syncLock)
+            {
+                if (string.IsNullOrWhiteSpace(termino)) return RegistrosActuales;
+
+                var term = termino.ToLowerInvariant();
+                return RegistrosActuales.Where(r => 
+                    r.Id.ToString().Contains(term) || 
+                    r.Categoria.ToLowerInvariant().Contains(term) || 
+                    r.Valor.ToString().Contains(term) ||
+                    r.Extras.Values.Any(v => v.ToLowerInvariant().Contains(term))
+                ).ToList();
+            }
+        }
+
+        public Registro? BuscarPorId(int id)
+        {
+            lock (_syncLock)
+            {
+                // Uso del Dictionary para búsqueda O(1) - Requisito Nivel 4
+                return IndiceId.TryGetValue(id, out var reg) ? reg : null;
+            }
+        }
+
         public void SincronizarTablaDesdeMemoria()
         {
             lock (_syncLock)

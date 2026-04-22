@@ -34,7 +34,8 @@ namespace DataArenaFusion.ConsoleApp
             Console.WriteLine("2. Ver previsualización de datos (Tabla)");
             Console.WriteLine("3. Ver resumen y Gráfica ASCII");
             Console.WriteLine("4. Contar duplicados");
-            Console.WriteLine("5. Limpiar datos");
+            Console.WriteLine("5. Filtrar datos (Búsqueda)");
+            Console.WriteLine("6. Limpiar datos");
             Console.WriteLine("0. Salir");
             Console.Write("\nSeleccione una opción: ");
         }
@@ -56,6 +57,9 @@ namespace DataArenaFusion.ConsoleApp
                     CountDuplicates();
                     break;
                 case "5":
+                    FilterData();
+                    break;
+                case "6":
                     _gestor.Limpiar();
                     Console.WriteLine("\nDatos limpiados con éxito.");
                     break;
@@ -195,6 +199,45 @@ namespace DataArenaFusion.ConsoleApp
 
             int count = _gestor.ContarDuplicados();
             Console.WriteLine($"\nSe encontraron {count} registros duplicados basados en el ID.");
+        }
+
+        static void FilterData()
+        {
+            if (_gestor.RegistrosActuales.Count == 0)
+            {
+                Console.WriteLine("\nNo hay datos cargados.");
+                return;
+            }
+
+            Console.Write("\nIngrese el término de búsqueda: ");
+            string term = Console.ReadLine() ?? "";
+
+            var results = _gestor.Filtrar(term);
+            Console.WriteLine($"\nSe encontraron {results.Count} resultados:");
+
+            if (results.Count > 0)
+            {
+                // Reutilizar lógica de tabla básica para los resultados
+                var columns = _gestor.TablaActual.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+                string headerRow = string.Join(" | ", columns.Select(c => c.PadRight(15).Substring(0, 15)));
+                Console.WriteLine(headerRow);
+                Console.WriteLine(new string('-', headerRow.Length));
+
+                int limit = Math.Min(10, results.Count);
+                for (int i = 0; i < limit; i++)
+                {
+                    var r = results[i];
+                    var cells = new List<string> { 
+                        r.Id.ToString().PadRight(15), 
+                        r.Categoria.PadRight(15), 
+                        r.Valor.ToString().PadRight(15) 
+                    };
+                    // Mostrar solo las principales por simplicidad en consola
+                    Console.WriteLine(string.Join(" | ", cells));
+                }
+
+                if (results.Count > limit) Console.WriteLine($"... y {results.Count - limit} más.");
+            }
         }
     }
 }

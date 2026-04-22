@@ -48,6 +48,7 @@ namespace DataArenaFusion
             btnOrdenar.Click += btnOrdenar_Click;
             btnAgrupar.Click += btnAgrupar_Click;
             btnDuplicados.Click += btnDuplicados_Click;
+            txtBusqueda.TextChanged += txtBusqueda_TextChanged;
         }
 
         private void ConfigurarInterfazInicial()
@@ -281,6 +282,42 @@ namespace DataArenaFusion
             Cursor = Cursors.Default;
 
             MessageBox.Show($"Se detectaron y resaltaron {resaltados} filas con datos duplicados en '{columna}'.", "Detección de Duplicados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void txtBusqueda_TextChanged(object sender, EventArgs e)
+        {
+            string termino = txtBusqueda.Text;
+            
+            // Si no hay termino, mostramos todo
+            if (string.IsNullOrWhiteSpace(termino))
+            {
+                dgvDatos.DataSource = _gestorDatos.TablaActual;
+                lblRegistros.Text = $"{_gestorDatos.TablaActual.Rows.Count} registros";
+                return;
+            }
+
+            // Usar la lógica de filtrado del Core (Nivel 5)
+            var filtrados = _gestorDatos.Filtrar(termino);
+            
+            // Crear una vista temporal para el DataGridView
+            // Nota: En una app real de alto rendimiento usaríamos un DataView con filtros
+            // pero para los requisitos de la clase, demostrar el filtrado sobre la lista común es ideal.
+            DataTable tablaFiltrada = _gestorDatos.TablaActual.Clone();
+            foreach (var reg in filtrados)
+            {
+                var fila = tablaFiltrada.NewRow();
+                fila[_gestorDatos.ColId] = reg.Id.ToString();
+                fila[_gestorDatos.ColCat] = reg.Categoria;
+                fila[_gestorDatos.ColVal] = reg.Valor.ToString(CultureInfo.InvariantCulture);
+                foreach (var extra in reg.Extras)
+                {
+                    if (tablaFiltrada.Columns.Contains(extra.Key)) fila[extra.Key] = extra.Value;
+                }
+                tablaFiltrada.Rows.Add(fila);
+            }
+
+            dgvDatos.DataSource = tablaFiltrada;
+            lblRegistros.Text = $"{filtrados.Count} resultados";
         }
 
 

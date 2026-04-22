@@ -45,6 +45,8 @@ namespace DataArenaFusion
             btnOrdenar = new Button();
             btnAgrupar = new Button();
             btnDuplicados = new Button();
+            txtBusqueda = new TextBox();
+            lblBusqueda = new Label();
             tabGraficas = new TabPage();
             pnlConfigGrafica = new Panel();
             lblEjeX = new Label();
@@ -334,6 +336,8 @@ namespace DataArenaFusion
             // 
             pnlFiltro.BackColor = Color.White;
             pnlFiltro.Controls.Add(lblRegistros);
+            pnlFiltro.Controls.Add(lblBusqueda);
+            pnlFiltro.Controls.Add(txtBusqueda);
             pnlFiltro.Controls.Add(lblFiltro);
             pnlFiltro.Controls.Add(cmbFiltroColumna);
             pnlFiltro.Controls.Add(btnOrdenar);
@@ -356,25 +360,44 @@ namespace DataArenaFusion
             lblRegistros.TabIndex = 2;
             lblRegistros.Text = "0 registros";
             // 
+            // lblBusqueda
+            // 
+            lblBusqueda.AutoSize = true;
+            lblBusqueda.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblBusqueda.ForeColor = Color.FromArgb(75, 85, 99);
+            lblBusqueda.Location = new Point(140, 16);
+            lblBusqueda.Name = "lblBusqueda";
+            lblBusqueda.Size = new Size(68, 23);
+            lblBusqueda.TabIndex = 8;
+            lblBusqueda.Text = "Buscar:";
+            // 
+            // txtBusqueda
+            // 
+            txtBusqueda.Font = new Font("Segoe UI", 10F);
+            txtBusqueda.Location = new Point(205, 12);
+            txtBusqueda.Name = "txtBusqueda";
+            txtBusqueda.Size = new Size(180, 30);
+            txtBusqueda.TabIndex = 9;
+            // 
             // lblFiltro
             // 
             lblFiltro.AutoSize = true;
             lblFiltro.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblFiltro.ForeColor = Color.FromArgb(75, 85, 99);
-            lblFiltro.Location = new Point(200, 16);
+            lblFiltro.Location = new Point(400, 16);
             lblFiltro.Name = "lblFiltro";
             lblFiltro.Size = new Size(98, 23);
             lblFiltro.TabIndex = 3;
-            lblFiltro.Text = "Filtrar por:";
+            lblFiltro.Text = "Columna:";
             // 
             // cmbFiltroColumna
             // 
             cmbFiltroColumna.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFiltroColumna.Font = new Font("Segoe UI", 10F);
             cmbFiltroColumna.FormattingEnabled = true;
-            cmbFiltroColumna.Location = new Point(295, 12);
+            cmbFiltroColumna.Location = new Point(490, 12);
             cmbFiltroColumna.Name = "cmbFiltroColumna";
-            cmbFiltroColumna.Size = new Size(200, 38);
+            cmbFiltroColumna.Size = new Size(150, 31);
             cmbFiltroColumna.TabIndex = 4;
             // 
             // btnOrdenar
@@ -384,9 +407,9 @@ namespace DataArenaFusion
             btnOrdenar.FlatStyle = FlatStyle.Flat;
             btnOrdenar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnOrdenar.ForeColor = Color.White;
-            btnOrdenar.Location = new Point(500, 10);
+            btnOrdenar.Location = new Point(650, 10);
             btnOrdenar.Name = "btnOrdenar";
-            btnOrdenar.Size = new Size(140, 38);
+            btnOrdenar.Size = new Size(90, 38);
             btnOrdenar.TabIndex = 5;
             btnOrdenar.Text = "Ordenar";
             btnOrdenar.UseVisualStyleBackColor = false;
@@ -398,9 +421,9 @@ namespace DataArenaFusion
             btnAgrupar.FlatStyle = FlatStyle.Flat;
             btnAgrupar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAgrupar.ForeColor = Color.White;
-            btnAgrupar.Location = new Point(640, 10);
+            btnAgrupar.Location = new Point(745, 10);
             btnAgrupar.Name = "btnAgrupar";
-            btnAgrupar.Size = new Size(140, 38);
+            btnAgrupar.Size = new Size(90, 38);
             btnAgrupar.TabIndex = 6;
             btnAgrupar.Text = "Agrupar";
             btnAgrupar.UseVisualStyleBackColor = false;
@@ -412,9 +435,9 @@ namespace DataArenaFusion
             btnDuplicados.FlatStyle = FlatStyle.Flat;
             btnDuplicados.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnDuplicados.ForeColor = Color.White;
-            btnDuplicados.Location = new Point(780, 10);
+            btnDuplicados.Location = new Point(840, 10);
             btnDuplicados.Name = "btnDuplicados";
-            btnDuplicados.Size = new Size(150, 38);
+            btnDuplicados.Size = new Size(100, 38);
             btnDuplicados.TabIndex = 7;
             btnDuplicados.Text = "Duplicados";
             btnDuplicados.UseVisualStyleBackColor = false;
@@ -564,6 +587,8 @@ namespace DataArenaFusion
         private System.Windows.Forms.Button btnOrdenar;
         private System.Windows.Forms.Button btnAgrupar;
         private System.Windows.Forms.Button btnDuplicados;
+        private System.Windows.Forms.TextBox txtBusqueda;
+        private System.Windows.Forms.Label lblBusqueda;
         private System.Windows.Forms.Panel pnlConfigGrafica;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartPrincipal;
         private System.Windows.Forms.ComboBox cmbTipoGrafica;
