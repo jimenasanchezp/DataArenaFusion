@@ -1,32 +1,28 @@
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// --- INICIO DE LOS LÍMITES DE SUBIDA DE ARCHIVOS ---
-builder.WebHost.ConfigureKestrel(serverOptions =>
+// Capturar excepciones que matan el proceso (Exit Code -1)
+AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
+    Console.WriteLine($"[FATAL CRASH] {(e.ExceptionObject as Exception)?.Message}");
+    Console.WriteLine((e.ExceptionObject as Exception)?.StackTrace);
+};
+
+// --- CONFIGURACIÓN GLOBAL DE LÍMITES DE SUBIDA (Streaming Safe) ---
+builder.WebHost.ConfigureKestrel(options =>
 {
-    serverOptions.Limits.MaxRequestBodySize = 104857600; // 100 MB
+    // Límite físico de la petición (100 MB)
+    options.Limits.MaxRequestBodySize = 104857600; 
 });
 
-builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 104857600; // 100 MB
-});
-// --- FIN DE LOS LÍMITES DE SUBIDA DE ARCHIVOS ---
-// Límites para Kestrel (si corres por consola)
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.Limits.MaxRequestBodySize = 104857600;
-});
-
-// ¡NUEVO! Límites para IIS Express (si corres desde Visual Studio)
 builder.Services.Configure<IISServerOptions>(options =>
 {
-    options.MaxRequestBodySize = 104857600; // 100 MB
+    options.MaxRequestBodySize = 104857600; 
 });
 
-builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 104857600; // 100 MB
-});
+// ---------------------------------------------------------
+
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
@@ -35,14 +31,11 @@ builder.Services.AddControllersWithViews()
         options.JsonSerializerOptions.DictionaryKeyPolicy = null;
     });
 
-// Inyectamos GestorDatos como Singleton para que actúe como la memoria RAM central 
-// persistente (como lo haría un Form en Windows Forms).
+// Inyectamos GestorDatos como Singleton
 builder.Services.AddSingleton<DataArenaFusion.Core.Services.GestorDatos>();
 
-// ¡Importante! El código nuevo debe ir antes de esta línea:
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -53,16 +46,13 @@ else
     app.UseHsts();
 }
 
-// Desactivamos la redirección forzada a HTTPS en desarrollo 
-// para evitar el error "Failed to fetch" por certificados no confiables.
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.UseStaticFiles();
 
 app.MapControllerRoute(

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using DataArenaFusion.Core.Services;
 using System.Data;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 
 namespace DataArenaFusion_Web.Controllers
 {
@@ -15,83 +17,91 @@ namespace DataArenaFusion_Web.Controllers
             _gestor = gestor;
         }
 
-        // --- INICIO DE LA CORRECCIÓN PARA ARCHIVOS GRANDES ---
         [HttpPost("Upload")]
-        [DisableRequestSizeLimit]
-        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile file)
         {
-            if (file == null || file.Length == 0) return BadRequest("Archivo inválido o no se recibió.");
+            Console.WriteLine("[UPLOAD] Entrando al método Upload. Petición recibida.");
 
-            // 1. Crear una carpeta temporal única para conservar el nombre real del archivo
-            var tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            Directory.CreateDirectory(tempFolder);
+            if (file == null || file.Length == 0)
+            {
+                Console.WriteLine("[UPLOAD ERROR] No se recibió ningún archivo o está vacío.");
+                return BadRequest("No se recibió ningún archivo.");
+            }
 
-            // 2. Conservar el file.FileName original (Ej: "Amazon.csv")
-            var tempPath = Path.Combine(tempFolder, file.FileName);
+            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "temp_uploads");
+            string tempFolder = Path.Combine(rootPath, Guid.NewGuid().ToString());
+            string tempPath = Path.Combine(tempFolder, file.FileName);
 
             try
             {
+                if (!Directory.Exists(rootPath)) Directory.CreateDirectory(rootPath);
+                Directory.CreateDirectory(tempFolder);
+
+                Console.WriteLine($"[UPLOAD] Guardando archivo: {file.FileName} ({file.Length} bytes)");
+
                 using (var stream = new FileStream(tempPath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
 
-                // 3. El gestor ahora leerá el nombre original correctamente
+                Console.WriteLine("[UPLOAD] Archivo guardado físicamente. Iniciando procesamiento...");
                 _gestor.CargarArchivo(tempPath);
+
+                Console.WriteLine("[UPLOAD] Procesamiento completado con éxito.");
                 return Ok(new { success = true });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { success = false, message = ex.Message });
+                Console.WriteLine($"[FATAL UPLOAD ERROR] {ex.GetType().Name}: {ex.Message}");
+                return StatusCode(500, new { success = false, message = ex.Message });
             }
             finally
             {
-                // 4. Limpieza segura borrando la carpeta entera
                 if (Directory.Exists(tempFolder))
                 {
-                    Directory.Delete(tempFolder, true);
+                    try { Directory.Delete(tempFolder, true); Console.WriteLine("[UPLOAD] Limpieza de temporales exitosa."); }
+                    catch (Exception ex) { Console.WriteLine($"[UPLOAD WARNING] Error al limpiar: {ex.Message}"); }
                 }
             }
         }
-        // --- FIN DE LA CORRECCIÓN ---
 
         [HttpGet("GetData")]
         public IActionResult GetData()
         {
-            var data = new List<Dictionary<string, object>>();
-            var columns = new List<string>();
-
-            if (_gestor.TablaActual != null && _gestor.TablaActual.Columns.Count > 0)
+            // PROTEGER LECTURA CONTRA ESCRITURAS SIMULTÁNEAS
+            lock (_gestor.SyncRoot)
             {
-                foreach (DataColumn col in _gestor.TablaActual.Columns)
-                {
-                    columns.Add(col.ColumnName);
-                }
+                var data = new List<Dictionary<string, object>>();
+                var columns = new List<string>();
 
-                // --- LÍMITE DE SEGURIDAD PARA EVITAR CRASH DEL SERVIDOR ---
-                // Mandamos máximo 2,000 filas al frontend (el total de la tabla sigue intacto en memoria para las gráficas)
-                int limite = Math.Min(_gestor.TablaActual.Rows.Count, 2000);
-
-                for (int i = 0; i < limite; i++)
+                if (_gestor.TablaActual != null)
                 {
-                    var row = _gestor.TablaActual.Rows[i];
-                    var dict = new Dictionary<string, object>();
                     foreach (DataColumn col in _gestor.TablaActual.Columns)
                     {
-                        dict[col.ColumnName] = row[col] == DBNull.Value ? "" : row[col];
+                        columns.Add(col.ColumnName);
                     }
-                    data.Add(dict);
-                }
-            }
 
-            return Ok(new { columns, data });
+                    int limite = Math.Min(_gestor.TablaActual.Rows.Count, 2000);
+
+                    for (int i = 0; i < limite; i++)
+                    {
+                        var row = _gestor.TablaActual.Rows[i];
+                        var dict = new Dictionary<string, object>();
+                        foreach (DataColumn col in _gestor.TablaActual.Columns)
+                        {
+                            dict[col.ColumnName] = row[col] == DBNull.Value ? "" : row[col];
+                        }
+                        data.Add(dict);
+                    }
+                }
+
+                return Ok(new { columns, data });
+            }
         }
 
         [HttpPost("Ordenar")]
         public IActionResult Ordenar()
         {
-            // The desktop button Ordenar invokes GestorDatos.OrdenarAscendente() which uses QuickSort
             _gestor.OrdenarAscendente();
             _gestor.SincronizarTablaDesdeMemoria();
             return Ok();
@@ -101,29 +111,37 @@ namespace DataArenaFusion_Web.Controllers
         public IActionResult Duplicados([FromQuery] string columna)
         {
             if (string.IsNullOrWhiteSpace(columna)) return BadRequest("Columna requerida");
-            var procesador = new DataArenaFusion.Core.Processing.Procesadores.ProcesadorDuplicados(_gestor.ColId, _gestor.ColCat, _gestor.ColVal);
-            var duplicados = procesador.Procesar(_gestor.RegistrosActuales, columna);
 
-            var valoresRepetidos = new HashSet<string>();
-            foreach (var d in duplicados)
+            lock (_gestor.SyncRoot)
             {
-                string val = "";
-                if (columna == _gestor.ColId) val = d.Id.ToString();
-                else if (columna == _gestor.ColCat) val = d.Categoria;
-                else if (columna == _gestor.ColVal) val = d.Valor.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                else { d.Extras.TryGetValue(columna, out val); }
-                if (val != null) valoresRepetidos.Add(val);
+                var procesador = new DataArenaFusion.Core.Processing.Procesadores.ProcesadorDuplicados(_gestor.ColId, _gestor.ColCat, _gestor.ColVal);
+                var duplicados = procesador.Procesar(_gestor.RegistrosActuales, columna);
+
+                var valoresRepetidos = new HashSet<string>();
+                foreach (var d in duplicados)
+                {
+                    string val = "";
+                    if (columna == _gestor.ColId) val = d.Id.ToString();
+                    else if (columna == _gestor.ColCat) val = d.Categoria;
+                    else if (columna == _gestor.ColVal) val = d.Valor.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    else { d.Extras.TryGetValue(columna, out val); }
+                    if (val != null) valoresRepetidos.Add(val);
+                }
+                return Ok(valoresRepetidos);
             }
-            return Ok(valoresRepetidos);
         }
 
         [HttpPost("EnriquecerApi")]
         public async Task<IActionResult> EnriquecerApi()
         {
-            if (_gestor.TablaActual.Rows.Count == 0) return BadRequest("No hay datos.");
+            lock (_gestor.SyncRoot)
+            {
+                if (_gestor.TablaActual.Rows.Count == 0) return BadRequest("No hay datos.");
+            }
 
+            // Nota: EnriquecerDataTableAsync ya tiene su propio manejo interno de hilos 
+            // a través de Task.Run, pero lo ideal es bloquear el DataTable durante la operación.
             await DataEnricherService.EnriquecerDataTableAsync(_gestor.TablaActual);
-            // After modifying DataTable, reload into records optionally or just leave table modified.
             return Ok();
         }
 

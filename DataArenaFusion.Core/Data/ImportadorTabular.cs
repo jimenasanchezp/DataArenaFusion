@@ -125,7 +125,7 @@ namespace DataArenaFusion.Core.Data
         {
             var importacion = new TablaImportada();
 
-            using var reader = new StreamReader(ruta);
+            using var reader = new StreamReader(ruta, Encoding.UTF8);
             var primeraLinea = reader.ReadLine();
 
             if (primeraLinea == null)
@@ -137,16 +137,20 @@ namespace DataArenaFusion.Core.Data
             var encabezados = ParseLine(primeraLinea, delimitador);
             importacion.Encabezados.AddRange(encabezados);
 
+            Console.WriteLine($"[CSV] Delimitador detectado: '{delimitador}'. Procesando líneas...");
+
             string? linea;
+            int contador = 0;
             while ((linea = reader.ReadLine()) != null)
             {
+                contador++;
                 if (string.IsNullOrWhiteSpace(linea))
                 {
                     continue;
                 }
 
                 var valores = ParseLine(linea, delimitador);
-                var registro = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                var registro = new Dictionary<string, string>(encabezados.Count, StringComparer.OrdinalIgnoreCase);
 
                 for (int j = 0; j < encabezados.Count; j++)
                 {
@@ -155,8 +159,14 @@ namespace DataArenaFusion.Core.Data
                 }
 
                 importacion.Filas.Add(registro);
+
+                if (contador % 50000 == 0)
+                {
+                    Console.WriteLine($"[CSV] Procesadas {contador} líneas...");
+                }
             }
 
+            Console.WriteLine($"[CSV] Finalizado. Total: {contador} líneas.");
             return importacion;
         }
 
