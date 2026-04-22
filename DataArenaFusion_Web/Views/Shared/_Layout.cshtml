@@ -46,8 +46,8 @@
                 </button>
 
                 <div class="nav-group-title">BASE DE DATOS</div>
-                <button class="btn w-100 btn-outline-light mb-2 text-start border-0 d-flex align-items-center" style="background: rgba(255,255,255,0.05);"><i class="bi bi-database me-2"></i> MariaDB</button>
-                <button class="btn w-100 btn-outline-light mb-4 text-start border-0 d-flex align-items-center" style="background: rgba(255,255,255,0.05);"><i class="bi bi-database me-2"></i> PostgreSQL</button>
+                <button id="btnMariaDB" class="btn w-100 btn-outline-light mb-2 text-start border-0 d-flex align-items-center" style="background: rgba(255,255,255,0.05);"><i class="bi bi-database me-2"></i> MariaDB</button>
+                <button id="btnPostgre" class="btn w-100 btn-outline-light mb-4 text-start border-0 d-flex align-items-center" style="background: rgba(255,255,255,0.05);"><i class="bi bi-database me-2"></i> PostgreSQL</button>
                 
                 <div class="nav-group-title">ACCIONES RÁPIDAS</div>
                 <button id="btnLimpiar" class="btn w-100 mb-2 text-start d-flex align-items-center" style="background: rgba(239, 68, 68, 0.1); color: #fca5a5 !important;">
@@ -68,125 +68,95 @@
         </main>
     </div>
 
+    <!-- Modal para Agrupamiento -->
+    <div class="modal fade" id="modalAgrupar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold" id="modalAgruparTitle">Resumen de Datos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="sticky-top bg-white">
+                                <tr style="border-bottom: 2px solid #f1f5f9;">
+                                    <th class="text-uppercase small fw-bold text-muted" id="thAgruparClave">Columna</th>
+                                    <th class="text-uppercase small fw-bold text-muted text-end" id="thAgruparValor">Valor / Conteo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyAgrupar">
+                                <!-- Datos cargados dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Conexión a Base de Datos -->
+    <div class="modal fade" id="modalDbConnection" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem; background-color: white;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold" id="modalDbTitle" style="color: #1e293b;">Conexión a Base de Datos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-4" id="modalDbSubtitle" style="color: #64748b; font-weight: 500;">Configura los parámetros de acceso</p>
+                    
+                    <input type="hidden" id="dbProvider" />
+
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold text-muted">SERVIDOR / IP</label>
+                            <input type="text" id="dbHost" class="form-control border-0 shadow-sm" placeholder="localhost" style="background-color: #f8fafc; height: 45px;">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">PUERTO</label>
+                            <input type="number" id="dbPort" class="form-control border-0 shadow-sm" style="background-color: #f8fafc; height: 45px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">BASE DE DATOS</label>
+                            <input type="text" id="dbName" class="form-control border-0 shadow-sm" style="background-color: #f8fafc; height: 45px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">USUARIO</label>
+                            <input type="text" id="dbUser" class="form-control border-0 shadow-sm" style="background-color: #f8fafc; height: 45px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">CONTRASEÑA</label>
+                            <input type="password" id="dbPass" class="form-control border-0 shadow-sm" style="background-color: #f8fafc; height: 45px;">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="dbSsl">
+                                <label class="form-check-label small fw-bold text-muted" for="dbSsl">
+                                    USAR SSL / TLS
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dbConnStatus" class="mt-3 small fw-bold text-center" style="display:none; padding: 10px; border-radius: 8px;"></div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-2 d-flex gap-2">
+                    <button type="button" class="btn px-4 fw-bold" id="btnTestConn" style="background-color: #f1f5f9; color: #475569;">PROBAR</button>
+                    <div class="ms-auto">
+                        <button type="button" class="btn px-4 fw-bold text-muted border-0 bg-transparent" data-bs-dismiss="modal">CANCELAR</button>
+                        <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="btnAcceptConn" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border:0;">ACEPTAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    
-    <script>
-        // Definicion default de loadDataGrid (Index.cshtml la puede sobreescribir)
-        if (typeof window.loadDataGrid !== 'function') {
-            window.loadDataGrid = async function() {
-                const res = await fetch('/api/DataApi/GetData');
-                if (!res.ok) return;
-                const result = await res.json();
-                const columns = result.columns || result.Columns || [];
-                const data    = result.data    || result.Data    || [];
-
-                // Actualizar contador
-                const lbl = document.getElementById('lblRegistros');
-                if (lbl) lbl.innerText = data.length;
-
-                // Encabezados
-                const trHead = document.getElementById('dgvHeaders');
-                const cmb    = document.getElementById('cmbFiltroColumna');
-                if (trHead) {
-                    trHead.innerHTML = '';
-                    if (cmb) cmb.innerHTML = '<option>Todas las columnas</option>';
-                    columns.forEach(col => {
-                        const th = document.createElement('th');
-                        th.innerText = col;
-                        trHead.appendChild(th);
-                        if (cmb) {
-                            const opt = document.createElement('option');
-                            opt.value = col;
-                            opt.innerText = col;
-                            cmb.appendChild(opt);
-                        }
-                    });
-                }
-
-                // Cuerpo de la tabla
-                const tbody = document.getElementById('dgvBody');
-                if (!tbody) return;
-                tbody.innerHTML = '';
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td class="text-center text-muted p-5" colspan="100%">No hay datos cargados.</td></tr>';
-                    return;
-                }
-                const limit = Math.min(data.length, 2000);
-                for (let i = 0; i < limit; i++) {
-                    const row = data[i];
-                    const tr = document.createElement('tr');
-                    columns.forEach(col => {
-                        const td = document.createElement('td');
-                        // Las propiedades del json pueden venir en PascalCase o camelCase
-                        const val = row[col] ?? row[col.charAt(0).toLowerCase() + col.slice(1)] ?? '';
-                        if (col.endsWith('(MXN)')) td.style.textAlign = 'right';
-                        td.innerText = val;
-                        tr.appendChild(td);
-                    });
-                    tbody.appendChild(tr);
-                }
-            };
-        }
-
-        // Mapa de tipos a extensiones de filtro
-        const fileAcceptMap = {
-            'csv':  '.csv',
-            'json': '.json',
-            'xml':  '.xml',
-            'txt':  '.txt,.csv'
-        };
-
-        function triggerFile(type) {
-            const uploader = document.getElementById('fileUploader');
-            // Aplicar el filtro correcto segun el boton
-            uploader.accept = fileAcceptMap[type] || '*';
-            // Resetear el valor para que el evento 'change' dispare aunque sea el mismo archivo
-            uploader.value = '';
-            uploader.click();
-        }
-
-        document.getElementById('fileUploader').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const fd = new FormData();
-            fd.append('file', file);
-
-            // Mostrar indicador de carga en la tabla
-            const tbody = document.getElementById('dgvBody');
-            if (tbody) {
-                tbody.innerHTML = '<tr><td class="text-center p-4 text-primary" colspan="100%"><strong>⏳ Cargando datos...</strong></td></tr>';
-            }
-             
-            try {
-                console.log("1. Enviando archivo al servidor...");
-                const res = await fetch('/api/DataApi/Upload', {
-                    method: 'POST',
-                    body: fd
-                });
-
-                if (res.ok) {
-                    console.log("2. Archivo subido. Solicitando datos de vuelta...");
-                    if (typeof window.loadDataGrid === 'function') {
-                        await window.loadDataGrid();
-                        console.log("3. ¡Tabla cargada exitosamente!");
-                    } else {
-                        window.location.reload();
-                    }
-                } else {
-                    const err = await res.json().catch(() => ({ message: 'Error desconocido' }));
-                    alert('Error al cargar el archivo: ' + err.message);
-                    if (tbody) tbody.innerHTML = '<tr><td class="text-center text-danger p-4" colspan="100%">Error al cargar el archivo.</td></tr>';
-                }
-            } catch (ex) {
-                // ESTE ALERT NOS DIRÁ EXACTAMENTE QUÉ PASÓ
-                alert('ERROR FATAL: Revisa la consola (F12)');
-                console.error("El servidor cortó la conexión abruptamente. Error detallado: ", ex);
-            }
-        });
-    </script>
 </body>
 </html>

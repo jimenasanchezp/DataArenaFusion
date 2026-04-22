@@ -4,6 +4,7 @@
 
 
 
+
 <div class="h-100 d-flex flex-column" style="background-color: var(--surface);">
     <ul class="nav nav-tabs bg-white pt-3 px-4" id="mainTabs" role="tablist">
 
@@ -17,7 +18,8 @@
 
     <div class="tab-content flex-grow-1 d-flex flex-column" id="mainTabsContent" style="overflow: hidden;">
         
-        <div class="tab-pane fade show active h-100 flex-column" id="tabla-pane" role="tabpanel" style="display: flex;">
+        <div class="tab-pane fade show active h-100" id="tabla-pane" role="tabpanel">
+            <div class="d-flex flex-column h-100">
             <div class="filter-panel px-4 py-3 d-flex align-items-center flex-wrap gap-4">
                 <div class="d-flex align-items-center">
                     <span class="text-uppercase small fw-bold text-muted me-2">Registros</span>
@@ -32,9 +34,9 @@
                 </div>
 
                 <div class="ms-auto d-flex gap-2">
-                    <button class="btn text-white px-4" style="background-color: var(--accent-blue);" onclick="accionAPI('Ordenar')"><i class="bi bi-sort-alpha-down me-2"></i>Ordenar</button>
-                    <button class="btn text-white px-4" style="background-color: var(--accent-purple);" onclick="accionAPI('Agrupar')"><i class="bi bi-collection me-2"></i>Agrupar</button>
-                    <button class="btn text-white px-4" style="background-color: #f43f5e;" onclick="accionAPI('Duplicados')"><i class="bi bi-files me-2"></i>Duplicados</button>
+                    <button id="btnOrdenar" class="btn text-white px-4" style="background-color: var(--accent-blue);"><i class="bi bi-sort-alpha-down me-2"></i>Ordenar</button>
+                    <button id="btnAgrupar" class="btn text-white px-4" style="background-color: var(--accent-purple);"><i class="bi bi-collection me-2"></i>Agrupar</button>
+                    <button id="btnDuplicados" class="btn text-white px-4" style="background-color: #f43f5e;"><i class="bi bi-files me-2"></i>Duplicados</button>
                 </div>
             </div>
 
@@ -48,38 +50,44 @@
                     </table>
                 </div>
             </div>
+            </div>
         </div>
 
-        <div class="tab-pane fade h-100 flex-column" id="grafica-pane" role="tabpanel" style="display:flex; flex-direction:column; background-color: var(--surface);">
-            <div class="filter-panel px-4 py-3 d-flex align-items-center flex-wrap gap-4">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="small fw-bold text-muted">EJE X:</label>
-                        <select id="cmbEjeX" class="form-select border-0 shadow-sm" style="width:180px; height: 42px;" onchange="generarGrafica()"></select>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="small fw-bold text-muted">EJE Y (#):</label>
-                        <select id="cmbEjeY" class="form-select border-0 shadow-sm" style="width:180px; height: 42px;" onchange="generarGrafica()"></select>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="small fw-bold text-muted">ESTILO:</label>
-                        <select id="cmbTipoGrafica" class="form-select border-0 shadow-sm" style="width:140px; height: 42px;" onchange="generarGrafica()">
-                            <option value="bar">Barras</option>
-                            <option value="pie">Pastel</option>
-                            <option value="line">Línea</option>
-                            <option value="doughnut">Dona</option>
-                        </select>
+        <div class="tab-pane fade h-100" id="grafica-pane" role="tabpanel" style="background-color: #f8fafc;">
+            <div class="d-flex flex-column h-100">
+            <div class="px-4 py-3 border-bottom bg-white d-flex align-items-center gap-4 shadow-sm">
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Eje X:</label>
+                    <select id="cmbEjeX" class="form-select form-select-sm border-0 shadow-none bg-light" style="width:180px; font-weight: 500;" onchange="generarGrafica()"></select>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Eje Y (#):</label>
+                    <select id="cmbEjeY" class="form-select form-select-sm border-0 shadow-none bg-light" style="width:180px; font-weight: 500;" onchange="generarGrafica()"></select>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Tipo:</label>
+                    <select id="cmbTipoGrafica" class="form-select form-select-sm border-0 shadow-none bg-light" style="width:140px; font-weight: 500;" onchange="generarGrafica()">
+                        <option value="bar">Barras</option>
+                        <option value="pie">Pastel</option>
+                        <option value="line">Línea</option>
+                        <option value="doughnut">Dona</option>
+                    </select>
+                </div>
+                <div class="ms-auto">
+                    <button class="btn btn-sm btn-outline-primary fw-bold px-3" onclick="generarGrafica()"><i class="bi bi-arrow-clockwise me-1"></i>Actualizar</button>
+                </div>
+            </div>
+            
+            <div class="flex-grow-1 p-4 d-flex align-items-center justify-content-center">
+                <div class="bg-white p-4 rounded-4 shadow-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="position: relative;">
+                    <canvas id="chartPrincipal" style="display: none; width: 100% !important; height: 100% !important;"></canvas>
+                    <div id="chartPlaceholder" class="text-center p-5">
+                         <div class="bi bi-bar-chart-steps mb-3" style="font-size: 4rem; color: var(--accent-blue); opacity: 0.15;"></div>
+                         <h5 class="text-muted fw-bold mb-2">Visualizador de Datos</h5>
+                         <p class="text-muted small">Selecciona los ejes para generar una representación visual de los datos cargados.</p>
                     </div>
                 </div>
             </div>
-            <div class="flex-grow-1 d-flex align-items-center justify-content-center p-4">
-                <div class="bg-white p-4 rounded-4 shadow-sm w-100 h-100 d-flex align-items-center justify-content-center" style="max-width: 1100px;">
-                    <canvas id="chartPrincipal" style="display: none;"></canvas>
-                    <div id="chartPlaceholder" class="text-center">
-                         <div class="bi bi-bar-chart-steps mb-3" style="font-size: 3rem; color: var(--text-muted); opacity: 0.3;"></div>
-                         <p class="text-muted fw-semibold">Selecciona una columna o importa datos para generar una gráfica interactiva.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -87,7 +95,10 @@
 
 @section Scripts {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 <script>
+    Chart.register(ChartDataLabels);
+    console.log("[INDEX] Script block starting...");
     let _globalColumns = [];
     let _globalData    = [];
     let _chartInstance = null;
@@ -105,6 +116,16 @@
         // AUTO-GENERAR GRÁFICA AL CARGAR ARCHIVO (Igual que en WinForms)
         if (_globalData.length > 0) {
             generarGrafica();
+        } else {
+            // Limpiar gráfica si no hay datos
+            if (_chartInstance) {
+                _chartInstance.destroy();
+                _chartInstance = null;
+            }
+            const ph = document.getElementById('chartPlaceholder');
+            if (ph) ph.style.display = '';
+            const cv = document.getElementById('chartPrincipal');
+            if (cv) cv.style.display = 'none';
         }
     };
 
@@ -209,7 +230,8 @@
 
         const labels  = entries.map(e => e[0]);
         const values  = entries.map(e => parseFloat(e[1].toFixed(2)));
-        const palette = labels.map((_, i) => `hsl(${(i * 37) % 360}, 70%, 55%)`);
+        const palette = labels.map((_, i) => tipo === 'bar' ? 'rgba(54, 162, 235, 0.8)' : `hsl(${(i * 37) % 360}, 70%, 55%)`);
+        const borders = labels.map((_, i) => tipo === 'bar' ? 'rgb(54, 162, 235)' : `hsl(${(i * 37) % 360}, 70%, 40%)`);
 
         if (_chartInstance) { _chartInstance.destroy(); _chartInstance = null; }
         const canvas = document.getElementById('chartPrincipal');
@@ -221,19 +243,30 @@
             data: {
                 labels,
                 datasets: [{
-                    label: isNumericY ? `Suma de ${ejeY} por ${ejeX}` : `Conteo de ${ejeY} por ${ejeX}`,
+                    label: 'Datos',
                     data: values,
                     backgroundColor: palette,
-                    borderColor: palette.map(c => c.replace('55%', '40%')),
-                    borderWidth: tipo === 'bar' || tipo === 'line' ? 1.5 : 2,
+                    borderColor: borders,
+                    borderWidth: 1,
                     tension: 0.4 
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: tipo === 'pie' || tipo === 'doughnut' },
+                    legend: { 
+                        display: true, 
+                        position: 'bottom',
+                        labels: { boxWidth: 20, font: { size: 12, weight: 'bold' } }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => value.toLocaleString(),
+                        font: { weight: 'bold', size: 11 },
+                        color: '#475569'
+                    },
                     title: {
                         display: true,
                         text: `${tipo.charAt(0).toUpperCase()+tipo.slice(1)}: ${ejeX} vs ${ejeY}`,
@@ -257,7 +290,17 @@
             if (accion === 'Ordenar') {
                 await fetch('/api/DataApi/Ordenar', { method: 'POST' });
             } else if (accion === 'Agrupar') {
-                alert("La función de agrupar en tabla aún no está conectada al servidor.");
+                const col = document.getElementById('cmbFiltroColumna').value;
+                if (col === 'Todas las columnas') {
+                    alert('Selecciona una columna específica para agrupar (ej: Ciudad o Categoría).');
+                    return; 
+                }
+                const res = await fetch('/api/DataApi/Agrupar?columna=' + encodeURIComponent(col), { method: 'POST' });
+                if (res.ok) {
+                    const agrupados = await res.json();
+                    mostrarModalAgrupar(col, agrupados);
+                    return;
+                }
             } else if (accion === 'Duplicados') {
                 const col = document.getElementById('cmbFiltroColumna').value;
                 if (col === 'Todas las columnas') {
@@ -285,38 +328,30 @@
         }
     }
 
-    const btnApi = document.getElementById('btnApi');
-    if (btnApi) {
-        btnApi.addEventListener('click', async () => {
-            btnApi.innerText = "Procesando...";
-            btnApi.disabled = true;
-            try {
-                await fetch('/api/DataApi/EnriquecerApi', { method: 'POST' });
-                await window.loadDataGrid();
-                alert("Datos enriquecidos con éxito desde las APIs de internet.");
-            } catch(e) {
-                alert("Error de red: " + e.message);
-            } finally {
-                btnApi.innerText = "API";
-                btnApi.disabled = false;
-            }
-        });
-    }
+    document.getElementById('btnOrdenar')?.addEventListener('click', () => accionAPI('Ordenar'));
+    document.getElementById('btnAgrupar')?.addEventListener('click', () => accionAPI('Agrupar'));
+    document.getElementById('btnDuplicados')?.addEventListener('click', () => accionAPI('Duplicados'));
 
-    const btnLimpiar = document.getElementById('btnLimpiar');
-    if (btnLimpiar) {
-        btnLimpiar.addEventListener('click', async () => {
-            await fetch('/api/DataApi/Limpiar', { method: 'POST' });
-            _globalColumns = []; _globalData = [];
-            document.getElementById('dgvHeaders').innerHTML = '';
-            document.getElementById('dgvBody').innerHTML = '<tr><td class="text-center p-5 text-muted" colspan="100%">No hay datos cargados.</td></tr>';
-            document.getElementById('lblRegistros').innerText = "0";
-            if (_chartInstance) { _chartInstance.destroy(); _chartInstance = null; }
-            const ph = document.getElementById('chartPlaceholder');
-            if (ph) ph.style.display = '';
-            const cv = document.getElementById('chartPrincipal');
-            if (cv) cv.style.display = 'none';
+    function mostrarModalAgrupar(columna, datos) {
+        document.getElementById('modalAgruparTitle').innerText = `Resumen por ${columna}`;
+        document.getElementById('thAgruparClave').innerText = columna;
+        
+        const tbody = document.getElementById('tbodyAgrupar');
+        tbody.innerHTML = '';
+        
+        const entries = Object.entries(datos).sort((a, b) => b[1] - a[1]);
+        
+        entries.forEach(([key, val]) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="fw-medium">${key}</td>
+                <td class="text-end fw-bold text-primary">${typeof val === 'number' ? val.toLocaleString() : val}</td>
+            `;
+            tbody.appendChild(tr);
         });
+        
+        const myModal = new bootstrap.Modal(document.getElementById('modalAgrupar'));
+        myModal.show();
     }
 
     window.loadDataGrid();

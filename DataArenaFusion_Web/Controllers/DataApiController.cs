@@ -145,11 +145,68 @@ namespace DataArenaFusion_Web.Controllers
             return Ok();
         }
 
+        [HttpPost("Agrupar")]
+        public IActionResult Agrupar([FromQuery] string columna)
+        {
+            if (string.IsNullOrWhiteSpace(columna)) return BadRequest("Columna requerida");
+
+            lock (_gestor.SyncRoot)
+            {
+                var procesador = new DataArenaFusion.Core.Processing.Procesadores.ProcesadorAgrupamiento(_gestor.ColId, _gestor.ColCat, _gestor.ColVal);
+                var agrupados = procesador.Procesar(_gestor.RegistrosActuales, columna);
+                
+                return Ok(agrupados);
+            }
+        }
+
         [HttpPost("Limpiar")]
         public IActionResult Limpiar()
         {
             _gestor.Limpiar();
             return Ok();
+        }
+
+        [HttpPost("TestConnection")]
+        public IActionResult TestConnection([FromBody] DataArenaFusion.Core.Models.DatabaseConnectionSettings settings)
+        {
+            try
+            {
+                var service = DataArenaFusion.Core.Services.Database.DatabaseConnectionServiceFactory.Create(settings.Provider);
+                if (service.TryTestConnection(settings, out string mensaje))
+                {
+                    return Ok(new { success = true, message = "Conexión exitosa" });
+                }
+                return BadRequest(new { success = false, message = mensaje });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost("Connect")]
+        public IActionResult Connect([FromBody] DataArenaFusion.Core.Models.DatabaseConnectionSettings settings)
+        {
+            try
+            {
+                var service = DataArenaFusion.Core.Services.Database.DatabaseConnectionServiceFactory.Create(settings.Provider);
+                
+                // Intentamos migrar los datos a la tabla actual del gestor
+                string mensaje = service.MigrarDatos(settings, _gestor.TablaActual);
+
+                if (mensaje == "OK")
+                {
+                    // Sincronizamos la lista de registros en memoria
+                    _gestor.SincronizarListaDesdeTabla();
+                    return Ok(new { success = true, message = "Datos importados correctamente" });
+                }
+
+                return BadRequest(new { success = false, message = mensaje });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
         }
     }
 }

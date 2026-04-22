@@ -132,6 +132,15 @@ namespace DataArenaFusion.Core.Services
             }
         }
 
+        public void SincronizarListaDesdeTabla()
+        {
+            lock (_syncLock)
+            {
+                RegistrosActuales = ConvertirARegistros(TablaActual);
+                ReconstruirIndice();
+            }
+        }
+
         public void SincronizarTablaDesdeMemoria()
         {
             lock (_syncLock)
