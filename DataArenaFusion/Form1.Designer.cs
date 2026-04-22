@@ -17,7 +17,7 @@ namespace DataArenaFusion
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             pnlImportar = new Panel();
             lblTitulo = new Label();
             pnlSeparador = new Panel();
@@ -33,8 +33,8 @@ namespace DataArenaFusion
             btnExpPostgre = new Button();
             lblAcciones = new Label();
             btnLimpiar = new Button();
-            btnConsola = new Button();
             btnApi = new Button();
+
             tabControlPrincipal = new TabControl();
             tabTabla = new TabPage();
             dgvDatos = new DataGridView();
@@ -53,8 +53,6 @@ namespace DataArenaFusion
             cmbEjeY = new ComboBox();
             lblTipo = new Label();
             cmbTipoGrafica = new ComboBox();
-          //  btnGraficar = new Button();
-            chartPrincipal = new System.Windows.Forms.DataVisualization.Charting.Chart();
             pnlImportar.SuspendLayout();
             tabControlPrincipal.SuspendLayout();
             tabTabla.SuspendLayout();
@@ -62,7 +60,6 @@ namespace DataArenaFusion
             pnlFiltro.SuspendLayout();
             tabGraficas.SuspendLayout();
             pnlConfigGrafica.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)chartPrincipal).BeginInit();
             SuspendLayout();
             // 
             // pnlImportar
@@ -83,16 +80,15 @@ namespace DataArenaFusion
             pnlImportar.Controls.Add(lblAcciones);
             pnlImportar.Controls.Add(btnLimpiar);
             pnlImportar.Controls.Add(btnApi);
-            pnlImportar.Controls.Add(btnConsola);
+
             pnlImportar.Dock = DockStyle.Left;
             pnlImportar.Location = new Point(0, 0);
             pnlImportar.Name = "pnlImportar";
-            pnlImportar.Size = new Size(240, 700);
+            pnlImportar.Size = new Size(240, 834);
             pnlImportar.TabIndex = 0;
             // 
-            // lblTitulo  (titulo principal del sidebar)
+            // lblTitulo
             // 
-            lblTitulo.AutoSize = false;
             lblTitulo.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.FromArgb(255, 46, 115);
             lblTitulo.Location = new Point(0, 5);
@@ -102,15 +98,13 @@ namespace DataArenaFusion
             lblTitulo.Text = "Data Arena Fusion";
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pnlSeparador (linea divisora debajo del titulo)
+            // pnlSeparador
             // 
             pnlSeparador.BackColor = Color.FromArgb(45, 55, 72);
             pnlSeparador.Location = new Point(15, 52);
             pnlSeparador.Name = "pnlSeparador";
             pnlSeparador.Size = new Size(210, 1);
             pnlSeparador.TabIndex = 98;
-            // 
-            // -- SECCION: IMPORTAR ARCHIVOS --
             // 
             // lblImportar
             // 
@@ -119,6 +113,7 @@ namespace DataArenaFusion
             lblImportar.ForeColor = Color.FromArgb(156, 163, 175);
             lblImportar.Location = new Point(15, 64);
             lblImportar.Name = "lblImportar";
+            lblImportar.Size = new Size(156, 19);
             lblImportar.TabIndex = 0;
             lblImportar.Text = "IMPORTAR ARCHIVOS";
             // 
@@ -131,7 +126,7 @@ namespace DataArenaFusion
             btnImpCsv.ForeColor = Color.FromArgb(46, 52, 64);
             btnImpCsv.Location = new Point(15, 88);
             btnImpCsv.Name = "btnImpCsv";
-            btnImpCsv.Size = new Size(210, 36);
+            btnImpCsv.Size = new Size(210, 44);
             btnImpCsv.TabIndex = 1;
             btnImpCsv.Text = "Importar CSV";
             btnImpCsv.UseVisualStyleBackColor = false;
@@ -143,9 +138,9 @@ namespace DataArenaFusion
             btnImpJson.FlatStyle = FlatStyle.Flat;
             btnImpJson.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnImpJson.ForeColor = Color.FromArgb(46, 52, 64);
-            btnImpJson.Location = new Point(15, 131);
+            btnImpJson.Location = new Point(15, 142);
             btnImpJson.Name = "btnImpJson";
-            btnImpJson.Size = new Size(210, 36);
+            btnImpJson.Size = new Size(210, 44);
             btnImpJson.TabIndex = 2;
             btnImpJson.Text = "Importar JSON";
             btnImpJson.UseVisualStyleBackColor = false;
@@ -157,9 +152,9 @@ namespace DataArenaFusion
             btnImpXml.FlatStyle = FlatStyle.Flat;
             btnImpXml.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnImpXml.ForeColor = Color.FromArgb(46, 52, 64);
-            btnImpXml.Location = new Point(15, 174);
+            btnImpXml.Location = new Point(15, 196);
             btnImpXml.Name = "btnImpXml";
-            btnImpXml.Size = new Size(210, 36);
+            btnImpXml.Size = new Size(210, 44);
             btnImpXml.TabIndex = 3;
             btnImpXml.Text = "Importar XML";
             btnImpXml.UseVisualStyleBackColor = false;
@@ -171,90 +166,88 @@ namespace DataArenaFusion
             btnImpTxt.FlatStyle = FlatStyle.Flat;
             btnImpTxt.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnImpTxt.ForeColor = Color.White;
-            btnImpTxt.Location = new Point(15, 217);
+            btnImpTxt.Location = new Point(15, 250);
             btnImpTxt.Name = "btnImpTxt";
-            btnImpTxt.Size = new Size(210, 36);
+            btnImpTxt.Size = new Size(210, 44);
             btnImpTxt.TabIndex = 4;
             btnImpTxt.Text = "Importar TXT";
             btnImpTxt.UseVisualStyleBackColor = false;
-            // 
-            // -- SECCION: BASES DE DATOS --
             // 
             // lblExportar
             // 
             lblExportar.AutoSize = true;
             lblExportar.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             lblExportar.ForeColor = Color.FromArgb(156, 163, 175);
-            lblExportar.Location = new Point(15, 272);
+            lblExportar.Location = new Point(15, 305);
             lblExportar.Name = "lblExportar";
+            lblExportar.Size = new Size(121, 19);
             lblExportar.TabIndex = 1;
             lblExportar.Text = "BASES DE DATOS";
             // 
-            // btnImpMaria  (Configurar MariaDB)
+            // btnImpMaria
             // 
             btnImpMaria.BackColor = Color.FromArgb(76, 86, 106);
             btnImpMaria.FlatAppearance.BorderSize = 0;
             btnImpMaria.FlatStyle = FlatStyle.Flat;
             btnImpMaria.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnImpMaria.ForeColor = Color.White;
-            btnImpMaria.Location = new Point(15, 296);
+            btnImpMaria.Location = new Point(15, 330);
             btnImpMaria.Name = "btnImpMaria";
-            btnImpMaria.Size = new Size(210, 36);
+            btnImpMaria.Size = new Size(210, 44);
             btnImpMaria.TabIndex = 5;
             btnImpMaria.Text = "Configurar MariaDB";
             btnImpMaria.UseVisualStyleBackColor = false;
             // 
-            // btnImpPostgre  (Configurar PostgreSQL)
+            // btnImpPostgre
             // 
             btnImpPostgre.BackColor = Color.FromArgb(76, 86, 106);
             btnImpPostgre.FlatAppearance.BorderSize = 0;
             btnImpPostgre.FlatStyle = FlatStyle.Flat;
             btnImpPostgre.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnImpPostgre.ForeColor = Color.White;
-            btnImpPostgre.Location = new Point(15, 339);
+            btnImpPostgre.Location = new Point(15, 384);
             btnImpPostgre.Name = "btnImpPostgre";
-            btnImpPostgre.Size = new Size(210, 36);
+            btnImpPostgre.Size = new Size(210, 44);
             btnImpPostgre.TabIndex = 6;
             btnImpPostgre.Text = "Configurar PostgreSQL";
             btnImpPostgre.UseVisualStyleBackColor = false;
             // 
-            // btnExpMaria  (Migrar a MariaDB)
+            // btnExpMaria
             // 
             btnExpMaria.BackColor = Color.FromArgb(50, 60, 80);
             btnExpMaria.FlatAppearance.BorderSize = 0;
             btnExpMaria.FlatStyle = FlatStyle.Flat;
             btnExpMaria.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnExpMaria.ForeColor = Color.FromArgb(163, 190, 140);
-            btnExpMaria.Location = new Point(15, 382);
+            btnExpMaria.Location = new Point(15, 438);
             btnExpMaria.Name = "btnExpMaria";
-            btnExpMaria.Size = new Size(210, 36);
+            btnExpMaria.Size = new Size(210, 44);
             btnExpMaria.TabIndex = 7;
             btnExpMaria.Text = "Migrar a MariaDB";
             btnExpMaria.UseVisualStyleBackColor = false;
             // 
-            // btnExpPostgre  (Migrar a PostgreSQL)
+            // btnExpPostgre
             // 
             btnExpPostgre.BackColor = Color.FromArgb(50, 60, 80);
             btnExpPostgre.FlatAppearance.BorderSize = 0;
             btnExpPostgre.FlatStyle = FlatStyle.Flat;
             btnExpPostgre.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnExpPostgre.ForeColor = Color.FromArgb(136, 192, 208);
-            btnExpPostgre.Location = new Point(15, 425);
+            btnExpPostgre.Location = new Point(15, 492);
             btnExpPostgre.Name = "btnExpPostgre";
-            btnExpPostgre.Size = new Size(210, 36);
+            btnExpPostgre.Size = new Size(210, 44);
             btnExpPostgre.TabIndex = 8;
             btnExpPostgre.Text = "Migrar a PostgreSQL";
             btnExpPostgre.UseVisualStyleBackColor = false;
-            // 
-            // -- SECCION: ACCIONES --
             // 
             // lblAcciones
             // 
             lblAcciones.AutoSize = true;
             lblAcciones.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             lblAcciones.ForeColor = Color.FromArgb(156, 163, 175);
-            lblAcciones.Location = new Point(15, 480);
+            lblAcciones.Location = new Point(15, 555);
             lblAcciones.Name = "lblAcciones";
+            lblAcciones.Size = new Size(78, 19);
             lblAcciones.TabIndex = 10;
             lblAcciones.Text = "ACCIONES";
             // 
@@ -265,28 +258,12 @@ namespace DataArenaFusion
             btnLimpiar.FlatStyle = FlatStyle.Flat;
             btnLimpiar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnLimpiar.ForeColor = Color.FromArgb(209, 213, 219);
-            btnLimpiar.Location = new Point(15, 503);
+            btnLimpiar.Location = new Point(15, 580);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(210, 36);
+            btnLimpiar.Size = new Size(210, 44);
             btnLimpiar.TabIndex = 11;
             btnLimpiar.Text = "Limpiar Datos";
             btnLimpiar.UseVisualStyleBackColor = false;
-            // 
-
-            // 
-            // btnConsola
-            // 
-            btnConsola.BackColor = Color.FromArgb(255, 46, 115);
-            btnConsola.FlatAppearance.BorderSize = 0;
-            btnConsola.FlatStyle = FlatStyle.Flat;
-            btnConsola.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnConsola.ForeColor = Color.White;
-            btnConsola.Location = new Point(15, 548);
-            btnConsola.Name = "btnConsola";
-            btnConsola.Size = new Size(210, 40);
-            btnConsola.TabIndex = 12;
-            btnConsola.Text = "Abrir Consola";
-            btnConsola.UseVisualStyleBackColor = false;
             // 
             // btnApi
             // 
@@ -295,12 +272,14 @@ namespace DataArenaFusion
             btnApi.FlatStyle = FlatStyle.Flat;
             btnApi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnApi.ForeColor = Color.White;
-            btnApi.Location = new Point(15, 600);
+            btnApi.Location = new Point(15, 634);
             btnApi.Name = "btnApi";
-            btnApi.Size = new Size(210, 40);
+            btnApi.Size = new Size(210, 44);
             btnApi.TabIndex = 13;
             btnApi.Text = "API";
             btnApi.UseVisualStyleBackColor = false;
+            // 
+            // 
             // 
             // tabControlPrincipal
             // 
@@ -311,7 +290,7 @@ namespace DataArenaFusion
             tabControlPrincipal.Location = new Point(240, 0);
             tabControlPrincipal.Name = "tabControlPrincipal";
             tabControlPrincipal.SelectedIndex = 0;
-            tabControlPrincipal.Size = new Size(960, 700);
+            tabControlPrincipal.Size = new Size(960, 834);
             tabControlPrincipal.TabIndex = 2;
             // 
             // tabTabla
@@ -322,9 +301,34 @@ namespace DataArenaFusion
             tabTabla.Location = new Point(4, 32);
             tabTabla.Name = "tabTabla";
             tabTabla.Padding = new Padding(3);
-            tabTabla.Size = new Size(952, 664);
+            tabTabla.Size = new Size(952, 798);
             tabTabla.TabIndex = 0;
             tabTabla.Text = "  Tabla de Datos  ";
+            // 
+            // dgvDatos
+            // 
+            dgvDatos.AllowUserToAddRows = false;
+            dgvDatos.AllowUserToDeleteRows = false;
+            dgvDatos.BackgroundColor = Color.White;
+            dgvDatos.BorderStyle = BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(37, 99, 235);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvDatos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDatos.Dock = DockStyle.Fill;
+            dgvDatos.EnableHeadersVisualStyles = false;
+            dgvDatos.Font = new Font("Segoe UI", 9.5F);
+            dgvDatos.Location = new Point(3, 55);
+            dgvDatos.Name = "dgvDatos";
+            dgvDatos.ReadOnly = true;
+            dgvDatos.RowHeadersWidth = 51;
+            dgvDatos.Size = new Size(946, 740);
+            dgvDatos.TabIndex = 1;
             // 
             // pnlFiltro
             // 
@@ -348,7 +352,7 @@ namespace DataArenaFusion
             lblRegistros.ForeColor = Color.FromArgb(37, 99, 235);
             lblRegistros.Location = new Point(15, 13);
             lblRegistros.Name = "lblRegistros";
-            lblRegistros.Size = new Size(95, 25);
+            lblRegistros.Size = new Size(106, 25);
             lblRegistros.TabIndex = 2;
             lblRegistros.Text = "0 registros";
             // 
@@ -359,7 +363,7 @@ namespace DataArenaFusion
             lblFiltro.ForeColor = Color.FromArgb(75, 85, 99);
             lblFiltro.Location = new Point(200, 16);
             lblFiltro.Name = "lblFiltro";
-            lblFiltro.Size = new Size(94, 23);
+            lblFiltro.Size = new Size(98, 23);
             lblFiltro.TabIndex = 3;
             lblFiltro.Text = "Filtrar por:";
             // 
@@ -370,7 +374,7 @@ namespace DataArenaFusion
             cmbFiltroColumna.FormattingEnabled = true;
             cmbFiltroColumna.Location = new Point(295, 12);
             cmbFiltroColumna.Name = "cmbFiltroColumna";
-            cmbFiltroColumna.Size = new Size(180, 31);
+            cmbFiltroColumna.Size = new Size(200, 38);
             cmbFiltroColumna.TabIndex = 4;
             // 
             // btnOrdenar
@@ -382,7 +386,7 @@ namespace DataArenaFusion
             btnOrdenar.ForeColor = Color.White;
             btnOrdenar.Location = new Point(500, 10);
             btnOrdenar.Name = "btnOrdenar";
-            btnOrdenar.Size = new Size(130, 32);
+            btnOrdenar.Size = new Size(140, 38);
             btnOrdenar.TabIndex = 5;
             btnOrdenar.Text = "Ordenar";
             btnOrdenar.UseVisualStyleBackColor = false;
@@ -396,7 +400,7 @@ namespace DataArenaFusion
             btnAgrupar.ForeColor = Color.White;
             btnAgrupar.Location = new Point(640, 10);
             btnAgrupar.Name = "btnAgrupar";
-            btnAgrupar.Size = new Size(130, 32);
+            btnAgrupar.Size = new Size(140, 38);
             btnAgrupar.TabIndex = 6;
             btnAgrupar.Text = "Agrupar";
             btnAgrupar.UseVisualStyleBackColor = false;
@@ -410,41 +414,15 @@ namespace DataArenaFusion
             btnDuplicados.ForeColor = Color.White;
             btnDuplicados.Location = new Point(780, 10);
             btnDuplicados.Name = "btnDuplicados";
-            btnDuplicados.Size = new Size(140, 32);
+            btnDuplicados.Size = new Size(150, 38);
             btnDuplicados.TabIndex = 7;
             btnDuplicados.Text = "Duplicados";
             btnDuplicados.UseVisualStyleBackColor = false;
-            // 
-            // dgvDatos
-            // 
-            dgvDatos.AllowUserToAddRows = false;
-            dgvDatos.AllowUserToDeleteRows = false;
-            dgvDatos.BackgroundColor = Color.White;
-            dgvDatos.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(37, 99, 235);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvDatos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDatos.Dock = DockStyle.Fill;
-            dgvDatos.EnableHeadersVisualStyles = false;
-            dgvDatos.Font = new Font("Segoe UI", 9.5F);
-            dgvDatos.Location = new Point(3, 55);
-            dgvDatos.Name = "dgvDatos";
-            dgvDatos.ReadOnly = true;
-            dgvDatos.RowHeadersWidth = 51;
-            dgvDatos.Size = new Size(946, 606);
-            dgvDatos.TabIndex = 1;
             // 
             // tabGraficas
             // 
             tabGraficas.BackColor = Color.FromArgb(241, 244, 249);
             tabGraficas.Controls.Add(pnlConfigGrafica);
-            tabGraficas.Controls.Add(chartPrincipal);
             tabGraficas.Location = new Point(4, 32);
             tabGraficas.Name = "tabGraficas";
             tabGraficas.Padding = new Padding(3);
@@ -474,7 +452,7 @@ namespace DataArenaFusion
             lblEjeX.ForeColor = Color.FromArgb(31, 41, 55);
             lblEjeX.Location = new Point(20, 18);
             lblEjeX.Name = "lblEjeX";
-            lblEjeX.Size = new Size(54, 23);
+            lblEjeX.Size = new Size(51, 23);
             lblEjeX.TabIndex = 0;
             lblEjeX.Text = "Eje X:";
             // 
@@ -485,7 +463,7 @@ namespace DataArenaFusion
             cmbEjeX.FormattingEnabled = true;
             cmbEjeX.Location = new Point(80, 14);
             cmbEjeX.Name = "cmbEjeX";
-            cmbEjeX.Size = new Size(165, 31);
+            cmbEjeX.Size = new Size(180, 38);
             cmbEjeX.TabIndex = 1;
             // 
             // lblEjeY
@@ -495,7 +473,7 @@ namespace DataArenaFusion
             lblEjeY.ForeColor = Color.FromArgb(31, 41, 55);
             lblEjeY.Location = new Point(262, 18);
             lblEjeY.Name = "lblEjeY";
-            lblEjeY.Size = new Size(79, 23);
+            lblEjeY.Size = new Size(75, 23);
             lblEjeY.TabIndex = 2;
             lblEjeY.Text = "Eje Y (#):";
             // 
@@ -506,7 +484,7 @@ namespace DataArenaFusion
             cmbEjeY.FormattingEnabled = true;
             cmbEjeY.Location = new Point(348, 14);
             cmbEjeY.Name = "cmbEjeY";
-            cmbEjeY.Size = new Size(165, 31);
+            cmbEjeY.Size = new Size(180, 38);
             cmbEjeY.TabIndex = 3;
             // 
             // lblTipo
@@ -528,26 +506,14 @@ namespace DataArenaFusion
             cmbTipoGrafica.Items.AddRange(new object[] { "Barras", "Pastel" });
             cmbTipoGrafica.Location = new Point(581, 14);
             cmbTipoGrafica.Name = "cmbTipoGrafica";
-            cmbTipoGrafica.Size = new Size(155, 31);
+            cmbTipoGrafica.Size = new Size(170, 38);
             cmbTipoGrafica.TabIndex = 5;
-            // 
-
-            // 
-            // chartPrincipal
-            // 
-            chartPrincipal.BackColor = Color.White;
-            chartPrincipal.Dock = DockStyle.Fill;
-            chartPrincipal.Location = new Point(3, 65);
-            chartPrincipal.Name = "chartPrincipal";
-            chartPrincipal.Size = new Size(946, 596);
-            chartPrincipal.TabIndex = 1;
-            chartPrincipal.Text = "chartPrincipal";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1200, 700);
+            ClientSize = new Size(1200, 834);
             Controls.Add(tabControlPrincipal);
             Controls.Add(pnlImportar);
             Font = new Font("Segoe UI", 10F);
@@ -560,11 +526,11 @@ namespace DataArenaFusion
             tabControlPrincipal.ResumeLayout(false);
             tabTabla.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvDatos).EndInit();
+            pnlFiltro.ResumeLayout(false);
             pnlFiltro.PerformLayout();
             tabGraficas.ResumeLayout(false);
             pnlConfigGrafica.ResumeLayout(false);
             pnlConfigGrafica.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)chartPrincipal).EndInit();
             ResumeLayout(false);
         }
 
@@ -585,7 +551,7 @@ namespace DataArenaFusion
         private System.Windows.Forms.Button btnExpMaria;
         private System.Windows.Forms.Button btnExpPostgre;
         private System.Windows.Forms.Button btnLimpiar;
-        private System.Windows.Forms.Button btnConsola;
+
         private System.Windows.Forms.Button btnApi;
         private System.Windows.Forms.TabControl tabControlPrincipal;
         private System.Windows.Forms.TabPage tabTabla;

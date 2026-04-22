@@ -5,45 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DataArenaFusion_Web</title>
     <script type="importmap"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DataArenaFusion_Web.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f4f9; }
-        #app-container { display: flex; height: 100vh; }
-        #sidebar { width: 240px; background-color: #111827; color: white; display: flex; flex-direction: column; }
-        #main-content { flex-grow: 1; overflow-y: auto; padding: 0; }
+        #app-container { display: flex; height: 100vh; overflow: hidden; }
+        #sidebar { width: 260px !important; flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto; }
+        #main-content { flex-grow: 1; overflow-y: auto; background-color: var(--surface); }
+        .sidebar-brand { padding: 2rem 1.5rem; text-align: left; }
+        .sidebar-brand h4 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; }
     </style>
 </head>
 <body>
     <div id="app-container">
         <!-- Sidebar -->
         <nav id="sidebar">
-            <div class="px-3 py-2 text-center" style="margin-top: 5px; margin-bottom: 20px;">
-                <h4 style="color: #ff2e73; font-weight: bold; margin:0;">Data Arena <br/><span style="color:white; font-size: 0.9em;">Fusion</span></h4>
+            <div class="sidebar-brand">
+                <h4 class="fw-bold mb-0" style="color: var(--accent-pink);">Data Arena <span style="color: white; opacity: 0.9;">Fusion</span></h4>
+                <p class="small text-muted mb-0">Analytics Engineering</p>
             </div>
             
-            <div class="px-3">
-                <h6 class="text-uppercase text-secondary small fw-bold mb-3">Importar Datos</h6>
-                
+            <div class="px-3 flex-grow-1">
+                <div class="nav-group-title">IMPORTAR DATOS</div>
                 <input type="file" id="fileUploader" style="display: none;" accept=".csv,.json,.xml" />
-                <button class="btn w-100 text-white mb-2 fw-bold text-start" style="background-color: #0ea5e9; border:none;" onclick="triggerFile('csv')">CSV</button>
-                <button class="btn w-100 text-dark mb-2 fw-bold text-start" style="background-color: #eab308; border:none;" onclick="triggerFile('json')">JSON</button>
-                <button class="btn w-100 text-white mb-2 fw-bold text-start" style="background-color: #f97316; border:none;" onclick="triggerFile('xml')">XML</button>
-                <button class="btn w-100 text-white mb-4 fw-bold text-start" style="background-color: #6b7280; border:none;" onclick="triggerFile('txt')">TXT</button>
+                <button class="btn w-100 text-white mb-2 text-start d-flex align-items-center" style="background: rgba(14, 165, 233, 0.15); color: #7dd3fc !important;" onclick="triggerFile('csv')">
+                    <i class="bi bi-filetype-csv me-2"></i> CSV
+                </button>
+                <button class="btn w-100 text-white mb-2 text-start d-flex align-items-center" style="background: rgba(234, 179, 8, 0.15); color: #fde047 !important;" onclick="triggerFile('json')">
+                    <i class="bi bi-filetype-json me-2"></i> JSON
+                </button>
+                <button class="btn w-100 text-white mb-2 text-start d-flex align-items-center" style="background: rgba(249, 115, 22, 0.15); color: #fdba74 !important;" onclick="triggerFile('xml')">
+                    <i class="bi bi-filetype-xml me-2"></i> XML
+                </button>
+                <button class="btn w-100 text-white mb-4 text-start d-flex align-items-center" style="background: rgba(107, 114, 128, 0.15); color: #d1d5db !important;" onclick="triggerFile('txt')">
+                    <i class="bi bi-file-earmark-text me-2"></i> TXT
+                </button>
 
-                <h6 class="text-uppercase text-secondary small fw-bold mb-3">Base de Datos</h6>
-                <button class="btn w-100 btn-outline-light mb-2 text-start"><i class="bi bi-database"></i> MariaDB</button>
-                <button class="btn w-100 btn-outline-light mb-4 text-start"><i class="bi bi-database"></i> PostgreSQL</button>
+                <div class="nav-group-title">BASE DE DATOS</div>
+                <button class="btn w-100 btn-outline-light mb-2 text-start border-0 d-flex align-items-center" style="background: rgba(255,255,255,0.05);"><i class="bi bi-database me-2"></i> MariaDB</button>
+                <button class="btn w-100 btn-outline-light mb-4 text-start border-0 d-flex align-items-center" style="background: rgba(255,255,255,0.05);"><i class="bi bi-database me-2"></i> PostgreSQL</button>
                 
-                <h6 class="text-uppercase text-secondary small fw-bold mb-3">Acciones Rápidas</h6>
-                <button id="btnLimpiar" class="btn w-100 btn-outline-danger mb-2 text-start fw-bold">Limpiar Datos</button>
+                <div class="nav-group-title">ACCIONES RÁPIDAS</div>
+                <button id="btnLimpiar" class="btn w-100 mb-2 text-start d-flex align-items-center" style="background: rgba(239, 68, 68, 0.1); color: #fca5a5 !important;">
+                    <i class="bi bi-trash3 me-2"></i> Limpiar Datos
+                </button>
             </div>
 
             <div class="mt-auto px-3 pb-4">
-                <button id="btnConsola" class="btn w-100 text-white fw-bold mb-2 text-center py-2" style="background-color: #ff2e73; border:none;">Abrir Consola</button>
-                <button id="btnApi" class="btn w-100 text-white fw-bold text-center py-2" style="background-color: #4b2eff; border:none;">API</button>
+                <button id="btnApi" class="btn w-100 text-white fw-bold py-3 shadow-lg" style="background: linear-gradient(135deg, var(--accent-purple) 0%, #4f46e5 100%);">
+                    <i class="bi bi-cloud-arrow-down me-2"></i> ENRIQUECER CON API
+                </button>
             </div>
         </nav>
 

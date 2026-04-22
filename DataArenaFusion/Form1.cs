@@ -2,12 +2,12 @@ using System.Data;
 using System.Globalization;
 using System.Windows.Forms.DataVisualization.Charting;
 using DataArenaFusion.Forms;
-using DataArenaFusion.Models;
-using DataArenaFusion.Services;
-using DataArenaFusion.Services.Database;
+using DataArenaFusion.Core.Models;
+using DataArenaFusion.Core.Services;
+using DataArenaFusion.Core.Services.Database;
 
 using System.Runtime.InteropServices;
-using DataArenaFusion.Processing.Procesadores;
+using DataArenaFusion.Core.Processing.Procesadores;
 
 namespace DataArenaFusion
 {
@@ -36,10 +36,7 @@ namespace DataArenaFusion
             btnExpMaria.Click += async (_, _) => await MigrarDatos(DatabaseProvider.MariaDb);
             btnExpPostgre.Click += async (_, _) => await MigrarDatos(DatabaseProvider.PostgreSql);
 
-            //btnGraficar.Click += (_, _) => GenerarGrafica();
-            //btnGenerarGrafica.Click += (_, _) => GenerarGrafica();
             btnLimpiar.Click += (_, _) => LimpiarPantalla();
-            btnConsola.Click += btnConsola_Click;
             btnApi.Click += btnApi_Click;
 
             cmbEjeX.SelectedIndexChanged += (_, _) => GenerarGraficaSiHayDatos();
@@ -72,38 +69,27 @@ namespace DataArenaFusion
 
         private void ConfigurarEstiloWeb()
         {
-            this.Font = new Font("Segoe UI", 10F);
-            BackColor = Color.FromArgb(241, 244, 249);
-            tabControlPrincipal.BackColor = Color.FromArgb(241, 244, 249);
+            this.Font = new Font("Segoe UI Semibold", 10.5F);
+            BackColor = Color.FromArgb(248, 250, 252); // Slate 50
+            
+            pnlImportar.BackColor = Color.FromArgb(15, 23, 42); // Slate 900
+            lblTitulo.ForeColor = Color.FromArgb(236, 72, 153); // Pink 500
+            pnlSeparador.BackColor = Color.FromArgb(30, 41, 59); // Slate 800
+            
+            tabControlPrincipal.BackColor = Color.FromArgb(248, 250, 252);
             tabControlPrincipal.Appearance = TabAppearance.Normal;
-            tabControlPrincipal.DrawMode = TabDrawMode.Normal;
             tabControlPrincipal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             
             dgvDatos.BackgroundColor = Color.White;
-            dgvDatos.BorderStyle = BorderStyle.None;
-            dgvDatos.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgvDatos.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dgvDatos.EnableHeadersVisualStyles = false;
+            dgvDatos.GridColor = Color.FromArgb(241, 245, 249);
+            dgvDatos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(241, 245, 249);
+            dgvDatos.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(71, 85, 105);
+            dgvDatos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dgvDatos.ColumnHeadersHeight = 50;
             
-            dgvDatos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(37, 99, 235);
-            dgvDatos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvDatos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
-            dgvDatos.ColumnHeadersHeight = 45;
-            
-            dgvDatos.DefaultCellStyle.BackColor = Color.White;
-            dgvDatos.DefaultCellStyle.ForeColor = Color.FromArgb(31, 41, 55);
             dgvDatos.DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-            dgvDatos.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgvDatos.DefaultCellStyle.Padding = new Padding(10, 0, 10, 0);
-            
-            dgvDatos.GridColor = Color.FromArgb(229, 231, 235);
-            dgvDatos.RowHeadersVisible = false;
+            dgvDatos.DefaultCellStyle.SelectionForeColor = Color.FromArgb(30, 64, 175);
             dgvDatos.RowTemplate.Height = 45;
-            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            pnlFiltro.BackColor = Color.White;
-            pnlConfigGrafica.BackColor = Color.White;
-            tabTabla.BackColor = Color.FromArgb(241, 244, 249);
-            tabGraficas.BackColor = Color.FromArgb(241, 244, 249);
 
             foreach (Control ctrl in pnlImportar.Controls)
             {
@@ -112,18 +98,18 @@ namespace DataArenaFusion
                     btn.Cursor = Cursors.Hand;
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.FlatAppearance.BorderSize = 0;
-                    btn.Size = new Size(210, 36);
-                    btn.Location = new Point((pnlImportar.Width - btn.Width) / 2, btn.Location.Y);
-                    
-                    btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(
-                        Math.Min(255, btn.BackColor.R + 30),
-                        Math.Min(255, btn.BackColor.G + 30),
-                        Math.Min(255, btn.BackColor.B + 30)
-                    );
+                    btn.Font = new Font("Segoe UI Semibold", 10F);
+                    // Los colores individuales se mantienen del Designer pero los suavizamos aquí si es necesario
+                }
+                else if (ctrl is Label lbl)
+                {
+                    lbl.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
                 }
             }
-
-                //btnGraficar.Cursor = Cursors.Hand;
+            
+            btnApi.BackColor = Color.FromArgb(139, 92, 246); // Violet 500
+            btnApi.ForeColor = Color.White;
+            btnApi.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -297,67 +283,7 @@ namespace DataArenaFusion
             MessageBox.Show($"Se detectaron y resaltaron {resaltados} filas con datos duplicados en '{columna}'.", "Detección de Duplicados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        private void btnConsola_Click(object sender, EventArgs e)
-        {
-            if (_gestorDatos.TablaActual == null || _gestorDatos.TablaActual.Rows.Count == 0)
-            {
-                MessageBox.Show("No hay datos cargados para mostrar en la consola.", "Consola", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
 
-            // Abrir la terminal negra tipo CMD
-            AllocConsole();
-
-            Console.Clear();
-            Console.WriteLine("==================================================");
-            Console.WriteLine("       DATA ARENA FUSION - CONSOLA DE DATOS       ");
-            Console.WriteLine("==================================================");
-            Console.WriteLine($"Total Registros: {_gestorDatos.TablaActual.Rows.Count}");
-            Console.WriteLine();
-
-            // Imprimir Encabezados
-            var encabezados = _gestorDatos.TablaActual.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
-            Console.WriteLine(string.Join(" | ", encabezados.Select(e => e.PadRight(15))));
-            Console.WriteLine(new string('-', 15 * encabezados.Count + (3 * encabezados.Count)));
-
-            // Imprimir Filas (hasta un maximo para no saturar)
-            int limite = Math.Min(100, _gestorDatos.TablaActual.Rows.Count);
-            for (int i = 0; i < limite; i++)
-            {
-                var fila = _gestorDatos.TablaActual.Rows[i];
-                var valores = encabezados.Select(c => (fila[c]?.ToString() ?? "").PadRight(15).Substring(0, Math.Min((fila[c]?.ToString() ?? "").Length, 15)+Math.Max(0, 15 - (fila[c]?.ToString() ?? "").Length)));
-                Console.WriteLine(string.Join(" | ", valores));
-            }
-
-            if (_gestorDatos.TablaActual.Rows.Count > limite)
-            {
-                Console.WriteLine($"\n... y {_gestorDatos.TablaActual.Rows.Count - limite} registros más (ocultos).");
-            }
-
-            var serie = chartPrincipal.Series.FirstOrDefault();
-            if (serie != null && serie.Points.Count > 0)
-            {
-                Console.WriteLine("\n==================================================");
-                Console.WriteLine("                  GRAFICA ASCII                   ");
-                Console.WriteLine("==================================================");
-                Console.WriteLine($"Eje X: {cmbEjeX.SelectedItem} | Eje Y: {cmbEjeY.SelectedItem}\n");
-
-                double maxY = serie.Points.Max(p => p.YValues[0]);
-                int maxBarWidth = 30; // caracteres
-                
-                foreach(var point in serie.Points)
-                {
-                    string label = string.IsNullOrWhiteSpace(point.AxisLabel) ? "X" : point.AxisLabel;
-                    if (label.Length > 12) label = label.Substring(0, 9) + "...";
-                    
-                    int barLength = maxY > 0 ? (int)((point.YValues[0] / maxY) * maxBarWidth) : 0;
-                    string bar = new string('#', barLength);
-                    Console.WriteLine($"{label.PadRight(12)} | {bar} {point.YValues[0]}");
-                }
-            }
-
-            Console.WriteLine("\n[Datos mostrados. Esta consola refleja el estado actual en memoria.]");
-        }
 
         private async void btnApi_Click(object sender, EventArgs e)
         {
@@ -486,7 +412,7 @@ namespace DataArenaFusion
                 CheckPathExists = true
             };
 
-            var carpetaEjemplos = Path.Combine(AppContext.BaseDirectory, "SampleData");
+            var carpetaEjemplos = Path.Combine(AppContext.BaseDirectory, "TestData");
             if (Directory.Exists(carpetaEjemplos))
             {
                 dialogo.InitialDirectory = carpetaEjemplos;

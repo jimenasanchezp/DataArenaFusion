@@ -37,7 +37,7 @@ builder.Services.AddControllersWithViews()
 
 // Inyectamos GestorDatos como Singleton para que actúe como la memoria RAM central 
 // persistente (como lo haría un Form en Windows Forms).
-builder.Services.AddSingleton<DataArenaFusion.Services.GestorDatos>();
+builder.Services.AddSingleton<DataArenaFusion.Core.Services.GestorDatos>();
 
 // ¡Importante! El código nuevo debe ir antes de esta línea:
 var app = builder.Build();
@@ -63,12 +63,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllers();
 

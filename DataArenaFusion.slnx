@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="DataArenaFusion.Console/DataArenaFusion.Console.csproj" />
+  <Project Path="DataArenaFusion.Core/DataArenaFusion.Core.csproj" />
   <Project Path="DataArenaFusion/DataArenaFusion.csproj" />
+  <Project Path="DataArenaFusion_Web/DataArenaFusion_Web.csproj" />
 </Solution>

@@ -1,6 +1,6 @@
 using System.Drawing;
-using DataArenaFusion.Models;
-using DataArenaFusion.Services.Database;
+using DataArenaFusion.Core.Models;
+using DataArenaFusion.Core.Services.Database;
 
 namespace DataArenaFusion.Forms
 {

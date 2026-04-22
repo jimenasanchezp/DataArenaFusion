@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using DataArenaFusion.Services;
+using DataArenaFusion.Core.Services;
 using System.Data;
 
 namespace DataArenaFusion_Web.Controllers
@@ -23,14 +23,21 @@ namespace DataArenaFusion_Web.Controllers
         {
             if (file == null || file.Length == 0) return BadRequest("Archivo inválido o no se recibió.");
 
-            var tempPath = Path.GetTempFileName() + Path.GetExtension(file.FileName);
-            using (var stream = new FileStream(tempPath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+            // 1. Crear una carpeta temporal única para conservar el nombre real del archivo
+            var tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(tempFolder);
+
+            // 2. Conservar el file.FileName original (Ej: "Amazon.csv")
+            var tempPath = Path.Combine(tempFolder, file.FileName);
 
             try
             {
+                using (var stream = new FileStream(tempPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // 3. El gestor ahora leerá el nombre original correctamente
                 _gestor.CargarArchivo(tempPath);
                 return Ok(new { success = true });
             }
@@ -40,7 +47,11 @@ namespace DataArenaFusion_Web.Controllers
             }
             finally
             {
-                if (System.IO.File.Exists(tempPath)) System.IO.File.Delete(tempPath);
+                // 4. Limpieza segura borrando la carpeta entera
+                if (Directory.Exists(tempFolder))
+                {
+                    Directory.Delete(tempFolder, true);
+                }
             }
         }
         // --- FIN DE LA CORRECCIÓN ---
@@ -90,7 +101,7 @@ namespace DataArenaFusion_Web.Controllers
         public IActionResult Duplicados([FromQuery] string columna)
         {
             if (string.IsNullOrWhiteSpace(columna)) return BadRequest("Columna requerida");
-            var procesador = new DataArenaFusion.Processing.Procesadores.ProcesadorDuplicados(_gestor.ColId, _gestor.ColCat, _gestor.ColVal);
+            var procesador = new DataArenaFusion.Core.Processing.Procesadores.ProcesadorDuplicados(_gestor.ColId, _gestor.ColCat, _gestor.ColVal);
             var duplicados = procesador.Procesar(_gestor.RegistrosActuales, columna);
 
             var valoresRepetidos = new HashSet<string>();

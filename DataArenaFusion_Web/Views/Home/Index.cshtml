@@ -2,89 +2,84 @@
     ViewData["Title"] = "Data Arena Fusion";
 }
 
-<style>
-    /* Estilos copiados de Form1.Designer.cs */
-    .tab-container { background-color: #f1f4f9; height: 100vh; display: flex; flex-direction: column; }
-    .filter-panel { background-color: #ffffff; padding: 15px; border-bottom: 2px solid #e5e7eb; display: flex; align-items: center; gap: 10px; }
-    .dgv-table { width: 100%; border-collapse: collapse; background-color: white; }
-    .dgv-table th { 
-        background-color: #2563eb; 
-        color: white; 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        font-weight: bold; 
-        padding: 10px; 
-        position: sticky; top: 0; 
-    }
-    .dgv-table td { padding: 8px; border-bottom: 1px solid #e5e7eb;  font-family: 'Segoe UI'; font-size: 14px;}
-    .dgv-table tr:nth-child(even) { background-color: #f8fafc; }
-    .dgv-table tr:hover { background-color: #e2e8f0; }
 
-    .btn-ordenar { background-color: #10b981; color: white; border: none; padding: 6px 15px; border-radius: 4px; font-weight: bold; }
-    .btn-agrupar { background-color: #8b5cf6; color: white; border: none; padding: 6px 15px; border-radius: 4px; font-weight: bold; }
-    .btn-duplicados { background-color: #ef4444; color: white; border: none; padding: 6px 15px; border-radius: 4px; font-weight: bold; }
-</style>
 
-<div class="tab-container">
-    <ul class="nav nav-tabs bg-white pt-2 px-2 border-bottom-0" id="mainTabs" role="tablist">
+<div class="h-100 d-flex flex-column" style="background-color: var(--surface);">
+    <ul class="nav nav-tabs bg-white pt-3 px-4" id="mainTabs" role="tablist">
+
         <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold text-dark border-bottom-0" id="tabla-tab" data-bs-toggle="tab" data-bs-target="#tabla-pane" type="button" role="tab">Tabla de Datos</button>
+            <button class="nav-link active" id="tabla-tab" data-bs-toggle="tab" data-bs-target="#tabla-pane" type="button" role="tab"><i class="bi bi-grid-3x3 me-2"></i>Tabla de Datos</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold text-secondary" id="grafica-tab" data-bs-toggle="tab" data-bs-target="#grafica-pane" type="button" role="tab">Gráficas de Datos</button>
+            <button class="nav-link" id="grafica-tab" data-bs-toggle="tab" data-bs-target="#grafica-pane" type="button" role="tab"><i class="bi bi-graph-up-arrow me-2"></i>Análisis Visual</button>
         </li>
     </ul>
 
     <div class="tab-content flex-grow-1 d-flex flex-column" id="mainTabsContent" style="overflow: hidden;">
         
         <div class="tab-pane fade show active h-100 flex-column" id="tabla-pane" role="tabpanel" style="display: flex;">
-            <div class="filter-panel">
-                <span class="fw-bold" style="color: #6b7280;">Registros: <span id="lblRegistros">0</span></span>
-                <div style="width: 2px; height: 20px; background: #e5e7eb; margin: 0 10px;"></div>
+            <div class="filter-panel px-4 py-3 d-flex align-items-center flex-wrap gap-4">
+                <div class="d-flex align-items-center">
+                    <span class="text-uppercase small fw-bold text-muted me-2">Registros</span>
+                    <span class="badge rounded-pill px-3 py-2" style="background-color: rgba(15, 23, 42, 0.05); color: var(--primary); font-size: 0.9rem;" id="lblRegistros">0</span>
+                </div>
                 
-                <span class="fw-bold" style="color: #111827;">Columna:</span>
-                <select id="cmbFiltroColumna" class="form-select form-select-sm" style="width: 200px;">
-                    <option>Todas las columnas</option>
-                </select>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small fw-bold text-muted">FILTRAR POR:</label>
+                    <select id="cmbFiltroColumna" class="form-select border-0 shadow-sm" style="width: 220px; height: 42px; background-color: white;">
+                        <option>Todas las columnas</option>
+                    </select>
+                </div>
 
-                <button class="btn-ordenar" onclick="accionAPI('Ordenar')">Ordenar</button>
-                <button class="btn-agrupar" onclick="accionAPI('Agrupar')">Agrupar</button>
-                <button class="btn-duplicados" onclick="accionAPI('Duplicados')">Extraer Duplicados</button>
+                <div class="ms-auto d-flex gap-2">
+                    <button class="btn text-white px-4" style="background-color: var(--accent-blue);" onclick="accionAPI('Ordenar')"><i class="bi bi-sort-alpha-down me-2"></i>Ordenar</button>
+                    <button class="btn text-white px-4" style="background-color: var(--accent-purple);" onclick="accionAPI('Agrupar')"><i class="bi bi-collection me-2"></i>Agrupar</button>
+                    <button class="btn text-white px-4" style="background-color: #f43f5e;" onclick="accionAPI('Duplicados')"><i class="bi bi-files me-2"></i>Duplicados</button>
+                </div>
             </div>
 
-            <div class="flex-grow-1" style="overflow: auto;">
-                <table class="dgv-table" id="dgvDatos">
-                    <thead><tr id="dgvHeaders"></tr></thead>
-                    <tbody id="dgvBody">
-                        <tr><td class="text-center text-muted p-5" colspan="100%">No hay datos cargados. Importa un archivo.</td></tr>
-                    </tbody>
-                </table>
+            <div class="flex-grow-1 p-4" style="overflow: auto;">
+                <div class="dgv-table shadow-sm">
+                    <table class="table table-hover mb-0" id="dgvDatos">
+                        <thead><tr id="dgvHeaders"></tr></thead>
+                        <tbody id="dgvBody">
+                            <tr><td class="text-center text-muted p-5" colspan="100%">No hay datos cargados. Importa un archivo desde el panel lateral.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="tab-pane fade h-100 flex-column" id="grafica-pane" role="tabpanel" style="display:flex; flex-direction:column; background-color: white;">
-            <div class="filter-panel" style="gap:16px; flex-wrap: wrap;">
-                <div class="d-flex align-items-center gap-2">
-                    <label class="fw-bold" style="color:#111827; white-space:nowrap;">Eje X:</label>
-                    <select id="cmbEjeX" class="form-select form-select-sm" style="width:175px;"></select>
+        <div class="tab-pane fade h-100 flex-column" id="grafica-pane" role="tabpanel" style="display:flex; flex-direction:column; background-color: var(--surface);">
+            <div class="filter-panel px-4 py-3 d-flex align-items-center flex-wrap gap-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small fw-bold text-muted">EJE X:</label>
+                        <select id="cmbEjeX" class="form-select border-0 shadow-sm" style="width:180px; height: 42px;" onchange="generarGrafica()"></select>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small fw-bold text-muted">EJE Y (#):</label>
+                        <select id="cmbEjeY" class="form-select border-0 shadow-sm" style="width:180px; height: 42px;" onchange="generarGrafica()"></select>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small fw-bold text-muted">ESTILO:</label>
+                        <select id="cmbTipoGrafica" class="form-select border-0 shadow-sm" style="width:140px; height: 42px;" onchange="generarGrafica()">
+                            <option value="bar">Barras</option>
+                            <option value="pie">Pastel</option>
+                            <option value="line">Línea</option>
+                            <option value="doughnut">Dona</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <label class="fw-bold" style="color:#111827; white-space:nowrap;">Eje Y:</label>
-                    <select id="cmbEjeY" class="form-select form-select-sm" style="width:175px;"></select>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <label class="fw-bold" style="color:#111827; white-space:nowrap;">Tipo:</label>
-                    <select id="cmbTipoGrafica" class="form-select form-select-sm" style="width:130px;">
-                        <option value="bar">Barras</option>
-                        <option value="pie">Pastel</option>
-                        <option value="line">Línea</option>
-                        <option value="doughnut">Dona</option>
-                    </select>
-                </div>
-                <button class="btn-ordenar" style="background:#2563eb;" onclick="generarGrafica()">📊 Generar Gráfica</button>
             </div>
-            <div class="flex-grow-1 d-flex align-items-center justify-content-center p-3" style="overflow:hidden;">
-                <canvas id="chartPrincipal" style="max-height:500px;"></canvas>
-                <p id="chartPlaceholder" class="text-muted text-center">Importa datos y presiona <strong>Generar Gráfica</strong>.</p>
+            <div class="flex-grow-1 d-flex align-items-center justify-content-center p-4">
+                <div class="bg-white p-4 rounded-4 shadow-sm w-100 h-100 d-flex align-items-center justify-content-center" style="max-width: 1100px;">
+                    <canvas id="chartPrincipal" style="display: none;"></canvas>
+                    <div id="chartPlaceholder" class="text-center">
+                         <div class="bi bi-bar-chart-steps mb-3" style="font-size: 3rem; color: var(--text-muted); opacity: 0.3;"></div>
+                         <p class="text-muted fw-semibold">Selecciona una columna o importa datos para generar una gráfica interactiva.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -93,12 +88,10 @@
 @section Scripts {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    // ─── Estado global ────────────────────────────────────────────────────────
     let _globalColumns = [];
     let _globalData    = [];
     let _chartInstance = null;
 
-    // ─── loadDataGrid: Obtener datos de la API ───────────────────────────────
     window.loadDataGrid = async function() {
         const res = await fetch('/api/DataApi/GetData');
         if (!res.ok) return;
@@ -108,12 +101,15 @@
 
         renderTable(_globalColumns, _globalData);
         poblarSelectorGrafica(_globalColumns, _globalData);
+        
+        // AUTO-GENERAR GRÁFICA AL CARGAR ARCHIVO (Igual que en WinForms)
+        if (_globalData.length > 0) {
+            generarGrafica();
+        }
     };
 
-    // ─── Tabla ────────────────────────────────────────────────────────────────
     function renderTable(columns, data) {
         document.getElementById('lblRegistros').innerText = data.length;
-
         const trHead = document.getElementById('dgvHeaders');
         trHead.innerHTML = '';
         const cmb = document.getElementById('cmbFiltroColumna');
@@ -149,7 +145,6 @@
         }
     }
 
-    // ─── Selectores de gráfica ────────────────────────────────────────────────
     function poblarSelectorGrafica(columns, data) {
         const cmbX = document.getElementById('cmbEjeX');
         const cmbY = document.getElementById('cmbEjeY');
@@ -177,32 +172,43 @@
         });
     }
 
-    // ─── Generación de gráfica ────────────────────────────────────────────────
     function generarGrafica() {
         const ejeX  = document.getElementById('cmbEjeX')?.value;
         const ejeY  = document.getElementById('cmbEjeY')?.value;
         const tipo  = document.getElementById('cmbTipoGrafica')?.value || 'bar';
         const placeholder = document.getElementById('chartPlaceholder');
 
-        if (!_globalData.length) {
-            alert('Importa un archivo primero.'); return;
-        }
-        if (!ejeX || !ejeY) {
-            alert('Selecciona Eje X y Eje Y.'); return;
-        }
+        if (!_globalData.length || !ejeX || !ejeY) return;
+
+        // LÓGICA DE WINFORMS RECREADA: 
+        // Determina si sumar (si es numérico) o contar (si es texto)
+        const isNumericY = _globalData.some(row => {
+            const val = row[ejeY];
+            return val !== undefined && val !== '' && val !== null && !isNaN(parseFloat(String(val).replace(/[^0-9.-]/g, '')));
+        });
 
         const grupos = {};
         _globalData.forEach(row => {
             const labelKey = row[ejeX] ?? '(vacío)';
-            const raw = String(row[ejeY] ?? '0').replace(/[^0-9.-]/g, '');
-            const num = parseFloat(raw) || 0;
-            grupos[labelKey] = (grupos[labelKey] || 0) + num;
+            
+            if (isNumericY) {
+                // Es un número: SUMAMOS
+                const raw = String(row[ejeY] ?? '0').replace(/[^0-9.-]/g, '');
+                const num = parseFloat(raw) || 0;
+                grupos[labelKey] = (grupos[labelKey] || 0) + num;
+            } else {
+                // Es texto: CONTAMOS frecuencias
+                grupos[labelKey] = (grupos[labelKey] || 0) + 1;
+            }
         });
 
-        const entries = Object.entries(grupos).slice(0, 40);
+        // Ordenar de mayor a menor y tomar el TOP 20 como en WinForms
+        const entries = Object.entries(grupos)
+                              .sort((a, b) => b[1] - a[1])
+                              .slice(0, 20);
+
         const labels  = entries.map(e => e[0]);
         const values  = entries.map(e => parseFloat(e[1].toFixed(2)));
-
         const palette = labels.map((_, i) => `hsl(${(i * 37) % 360}, 70%, 55%)`);
 
         if (_chartInstance) { _chartInstance.destroy(); _chartInstance = null; }
@@ -215,7 +221,7 @@
             data: {
                 labels,
                 datasets: [{
-                    label: `${ejeX} vs ${ejeY}`,
+                    label: isNumericY ? `Suma de ${ejeY} por ${ejeX}` : `Conteo de ${ejeY} por ${ejeX}`,
                     data: values,
                     backgroundColor: palette,
                     borderColor: palette.map(c => c.replace('55%', '40%')),
@@ -243,7 +249,6 @@
         });
     }
 
-    // ─── Botones Superiores de Tabla ──────────────────────────────────────────
     async function accionAPI(accion) {
         const dgvBody = document.getElementById('dgvBody');
         dgvBody.style.opacity = '0.5';
@@ -259,24 +264,19 @@
                     alert('Selecciona una columna específica para buscar duplicados.');
                     return; 
                 }
-                
                 const res = await fetch('/api/DataApi/Duplicados?columna=' + encodeURIComponent(col), { method: 'POST' });
                 if (res.ok) {
                     const duplicados = await res.json();
                     const rows = document.querySelectorAll('#dgvBody tr');
                     const colIdx = _globalColumns.indexOf(col);
-                    
                     rows.forEach(tr => {
                         const cellVal = tr.cells[colIdx]?.innerText ?? '';
                         tr.style.backgroundColor = duplicados.includes(cellVal) ? '#fee2e2' : '';
                     });
-                    
                     alert(`Se encontraron ${duplicados.length} valores duplicados en "${col}". Están resaltados en rojo.`);
                     return; 
                 }
             }
-
-            // Solo se recarga la tabla si fue Ordenar
             await window.loadDataGrid();
         } catch (error) {
             alert("Ocurrió un error de red: " + error.message);
@@ -285,8 +285,6 @@
         }
     }
 
-    // ─── Eventos Extras (Limpieza y APIs Externas) ────────────────────────────
-    // Verificamos de forma segura si los botones existen en _Layout.cshtml
     const btnApi = document.getElementById('btnApi');
     if (btnApi) {
         btnApi.addEventListener('click', async () => {
@@ -321,7 +319,6 @@
         });
     }
 
-    // Estado inicial
     window.loadDataGrid();
 </script>
 }
