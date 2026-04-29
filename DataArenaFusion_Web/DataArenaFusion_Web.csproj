@@ -16,4 +16,8 @@
     <ProjectReference Include="..\DataArenaFusion.Core\DataArenaFusion.Core.csproj" />
   </ItemGroup>
 
+  <Target Name="StopRunningWebAppBeforeBuild" BeforeTargets="Build" Condition="'$(OS)' == 'Windows_NT'">
+    <Exec Command="taskkill /F /IM DataArenaFusion_Web.exe /T &gt;nul 2&gt;nul" IgnoreExitCode="true" />
+  </Target>
+
 </Project>

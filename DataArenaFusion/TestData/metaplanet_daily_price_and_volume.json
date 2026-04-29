@@ -1,0 +1,1499 @@
+[
+ {
+  "day": "2026-04-16",
+  "ticker": 3350,
+  "price": 338,
+  "currency": "JPY"
+ },
+ {
+  "day": "2026-04-15",
+  "ticker": "MTPLF",
+  "price": 2.11,
+  "currency": "USD",
+  "volume": 844623
+ },
+ {
+  "day": "2026-04-15",
+  "ticker": "DN3",
+  "price": 1.77,
+  "currency": "EUR",
+  "volume": 75872
+ },
+ {
+  "day": "2026-04-15",
+  "ticker": 3350,
+  "price": 327,
+  "currency": "JPY",
+  "volume": 22050200
+ },
+ {
+  "day": "2026-04-14",
+  "ticker": "MTPLF",
+  "price": 2.1,
+  "currency": "USD",
+  "volume": 1470829
+ },
+ {
+  "day": "2026-04-14",
+  "ticker": "DN3",
+  "price": 1.78,
+  "currency": "EUR",
+  "volume": 45130
+ },
+ {
+  "day": "2026-04-14",
+  "ticker": 3350,
+  "price": 327,
+  "currency": "JPY",
+  "volume": 35411700
+ },
+ {
+  "day": "2026-04-13",
+  "ticker": "MTPLF",
+  "price": 2,
+  "currency": "USD",
+  "volume": 915613
+ },
+ {
+  "day": "2026-04-13",
+  "ticker": "DN3",
+  "price": 1.72,
+  "currency": "EUR",
+  "volume": 45185
+ },
+ {
+  "day": "2026-04-13",
+  "ticker": 3350,
+  "price": 309,
+  "currency": "JPY",
+  "volume": 13248100
+ },
+ {
+  "day": "2026-04-10",
+  "ticker": "MTPLF",
+  "price": 2.03,
+  "currency": "USD",
+  "volume": 448317
+ },
+ {
+  "day": "2026-04-10",
+  "ticker": "DN3",
+  "price": 1.74,
+  "currency": "EUR",
+  "volume": 14000
+ },
+ {
+  "day": "2026-04-10",
+  "ticker": 3350,
+  "price": 318,
+  "currency": "JPY",
+  "volume": 15683900
+ },
+ {
+  "day": "2026-04-09",
+  "ticker": "MTPLF",
+  "price": 1.97,
+  "currency": "USD",
+  "volume": 727122
+ },
+ {
+  "day": "2026-04-09",
+  "ticker": "DN3",
+  "price": 1.72,
+  "currency": "EUR",
+  "volume": 26594
+ },
+ {
+  "day": "2026-04-09",
+  "ticker": 3350,
+  "price": 307,
+  "currency": "JPY",
+  "volume": 15652100
+ },
+ {
+  "day": "2026-04-08",
+  "ticker": "MTPLF",
+  "price": 2,
+  "currency": "USD",
+  "volume": 1049804
+ },
+ {
+  "day": "2026-04-08",
+  "ticker": "DN3",
+  "price": 1.7,
+  "currency": "EUR",
+  "volume": 63104
+ },
+ {
+  "day": "2026-04-08",
+  "ticker": 3350,
+  "price": 317,
+  "currency": "JPY",
+  "volume": 30299700
+ },
+ {
+  "day": "2026-04-07",
+  "ticker": "MTPLF",
+  "price": 1.88,
+  "currency": "USD",
+  "volume": 1197663
+ },
+ {
+  "day": "2026-04-07",
+  "ticker": "DN3",
+  "price": 1.61,
+  "currency": "EUR",
+  "volume": 37050
+ },
+ {
+  "day": "2026-04-07",
+  "ticker": 3350,
+  "price": 297,
+  "currency": "JPY",
+  "volume": 21425200
+ },
+ {
+  "day": "2026-04-06",
+  "ticker": "MTPLF",
+  "price": 1.93,
+  "currency": "USD",
+  "volume": 1202275
+ },
+ {
+  "day": "2026-04-06",
+  "ticker": 3350,
+  "price": 302,
+  "currency": "JPY",
+  "volume": 16570800
+ },
+ {
+  "day": "2026-04-03",
+  "ticker": 3350,
+  "price": 298,
+  "currency": "JPY",
+  "volume": 9598400
+ },
+ {
+  "day": "2026-04-02",
+  "ticker": "MTPLF",
+  "price": 1.88,
+  "currency": "USD",
+  "volume": 1021433
+ },
+ {
+  "day": "2026-04-02",
+  "ticker": "DN3",
+  "price": 1.65,
+  "currency": "EUR",
+  "volume": 9339
+ },
+ {
+  "day": "2026-04-02",
+  "ticker": 3350,
+  "price": 302,
+  "currency": "JPY",
+  "volume": 23670600
+ },
+ {
+  "day": "2026-04-01",
+  "ticker": "MTPLF",
+  "price": 1.89,
+  "currency": "USD",
+  "volume": 1005940
+ },
+ {
+  "day": "2026-04-01",
+  "ticker": "DN3",
+  "price": 1.65,
+  "currency": "EUR",
+  "volume": 21703
+ },
+ {
+  "day": "2026-04-01",
+  "ticker": 3350,
+  "price": 308,
+  "currency": "JPY",
+  "volume": 16355300
+ },
+ {
+  "day": "2026-03-31",
+  "ticker": "MTPLF",
+  "price": 1.88,
+  "currency": "USD",
+  "volume": 1823324
+ },
+ {
+  "day": "2026-03-31",
+  "ticker": "DN3",
+  "price": 1.66,
+  "currency": "EUR",
+  "volume": 53529
+ },
+ {
+  "day": "2026-03-31",
+  "ticker": 3350,
+  "price": 294,
+  "currency": "JPY",
+  "volume": 17176900
+ },
+ {
+  "day": "2026-03-30",
+  "ticker": "MTPLF",
+  "price": 1.86,
+  "currency": "USD",
+  "volume": 1362364
+ },
+ {
+  "day": "2026-03-30",
+  "ticker": "DN3",
+  "price": 1.59,
+  "currency": "EUR",
+  "volume": 290684
+ },
+ {
+  "day": "2026-03-30",
+  "ticker": 3350,
+  "price": 300,
+  "currency": "JPY",
+  "volume": 22265400
+ },
+ {
+  "day": "2026-03-27",
+  "ticker": "MTPLF",
+  "price": 1.82,
+  "currency": "USD",
+  "volume": 1093539
+ },
+ {
+  "day": "2026-03-27",
+  "ticker": "DN3",
+  "price": 1.61,
+  "currency": "EUR",
+  "volume": 151167
+ },
+ {
+  "day": "2026-03-27",
+  "ticker": 3350,
+  "price": 304,
+  "currency": "JPY",
+  "volume": 15612600
+ },
+ {
+  "day": "2026-03-26",
+  "ticker": "MTPLF",
+  "price": 1.92,
+  "currency": "USD",
+  "volume": 765549
+ },
+ {
+  "day": "2026-03-26",
+  "ticker": "DN3",
+  "price": 1.66,
+  "currency": "EUR",
+  "volume": 205738
+ },
+ {
+  "day": "2026-03-26",
+  "ticker": 3350,
+  "price": 309,
+  "currency": "JPY",
+  "volume": 22119500
+ },
+ {
+  "day": "2026-03-25",
+  "ticker": "MTPLF",
+  "price": 1.99,
+  "currency": "USD",
+  "volume": 1459885
+ },
+ {
+  "day": "2026-03-25",
+  "ticker": "DN3",
+  "price": 1.74,
+  "currency": "EUR",
+  "volume": 99195
+ },
+ {
+  "day": "2026-03-25",
+  "ticker": 3350,
+  "price": 318,
+  "currency": "JPY",
+  "volume": 26483100
+ },
+ {
+  "day": "2026-03-24",
+  "ticker": "MTPLF",
+  "price": 1.95,
+  "currency": "USD",
+  "volume": 1242278
+ },
+ {
+  "day": "2026-03-24",
+  "ticker": "DN3",
+  "price": 1.7,
+  "currency": "EUR",
+  "volume": 160397
+ },
+ {
+  "day": "2026-03-24",
+  "ticker": 3350,
+  "price": 309,
+  "currency": "JPY",
+  "volume": 21851400
+ },
+ {
+  "day": "2026-03-23",
+  "ticker": "MTPLF",
+  "price": 2.03,
+  "currency": "USD",
+  "volume": 451257
+ },
+ {
+  "day": "2026-03-23",
+  "ticker": "DN3",
+  "price": 1.76,
+  "currency": "EUR",
+  "volume": 138698
+ },
+ {
+  "day": "2026-03-23",
+  "ticker": 3350,
+  "price": 312,
+  "currency": "JPY",
+  "volume": 23762900
+ },
+ {
+  "day": "2026-03-20",
+  "ticker": "MTPLF",
+  "price": 1.99,
+  "currency": "USD",
+  "volume": 850765
+ },
+ {
+  "day": "2026-03-20",
+  "ticker": "DN3",
+  "price": 1.74,
+  "currency": "EUR",
+  "volume": 720888
+ },
+ {
+  "day": "2026-03-19",
+  "ticker": "MTPLF",
+  "price": 1.97,
+  "currency": "USD",
+  "volume": 2284766
+ },
+ {
+  "day": "2026-03-19",
+  "ticker": "DN3",
+  "price": 1.75,
+  "currency": "EUR",
+  "volume": 180106
+ },
+ {
+  "day": "2026-03-19",
+  "ticker": 3350,
+  "price": 320,
+  "currency": "JPY",
+  "volume": 37336400
+ },
+ {
+  "day": "2026-03-18",
+  "ticker": "MTPLF",
+  "price": 2.03,
+  "currency": "USD",
+  "volume": 1664873
+ },
+ {
+  "day": "2026-03-18",
+  "ticker": "DN3",
+  "price": 1.82,
+  "currency": "EUR",
+  "volume": 72381
+ },
+ {
+  "day": "2026-03-18",
+  "ticker": 3350,
+  "price": 355,
+  "currency": "JPY",
+  "volume": 25279400
+ },
+ {
+  "day": "2026-03-17",
+  "ticker": "MTPLF",
+  "price": 2.22,
+  "currency": "USD",
+  "volume": 2956397
+ },
+ {
+  "day": "2026-03-17",
+  "ticker": "DN3",
+  "price": 1.93,
+  "currency": "EUR",
+  "volume": 110909
+ },
+ {
+  "day": "2026-03-17",
+  "ticker": 3350,
+  "price": 344,
+  "currency": "JPY",
+  "volume": 63713900
+ },
+ {
+  "day": "2026-03-16",
+  "ticker": "MTPLF",
+  "price": 2.39,
+  "currency": "USD",
+  "volume": 998640
+ },
+ {
+  "day": "2026-03-16",
+  "ticker": "DN3",
+  "price": 2.1,
+  "currency": "EUR",
+  "volume": 134380
+ },
+ {
+  "day": "2026-03-16",
+  "ticker": 3350,
+  "price": 391,
+  "currency": "JPY",
+  "volume": 38708500
+ },
+ {
+  "day": "2026-03-13",
+  "ticker": "MTPLF",
+  "price": 2.33,
+  "currency": "USD",
+  "volume": 845538
+ },
+ {
+  "day": "2026-03-13",
+  "ticker": "DN3",
+  "price": 2.13,
+  "currency": "EUR",
+  "volume": 61680
+ },
+ {
+  "day": "2026-03-13",
+  "ticker": 3350,
+  "price": 373,
+  "currency": "JPY",
+  "volume": 41666400
+ },
+ {
+  "day": "2026-03-12",
+  "ticker": "MTPLF",
+  "price": 2.2,
+  "currency": "USD",
+  "volume": 397185
+ },
+ {
+  "day": "2026-03-12",
+  "ticker": "DN3",
+  "price": 1.91,
+  "currency": "EUR",
+  "volume": 9950
+ },
+ {
+  "day": "2026-03-12",
+  "ticker": 3350,
+  "price": 352,
+  "currency": "JPY",
+  "volume": 25937100
+ },
+ {
+  "day": "2026-03-11",
+  "ticker": "MTPLF",
+  "price": 2.29,
+  "currency": "USD",
+  "volume": 478918
+ },
+ {
+  "day": "2026-03-11",
+  "ticker": "DN3",
+  "price": 1.97,
+  "currency": "EUR",
+  "volume": 150470
+ },
+ {
+  "day": "2026-03-11",
+  "ticker": 3350,
+  "price": 369,
+  "currency": "JPY",
+  "volume": 28619900
+ },
+ {
+  "day": "2026-03-10",
+  "ticker": "MTPLF",
+  "price": 2.17,
+  "currency": "USD",
+  "volume": 734371
+ },
+ {
+  "day": "2026-03-10",
+  "ticker": "DN3",
+  "price": 1.93,
+  "currency": "EUR",
+  "volume": 115110
+ },
+ {
+  "day": "2026-03-10",
+  "ticker": 3350,
+  "price": 354,
+  "currency": "JPY",
+  "volume": 29374400
+ },
+ {
+  "day": "2026-03-09",
+  "ticker": "MTPLF",
+  "price": 2.14,
+  "currency": "USD",
+  "volume": 520628
+ },
+ {
+  "day": "2026-03-09",
+  "ticker": "DN3",
+  "price": 1.85,
+  "currency": "EUR",
+  "volume": 79443
+ },
+ {
+  "day": "2026-03-09",
+  "ticker": 3350,
+  "price": 327,
+  "currency": "JPY",
+  "volume": 27036500
+ },
+ {
+  "day": "2026-03-06",
+  "ticker": "MTPLF",
+  "price": 2.1,
+  "currency": "USD",
+  "volume": 596095
+ },
+ {
+  "day": "2026-03-06",
+  "ticker": "DN3",
+  "price": 1.82,
+  "currency": "EUR",
+  "volume": 68885
+ },
+ {
+  "day": "2026-03-06",
+  "ticker": 3350,
+  "price": 341,
+  "currency": "JPY",
+  "volume": 23183100
+ },
+ {
+  "day": "2026-03-05",
+  "ticker": "MTPLF",
+  "price": 2.17,
+  "currency": "USD",
+  "volume": 1063219
+ },
+ {
+  "day": "2026-03-05",
+  "ticker": "DN3",
+  "price": 1.86,
+  "currency": "EUR",
+  "volume": 242144
+ },
+ {
+  "day": "2026-03-05",
+  "ticker": 3350,
+  "price": 364,
+  "currency": "JPY",
+  "volume": 48812400
+ },
+ {
+  "day": "2026-03-04",
+  "ticker": "MTPLF",
+  "price": 2.21,
+  "currency": "USD",
+  "volume": 1328371
+ },
+ {
+  "day": "2026-03-04",
+  "ticker": "DN3",
+  "price": 1.93,
+  "currency": "EUR",
+  "volume": 178718
+ },
+ {
+  "day": "2026-03-04",
+  "ticker": 3350,
+  "price": 316,
+  "currency": "JPY",
+  "volume": 22959400
+ },
+ {
+  "day": "2026-03-03",
+  "ticker": "MTPLF",
+  "price": 2.09,
+  "currency": "USD",
+  "volume": 858049
+ },
+ {
+  "day": "2026-03-03",
+  "ticker": "DN3",
+  "price": 1.84,
+  "currency": "EUR",
+  "volume": 107028
+ },
+ {
+  "day": "2026-03-03",
+  "ticker": 3350,
+  "price": 333,
+  "currency": "JPY",
+  "volume": 30513800
+ },
+ {
+  "day": "2026-03-02",
+  "ticker": "MTPLF",
+  "price": 2.17,
+  "currency": "USD",
+  "volume": 1190892
+ },
+ {
+  "day": "2026-03-02",
+  "ticker": "DN3",
+  "price": 1.88,
+  "currency": "EUR",
+  "volume": 595309
+ },
+ {
+  "day": "2026-03-02",
+  "ticker": 3350,
+  "price": 322,
+  "currency": "JPY",
+  "volume": 21940300
+ },
+ {
+  "day": "2026-02-27",
+  "ticker": "MTPLF",
+  "price": 1.99,
+  "currency": "USD",
+  "volume": 754894
+ },
+ {
+  "day": "2026-02-27",
+  "ticker": "DN3",
+  "price": 1.69,
+  "currency": "EUR",
+  "volume": 67114
+ },
+ {
+  "day": "2026-02-27",
+  "ticker": 3350,
+  "price": 324,
+  "currency": "JPY",
+  "volume": 18444300
+ },
+ {
+  "day": "2026-02-26",
+  "ticker": "MTPLF",
+  "price": 2.06,
+  "currency": "USD",
+  "volume": 1104417
+ },
+ {
+  "day": "2026-02-26",
+  "ticker": "DN3",
+  "price": 1.77,
+  "currency": "EUR",
+  "volume": 76396
+ },
+ {
+  "day": "2026-02-26",
+  "ticker": 3350,
+  "price": 331,
+  "currency": "JPY",
+  "volume": 36397400
+ },
+ {
+  "day": "2026-02-25",
+  "ticker": "MTPLF",
+  "price": 2.09,
+  "currency": "USD",
+  "volume": 4510656
+ },
+ {
+  "day": "2026-02-25",
+  "ticker": "DN3",
+  "price": 1.77,
+  "currency": "EUR",
+  "volume": 201373
+ },
+ {
+  "day": "2026-02-25",
+  "ticker": 3350,
+  "price": 299,
+  "currency": "JPY",
+  "volume": 40753300
+ },
+ {
+  "day": "2026-02-24",
+  "ticker": "MTPLF",
+  "price": 1.98,
+  "currency": "USD",
+  "volume": 937741
+ },
+ {
+  "day": "2026-02-24",
+  "ticker": "DN3",
+  "price": 1.7,
+  "currency": "EUR",
+  "volume": 169446
+ },
+ {
+  "day": "2026-02-24",
+  "ticker": 3350,
+  "price": 300,
+  "currency": "JPY",
+  "volume": 33838400
+ },
+ {
+  "day": "2026-02-23",
+  "ticker": "MTPLF",
+  "price": 1.96,
+  "currency": "USD",
+  "volume": 1016869
+ },
+ {
+  "day": "2026-02-23",
+  "ticker": "DN3",
+  "price": 1.64,
+  "currency": "EUR",
+  "volume": 110125
+ },
+ {
+  "day": "2026-02-20",
+  "ticker": "MTPLF",
+  "price": 2.04,
+  "currency": "USD",
+  "volume": 723734
+ },
+ {
+  "day": "2026-02-20",
+  "ticker": "DN3",
+  "price": 1.76,
+  "currency": "EUR",
+  "volume": 101882
+ },
+ {
+  "day": "2026-02-20",
+  "ticker": 3350,
+  "price": 319,
+  "currency": "JPY",
+  "volume": 25948300
+ },
+ {
+  "day": "2026-02-19",
+  "ticker": "MTPLF",
+  "price": 2.02,
+  "currency": "USD",
+  "volume": 2187056
+ },
+ {
+  "day": "2026-02-19",
+  "ticker": "DN3",
+  "price": 1.74,
+  "currency": "EUR",
+  "volume": 137116
+ },
+ {
+  "day": "2026-02-19",
+  "ticker": 3350,
+  "price": 310,
+  "currency": "JPY",
+  "volume": 26108100
+ },
+ {
+  "day": "2026-02-18",
+  "ticker": "MTPLF",
+  "price": 2.08,
+  "currency": "USD",
+  "volume": 1693062
+ },
+ {
+  "day": "2026-02-18",
+  "ticker": "DN3",
+  "price": 1.78,
+  "currency": "EUR",
+  "volume": 194626
+ },
+ {
+  "day": "2026-02-18",
+  "ticker": 3350,
+  "price": 326,
+  "currency": "JPY",
+  "volume": 22968000
+ },
+ {
+  "day": "2026-02-17",
+  "ticker": "MTPLF",
+  "price": 2.19,
+  "currency": "USD",
+  "volume": 627716
+ },
+ {
+  "day": "2026-02-17",
+  "ticker": "DN3",
+  "price": 1.85,
+  "currency": "EUR",
+  "volume": 36475
+ },
+ {
+  "day": "2026-02-17",
+  "ticker": 3350,
+  "price": 338,
+  "currency": "JPY",
+  "volume": 26228800
+ },
+ {
+  "day": "2026-02-16",
+  "ticker": "DN3",
+  "price": 1.86,
+  "currency": "EUR",
+  "volume": 57557
+ },
+ {
+  "day": "2026-02-16",
+  "ticker": 3350,
+  "price": 326,
+  "currency": "JPY",
+  "volume": 14584700
+ },
+ {
+  "day": "2026-02-13",
+  "ticker": "MTPLF",
+  "price": 2.26,
+  "currency": "USD",
+  "volume": 1110818
+ },
+ {
+  "day": "2026-02-13",
+  "ticker": "DN3",
+  "price": 1.94,
+  "currency": "EUR",
+  "volume": 26549
+ },
+ {
+  "day": "2026-02-13",
+  "ticker": 3350,
+  "price": 325,
+  "currency": "JPY",
+  "volume": 17677500
+ },
+ {
+  "day": "2026-02-12",
+  "ticker": "MTPLF",
+  "price": 2.14,
+  "currency": "USD",
+  "volume": 942588
+ },
+ {
+  "day": "2026-02-12",
+  "ticker": "DN3",
+  "price": 1.84,
+  "currency": "EUR",
+  "volume": 184637
+ },
+ {
+  "day": "2026-02-12",
+  "ticker": 3350,
+  "price": 337,
+  "currency": "JPY",
+  "volume": 18189100
+ },
+ {
+  "day": "2026-02-11",
+  "ticker": "MTPLF",
+  "price": 2.22,
+  "currency": "USD",
+  "volume": 1260644
+ },
+ {
+  "day": "2026-02-11",
+  "ticker": "DN3",
+  "price": 1.89,
+  "currency": "EUR",
+  "volume": 78334
+ },
+ {
+  "day": "2026-02-10",
+  "ticker": "MTPLF",
+  "price": 2.3,
+  "currency": "USD",
+  "volume": 883072
+ },
+ {
+  "day": "2026-02-10",
+  "ticker": "DN3",
+  "price": 1.92,
+  "currency": "EUR",
+  "volume": 78002
+ },
+ {
+  "day": "2026-02-10",
+  "ticker": 3350,
+  "price": 358,
+  "currency": "JPY",
+  "volume": 19601300
+ },
+ {
+  "day": "2026-02-09",
+  "ticker": "MTPLF",
+  "price": 2.37,
+  "currency": "USD",
+  "volume": 1870548
+ },
+ {
+  "day": "2026-02-09",
+  "ticker": "DN3",
+  "price": 2,
+  "currency": "EUR",
+  "volume": 171062
+ },
+ {
+  "day": "2026-02-09",
+  "ticker": 3350,
+  "price": 355,
+  "currency": "JPY",
+  "volume": 31407300
+ },
+ {
+  "day": "2026-02-06",
+  "ticker": "MTPLF",
+  "price": 2.5,
+  "currency": "USD",
+  "volume": 3816276
+ },
+ {
+  "day": "2026-02-06",
+  "ticker": "DN3",
+  "price": 2.1,
+  "currency": "EUR",
+  "volume": 409356
+ },
+ {
+  "day": "2026-02-06",
+  "ticker": 3350,
+  "price": 340,
+  "currency": "JPY",
+  "volume": 44102400
+ },
+ {
+  "day": "2026-02-05",
+  "ticker": "MTPLF",
+  "price": 1.86,
+  "currency": "USD",
+  "volume": 7210342
+ },
+ {
+  "day": "2026-02-05",
+  "ticker": "DN3",
+  "price": 1.59,
+  "currency": "EUR",
+  "volume": 1722736
+ },
+ {
+  "day": "2026-02-05",
+  "ticker": 3350,
+  "price": 360,
+  "currency": "JPY",
+  "volume": 36890600
+ },
+ {
+  "day": "2026-02-04",
+  "ticker": "MTPLF",
+  "price": 2.34,
+  "currency": "USD",
+  "volume": 2962023
+ },
+ {
+  "day": "2026-02-04",
+  "ticker": "DN3",
+  "price": 2.02,
+  "currency": "EUR",
+  "volume": 230355
+ },
+ {
+  "day": "2026-02-04",
+  "ticker": 3350,
+  "price": 390,
+  "currency": "JPY",
+  "volume": 18008300
+ },
+ {
+  "day": "2026-02-03",
+  "ticker": "MTPLF",
+  "price": 2.44,
+  "currency": "USD",
+  "volume": 3016655
+ },
+ {
+  "day": "2026-02-03",
+  "ticker": "DN3",
+  "price": 2.1,
+  "currency": "EUR",
+  "volume": 252527
+ },
+ {
+  "day": "2026-02-03",
+  "ticker": 3350,
+  "price": 406,
+  "currency": "JPY",
+  "volume": 26428100
+ },
+ {
+  "day": "2026-02-02",
+  "ticker": "MTPLF",
+  "price": 2.67,
+  "currency": "USD",
+  "volume": 2225041
+ },
+ {
+  "day": "2026-02-02",
+  "ticker": "DN3",
+  "price": 2.29,
+  "currency": "EUR",
+  "volume": 225350
+ },
+ {
+  "day": "2026-02-02",
+  "ticker": 3350,
+  "price": 402,
+  "currency": "JPY",
+  "volume": 31378200
+ },
+ {
+  "day": "2026-01-30",
+  "ticker": "MTPLF",
+  "price": 2.83,
+  "currency": "USD",
+  "volume": 2131704
+ },
+ {
+  "day": "2026-01-30",
+  "ticker": "DN3",
+  "price": 2.42,
+  "currency": "EUR",
+  "volume": 117468
+ },
+ {
+  "day": "2026-01-30",
+  "ticker": 3350,
+  "price": 434,
+  "currency": "JPY",
+  "volume": 44992500
+ },
+ {
+  "day": "2026-01-29",
+  "ticker": "MTPLF",
+  "price": 2.77,
+  "currency": "USD",
+  "volume": 2725689
+ },
+ {
+  "day": "2026-01-29",
+  "ticker": "DN3",
+  "price": 2.33,
+  "currency": "EUR",
+  "volume": 257098
+ },
+ {
+  "day": "2026-01-29",
+  "ticker": 3350,
+  "price": 456,
+  "currency": "JPY",
+  "volume": 14951500
+ },
+ {
+  "day": "2026-01-28",
+  "ticker": "MTPLF",
+  "price": 3.1,
+  "currency": "USD",
+  "volume": 808785
+ },
+ {
+  "day": "2026-01-28",
+  "ticker": "DN3",
+  "price": 2.63,
+  "currency": "EUR",
+  "volume": 17268
+ },
+ {
+  "day": "2026-01-28",
+  "ticker": 3350,
+  "price": 475,
+  "currency": "JPY",
+  "volume": 12863200
+ },
+ {
+  "day": "2026-01-27",
+  "ticker": "MTPLF",
+  "price": 3.21,
+  "currency": "USD",
+  "volume": 1453347
+ },
+ {
+  "day": "2026-01-27",
+  "ticker": "DN3",
+  "price": 2.56,
+  "currency": "EUR",
+  "volume": 55684
+ },
+ {
+  "day": "2026-01-27",
+  "ticker": 3350,
+  "price": 495,
+  "currency": "JPY",
+  "volume": 18885400
+ },
+ {
+  "day": "2026-01-26",
+  "ticker": "MTPLF",
+  "price": 3.04,
+  "currency": "USD",
+  "volume": 2347676
+ },
+ {
+  "day": "2026-01-26",
+  "ticker": "DN3",
+  "price": 2.54,
+  "currency": "EUR",
+  "volume": 150457
+ },
+ {
+  "day": "2026-01-26",
+  "ticker": 3350,
+  "price": 476,
+  "currency": "JPY",
+  "volume": 25840100
+ },
+ {
+  "day": "2026-01-23",
+  "ticker": "MTPLF",
+  "price": 3.26,
+  "currency": "USD",
+  "volume": 1089005
+ },
+ {
+  "day": "2026-01-23",
+  "ticker": "DN3",
+  "price": 2.81,
+  "currency": "EUR",
+  "volume": 106908
+ },
+ {
+  "day": "2026-01-23",
+  "ticker": 3350,
+  "price": 512,
+  "currency": "JPY",
+  "volume": 16651700
+ },
+ {
+  "day": "2026-01-22",
+  "ticker": "MTPLF",
+  "price": 3.21,
+  "currency": "USD",
+  "volume": 768931
+ },
+ {
+  "day": "2026-01-22",
+  "ticker": "DN3",
+  "price": 2.76,
+  "currency": "EUR",
+  "volume": 19072
+ },
+ {
+  "day": "2026-01-22",
+  "ticker": 3350,
+  "price": 510,
+  "currency": "JPY",
+  "volume": 19585100
+ },
+ {
+  "day": "2026-01-21",
+  "ticker": "MTPLF",
+  "price": 3.33,
+  "currency": "USD",
+  "volume": 2183963
+ },
+ {
+  "day": "2026-01-21",
+  "ticker": "DN3",
+  "price": 2.84,
+  "currency": "EUR",
+  "volume": 238235
+ },
+ {
+  "day": "2026-01-21",
+  "ticker": 3350,
+  "price": 515,
+  "currency": "JPY",
+  "volume": 28772000
+ },
+ {
+  "day": "2026-01-20",
+  "ticker": "MTPLF",
+  "price": 3.26,
+  "currency": "USD",
+  "volume": 2366187
+ },
+ {
+  "day": "2026-01-20",
+  "ticker": "DN3",
+  "price": 2.76,
+  "currency": "EUR",
+  "volume": 710401
+ },
+ {
+  "day": "2026-01-20",
+  "ticker": 3350,
+  "price": 521,
+  "currency": "JPY",
+  "volume": 22741100
+ },
+ {
+  "day": "2026-01-19",
+  "ticker": "DN3",
+  "price": 2.94,
+  "currency": "EUR",
+  "volume": 12101
+ },
+ {
+  "day": "2026-01-19",
+  "ticker": 3350,
+  "price": 541,
+  "currency": "JPY",
+  "volume": 31487300
+ },
+ {
+  "day": "2026-01-16",
+  "ticker": "MTPLF",
+  "price": 3.77,
+  "currency": "USD",
+  "volume": 920277
+ },
+ {
+  "day": "2026-01-16",
+  "ticker": "DN3",
+  "price": 3.18,
+  "currency": "EUR",
+  "volume": 31221
+ },
+ {
+  "day": "2026-01-16",
+  "ticker": 3350,
+  "price": 591,
+  "currency": "JPY",
+  "volume": 27504000
+ },
+ {
+  "day": "2026-01-15",
+  "ticker": "MTPLF",
+  "price": 3.83,
+  "currency": "USD",
+  "volume": 1121117
+ },
+ {
+  "day": "2026-01-15",
+  "ticker": "DN3",
+  "price": 3.34,
+  "currency": "EUR",
+  "volume": 208194
+ },
+ {
+  "day": "2026-01-15",
+  "ticker": 3350,
+  "price": 613,
+  "currency": "JPY",
+  "volume": 46268100
+ },
+ {
+  "day": "2026-01-14",
+  "ticker": "MTPLF",
+  "price": 3.96,
+  "currency": "USD",
+  "volume": 3157633
+ },
+ {
+  "day": "2026-01-14",
+  "ticker": "DN3",
+  "price": 3.41,
+  "currency": "EUR",
+  "volume": 578535
+ },
+ {
+  "day": "2026-01-14",
+  "ticker": 3350,
+  "price": 605,
+  "currency": "JPY",
+  "volume": 87719400
+ },
+ {
+  "day": "2026-01-13",
+  "ticker": "MTPLF",
+  "price": 3.51,
+  "currency": "USD",
+  "volume": 2611208
+ },
+ {
+  "day": "2026-01-13",
+  "ticker": "DN3",
+  "price": 3.01,
+  "currency": "EUR",
+  "volume": 218644
+ },
+ {
+  "day": "2026-01-13",
+  "ticker": 3350,
+  "price": 528,
+  "currency": "JPY",
+  "volume": 30695500
+ },
+ {
+  "day": "2026-01-12",
+  "ticker": "MTPLF",
+  "price": 3.48,
+  "currency": "USD",
+  "volume": 1277329
+ },
+ {
+  "day": "2026-01-12",
+  "ticker": "DN3",
+  "price": 3.02,
+  "currency": "EUR",
+  "volume": 51667
+ },
+ {
+  "day": "2026-01-09",
+  "ticker": "MTPLF",
+  "price": 3.33,
+  "currency": "USD",
+  "volume": 2104509
+ },
+ {
+  "day": "2026-01-09",
+  "ticker": "DN3",
+  "price": 2.86,
+  "currency": "EUR",
+  "volume": 154874
+ },
+ {
+  "day": "2026-01-09",
+  "ticker": 3350,
+  "price": 540,
+  "currency": "JPY",
+  "volume": 38353600
+ },
+ {
+  "day": "2026-01-08",
+  "ticker": "MTPLF",
+  "price": 3.18,
+  "currency": "USD",
+  "volume": 2076354
+ },
+ {
+  "day": "2026-01-08",
+  "ticker": "DN3",
+  "price": 2.78,
+  "currency": "EUR",
+  "volume": 94774
+ },
+ {
+  "day": "2026-01-08",
+  "ticker": 3350,
+  "price": 494,
+  "currency": "JPY",
+  "volume": 34433400
+ },
+ {
+  "day": "2026-01-07",
+  "ticker": "MTPLF",
+  "price": 3.36,
+  "currency": "USD",
+  "volume": 1493117
+ },
+ {
+  "day": "2026-01-07",
+  "ticker": "DN3",
+  "price": 2.89,
+  "currency": "EUR",
+  "volume": 846518
+ },
+ {
+  "day": "2026-01-07",
+  "ticker": 3350,
+  "price": 531,
+  "currency": "JPY",
+  "volume": 62398900
+ },
+ {
+  "day": "2026-01-06",
+  "ticker": "MTPLF",
+  "price": 3.2,
+  "currency": "USD",
+  "volume": 3193186
+ },
+ {
+  "day": "2026-01-06",
+  "ticker": "DN3",
+  "price": 2.76,
+  "currency": "EUR",
+  "volume": 522177
+ },
+ {
+  "day": "2026-01-06",
+  "ticker": 3350,
+  "price": 510,
+  "currency": "JPY",
+  "volume": 57505400
+ },
+ {
+  "day": "2026-01-05",
+  "ticker": "MTPLF",
+  "price": 3.12,
+  "currency": "USD",
+  "volume": 4023024
+ },
+ {
+  "day": "2026-01-05",
+  "ticker": "DN3",
+  "price": 2.68,
+  "currency": "EUR",
+  "volume": 107581
+ },
+ {
+  "day": "2026-01-05",
+  "ticker": 3350,
+  "price": 468,
+  "currency": "JPY",
+  "volume": 55756000
+ },
+ {
+  "day": "2026-01-02",
+  "ticker": "MTPLF",
+  "price": 2.61,
+  "currency": "USD",
+  "volume": 2040819
+ },
+ {
+  "day": "2026-01-02",
+  "ticker": "DN3",
+  "price": 2.24,
+  "currency": "EUR",
+  "volume": 212634
+ },
+ {
+  "day": "2025-12-31",
+  "ticker": "MTPLF",
+  "price": 2.5,
+  "currency": "USD",
+  "volume": 3179199
+ }
+]

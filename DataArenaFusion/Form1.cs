@@ -495,6 +495,23 @@ namespace DataArenaFusion
             dgvDatos.DataSource = null;
             dgvDatos.DataSource = _gestorDatos.TablaActual;
 
+            // Formatear columnas dinámicamente
+            foreach (DataGridViewColumn col in dgvDatos.Columns)
+            {
+                // Alinear a la derecha si es moneda (MXN)
+                if (col.Name.EndsWith("(MXN)", StringComparison.OrdinalIgnoreCase) || 
+                    col.Name.ToLower().Contains("precio") || 
+                    col.Name.ToLower().Contains("total"))
+                {
+                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    col.DefaultCellStyle.Format = "C2"; // Formato moneda local
+                    col.DefaultCellStyle.ForeColor = Color.DarkGreen;
+                }
+                
+                // Asegurar que las columnas tengan un ancho mínimo razonable
+                col.MinimumWidth = 100;
+            }
+
             lblRegistros.Text = $"{_gestorDatos.TablaActual.Rows.Count} registros";
             ActualizarCombosGrafica(_gestorDatos.TablaActual);
             RefrescarFiltros();
